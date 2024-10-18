@@ -9,9 +9,10 @@ const errorHandler = require('./middleware/errorHandler');
 const cookieParser = require('cookie-parser');
 const credentials = require('./middleware/credentials');
 const verifyJWT = require('./middleware/verifyJWT');
-
+const passport = require('passport');
+require('./config/passport-setup');
+const session = require('express-session'); // Middleware for session handling
 const PORT = process.env.PORT || 5000;
-
 
 
 // Sync all models with the database
@@ -37,6 +38,14 @@ app.use(express.urlencoded({ extended: false }));
 // Parse Cookie header and populate req.cookies
 app.use(cookieParser());
 
+// Express session middleware
+app.use(session({
+    secret: process.env.SESSION_SECRET,  // Change 'your-secret-key' to a secure, unique string
+    resave: false,              // Prevent session from being saved back to the store if it wasn't modified
+    saveUninitialized: false,   // Only save session data when something is stored in the session
+    cookie: { secure: false }   // Use secure: true if you're using HTTPS
+}));
+
 
 // Routes
 app.use('/api/auth/register', require('./routes/register'));
@@ -47,6 +56,12 @@ app.use('/api/auth/token/refresh', require('./routes/refreshToken'));
 app.use('/api/auth/logout', require('./routes/logout'));
 app.use('/api/auth/forget-password', require('./routes/forgetPassword'));
 app.use('/api/auth/reset-password', require('./routes/resetPassword'));
+
+// Google and Facebook OAuth routes
+app.use(passport.initialize());
+app.use(passport.session());
+app.use('/api/auth/google', require('./routes/google-auth'));
+//app.use('/api/auth/facebook', require('./routes/facebook-auth'));
 
 app.use(verifyJWT);
 app.use('/api/users', require('./routes/users'));

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "../config/axios";
 import { useNavigate } from "react-router-dom";
-import {ArrowLeft, X} from 'lucide-react';
+import {ArrowLeft, X, ShoppingCart} from 'lucide-react';
 
 const Toast = ({ message, type, onClose }) => (
     <div className={`fixed top-4 right-4 p-4 rounded-md shadow-md flex items-center justify-between ${type === 'error' ? 'bg-red-500' : 'bg-green-500'} text-white`}>
@@ -54,21 +54,24 @@ const ForgetPassword = () => {
         }
     };
 
-    return (
-        <div className="flex justify-center items-center w-screen h-screen bg-gray-50">
-          <div className="bg-white p-8 shadow-xl mx-auto w-full max-w-md rounded-2xl">
+  return (
+    <>
+      <ShoppingCart className='text-orange-500 mt-4 ml-4' size={32} />
+      <div className="flex justify-center items-center w-screen bg-gray-50">
+          
+          <div className="bg-white p-8 shadow-xl mx-auto w-full max-w-md rounded-2xl mt-32">
             <div className="flex items-center mb-6">
               <ArrowLeft className="text-gray-500 cursor-pointer" onClick={() => navigate(-1)} />
               <h2 className="text-2xl font-bold ml-4">Đặt lại mật khẩu</h2>
             </div>
     
             <form onSubmit={handleSubmit}>
-              <Input
+              <input
                 type="text"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mb-4"
+                className="mb-4 w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:shadow-outline"
               />
                 <button
                         type="submit"
@@ -86,8 +89,8 @@ const ForgetPassword = () => {
                 />
             )}
         </div>
-      );
-    
+      </>
+    );
 };
 
 export default ForgetPassword;  

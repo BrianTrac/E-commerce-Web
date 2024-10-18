@@ -14,3 +14,6 @@
 2024-10-17 12:03:02 	 b85c22ff-b70e-453b-ad1e-bc0cd26a5b7f 	  Error: Not allowed by CORS
 2024-10-17 12:03:02 	 9dd5fb5f-3aaa-4eff-b955-451cd9cc2727 	  Error: Not allowed by CORS
 2024-10-17 12:03:03 	 d7691f37-1b39-47f6-b5ba-b153d359b8b7 	  Error: Not allowed by CORS
+2024-10-19 00:23:01 	 76f827c5-8175-437d-9589-d62e6067851b 	  Error: Login sessions require session support. Did you forget to use `express-session` middleware?
+2024-10-19 01:13:35 	 80deacdb-a8d4-448c-be26-bfc517efaf32 	  SequelizeDatabaseError: column "googleId" does not exist
+2024-10-19 01:15:41 	 3f4c1bb7-6d24-465d-836a-94b020156622 	  SequelizeDatabaseError: relation "Users" does not exist

@@ -5,7 +5,7 @@ const crypto = require('crypto');
 
 const verifyEmail = async (req, res) => {
     const { email } = req.body;
-    
+    console.log(req.body);
     if (!email) {
         return res.status(400).json({ message: 'Email is required' });
     }

@@ -1,9 +1,9 @@
 const nodemailer = require('nodemailer');
 const Mailgen = require('mailgen');
+const { WEB_URL } = require('./config');;
 
-PORT='http://localhost:3001';
 // Link to verify email
-LINK_TO_VERIFY_EMAIL = `${PORT}/auth/verify-email`;
+LINK_TO_VERIFY_EMAIL = `${WEB_URL}/auth/verify-email`;
 
 // Create a transporter for sending emails
 const transporter = nodemailer.createTransport({
@@ -19,7 +19,7 @@ const mailGenerator = new Mailgen({
     theme: 'default',
     product: {
         name: 'E-commerce',
-        link: PORT,
+        link: WEB_URL,
     },
 });
 
@@ -70,7 +70,7 @@ const sendResetPasswordEmail = async (email) => {
                 button: {
                     color: '#DC4D2F',
                     text: 'Reset Password',
-                    link: `${PORT}/auth/reset-password?email=${email}`,
+                    link: `${WEB_URL}/auth/reset-password?email=${email}`,
                 },
             },
             outro: 'If you did not request a password reset, no further action is required on your part.',

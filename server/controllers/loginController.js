@@ -1,6 +1,6 @@
 const User = require('../model/User');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const { generateAccessToken, generateRefreshToken } = require('../helper/jwtToken');
 
 const handleLogin = async (req, res) => {
     const { username, password } = req.body;  
@@ -24,22 +24,9 @@ const handleLogin = async (req, res) => {
         return res.status(401).json('invalid credentials');
     }
 
-    const accessToken = jwt.sign(
-        {
-            'id': user.id,
-            'role': user.role,
-        },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '15m' }
-    );
+    const accessToken = generateAccessToken(user);
 
-    const refreshToken = jwt.sign(
-        {
-            'id': user.id,
-        },
-        process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: '1m' }
-    );
+    const refreshToken = generateRefreshToken(user);
 
     user.refreshToken = refreshToken;
     await user.save();

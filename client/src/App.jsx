@@ -9,10 +9,10 @@ import RequireAuth from "./hooks/RequireAuth";
 import Admin from "./pages/Admin";
 import Seller from "./pages/Seller";
 import PersistLogin from "./hooks/PersistLogin";
-import EmailVerification from "./component/EmailVerification.jsx";
-import ForgetPassword from "./component/ForgetPassword.jsx";
-import ResetPassword from "./component/ResetPassword.jsx";
-
+import EmailVerification from "./components/EmailVerification.jsx";
+import ForgetPassword from "./components/ForgetPassword.jsx";
+import ResetPassword from "./components/ResetPassword.jsx";
+import GoogleAuthHandler from './components/GoogleAuthHandler';
 
 
 const ROLES = {
@@ -46,7 +46,8 @@ const App = () => {
             <Route path="/auth/forget-password" element={<ForgetPassword />} />
             <Route path="/auth/reset-password" element={<ResetPassword />} />
             <Route path="/auth/verify-email" element={<EmailVerification />}/>
-
+            <Route path="/auth/google/callback" element={<GoogleAuthHandler />} />
+            
             <Route path="unauthorized" element={<MissingPage />} /> {/* 403 Page */}
             
             <Route path="*" element={<MissingPage />} /> {/* 404 Page */}

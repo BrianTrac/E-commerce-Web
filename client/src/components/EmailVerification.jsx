@@ -95,7 +95,11 @@ const EmailVerification = () => {
                 navigate('/auth/login');
             } else if (location.state.type === 'forget-password') {
                 navigate('/auth/reset-password', { state: { email } });
-            }
+          }
+            else {
+                navigate('/');
+          }
+          
         } catch (err) {
           
             toast.error('Failed to verify OTP');

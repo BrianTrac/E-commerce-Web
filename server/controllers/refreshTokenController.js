@@ -1,5 +1,5 @@
 const User = require('../model/User');
-const jwt = require('jsonwebtoken');
+const {generateAccessToken} = require('../helper/jwtToken');    
 
 const handleRefreshToken = async (req, res) => {
     const refreshToken = req.cookies ? req.cookies.refreshToken : null;
@@ -13,7 +13,7 @@ const handleRefreshToken = async (req, res) => {
         return res.status(403).json({ message: 'Forbidden' });
     }
 
-    console.log('REFRESH_TOKEN_SECRET: ', process.env.REFRESH_TOKEN_SECRET);
+//    console.log('REFRESH_TOKEN_SECRET: ', process.env.REFRESH_TOKEN_SECRET);
     jwt.verify(
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
@@ -22,14 +22,7 @@ const handleRefreshToken = async (req, res) => {
                 return res.status(403).json({ message: 'Forbidden' });
             }
 
-            const accessToken = jwt.sign(
-                {
-                    'id': decoded.id,
-                    'role': user.role,
-                },
-                process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '15m' }
-            );
+            const accessToken = generateAccessToken(user);
 
             res.json({ accessToken });
         }

@@ -9,6 +9,7 @@ const Recommend = () => {
       rating: 4.8,
       sold: "3.8k"
     },
+    // Thêm sản phẩm khác tại đây
   ];
 
   return (

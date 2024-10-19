@@ -1,3 +1,9 @@
+## Không biết kéo về chạy dc k. Cd đến đúng thư mục rồi cài mấy thư viện vào. Nếu có trong packet.json thì đã cài rồi
+### npm i react-router-dom
+### npm i antd
+### Lên trang chủ tailwind cho react làm theo để cài tailwind nữa
+### Xong npm start là dc
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

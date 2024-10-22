@@ -1,5 +1,5 @@
 const { sendResetPasswordEmail } = require('../config/mailer');
-const User = require('../model/User');
+const User = require('../models/User');
 
 const sendResetLink = async (req, res) => {
     const { email } = req.body;
@@ -16,7 +16,7 @@ const sendResetLink = async (req, res) => {
 
     // Send the password reset link to the user's email
     try {
-        await sendResetPasswordEmail(email);
+        sendResetPasswordEmail(email);
         res.status(200).json({ message: 'Password reset link sent successfully' });
     } catch (error) {
         return res.status(500).json({ message: 'Failed to send password reset link. Please try again later' });

@@ -13,12 +13,10 @@ const passport = require('passport');
 require('./config/passport-setup');
 const session = require('express-session'); // Middleware for session handling
 const PORT = process.env.PORT || 5000;
+const User = require('./models/User'); 
+const OTP = require('./models/OTP');   
+require('./models/associations'); // Import associations
 
-
-// Sync all models with the database
-sequelize.sync()
-    .then(() => console.log('All models were synchronized successfully.'))
-    .catch(err => console.log('Failed to sync models:', err));
 
 // custom middleware logger
 app.use(logger);
@@ -47,33 +45,42 @@ app.use(session({
 }));
 
 
-// Routes
-app.use('/api/auth/register', require('./routes/register'));
-app.use('/api/auth/send-otp', require('./routes/verifyEmail'));
-app.use('/api/auth/verify-otp', require('./routes/verifyOTP'));
-app.use('/api/auth/login', require('./routes/login'));
-app.use('/api/auth/token/refresh', require('./routes/refreshToken'));
-app.use('/api/auth/logout', require('./routes/logout'));
-app.use('/api/auth/forget-password', require('./routes/forgetPassword'));
-app.use('/api/auth/reset-password', require('./routes/resetPassword'));
+// Sync all models with the database before starting the server and initializing Passport
+sequelize.sync({ force: false })
+    .then(() => {
+        console.log('All models were synchronized successfully.');
 
-// Google and Facebook OAuth routes
-app.use(passport.initialize());
-app.use(passport.session());
-app.use('/api/auth/google', require('./routes/google-auth'));
-//app.use('/api/auth/facebook', require('./routes/facebook-auth'));
+        // Initialize Passport after DB sync to ensure tables exist
+        app.use(passport.initialize());
+        app.use(passport.session());
 
-app.use(verifyJWT);
-app.use('/api/users', require('./routes/users'));
+        // Routes
+        app.use('/api/auth/register', require('./routes/register'));
+        app.use('/api/auth/login', require('./routes/login'));
+        app.use('/api/auth/token/refresh', require('./routes/refreshToken'));
+        app.use('/api/auth/logout', require('./routes/logout'));
+        app.use('/api/auth/forget-password', require('./routes/forgetPassword'));
+        app.use('/api/auth/reset-password', require('./routes/resetPassword'));
 
+        // Google and Facebook OAuth routes
+        app.use('/api/auth/google', require('./routes/google-auth'));
+        // app.use('/api/auth/facebook', require('./routes/facebook-auth'));
 
-app.all('*', (req, res) => {
-    res.status(404).json({ message: 'Resource not found' });
-});
+        app.use(verifyJWT);
+        app.use('/api/users', require('./routes/users'));
 
-// Error handler middleware
-app.use(errorHandler);
+        app.all('*', (req, res) => {
+            res.status(404).json({ message: 'Resource not found' });
+        });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+        // Error handler middleware
+        app.use(errorHandler);
+
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    })
+    .catch(err => {
+        console.log('Failed to sync models:', err);
+    }
+);

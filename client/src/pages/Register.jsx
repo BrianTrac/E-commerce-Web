@@ -4,8 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from '../config/axios';
 import { toast } from 'react-toastify';
-
-
+import SERVER_URL from '../config/config';
 
 const Register = () => {
     const [username, setUsername] = useState('');
@@ -40,7 +39,7 @@ const Register = () => {
         setError('');
 
         try {
-            await axios.post('/api/auth/register', 
+            const response = await axios.post('/api/auth/register', 
                 JSON.stringify({ username, email, password }),
                 {
                     headers: { 'Content-Type': 'application/json' },
@@ -48,27 +47,23 @@ const Register = () => {
                 }
             );
 
-            setUsername('');
-            setEmail('');
-            setPassword('');
-            setConfirmPassword('');
             setError('');
 
-            // direct to Email Verification page
-            // Ensure toast is configured correctly
-            toast.success('Registration successful! Please check your email to verify.');
-            navigate('/auth/verify-email', { state: { email, type: 'register' } });
+            toast.success(response.data.message);
+            navigate('/auth/register/verify-otp', { state: {username, password , email, type: 'register' } });
               
         } catch (err) {
-            if (!err?.response) {
-                setError('Network error. Please try again later.');
-            } else if (err.response?.status === 409) {
-                setError('User already exists');
-            }
-            else {
-                setError('An error occurred. Please try again later.');
-            }
+            console.log(err);
+            if (err.response) {
+                setError(err.response.data.message);
+            } else {
+                setError('Failed to register user. Please try again later');
+            };
         }
+    }
+
+    const handleGoogleLogin = () => {
+        window.location.href = `${SERVER_URL}/api/auth/google`;
     }
 
     return (
@@ -134,11 +129,15 @@ const Register = () => {
                 </button>
                 <div className="w-full border-t border-gray-800"></div>
                 <div className="flex">
-                    <button className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 mr-4 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button
+                        className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 mr-4 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <Facebook className="h-5 w-5 mr-2 text-blue-800" />
                         Facebook
                     </button>
-                    <button className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button
+                        className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        onClick={handleGoogleLogin}
+                    >
                         <FcGoogle className="h-5 w-5 mr-2" />
                         Google
                     </button>

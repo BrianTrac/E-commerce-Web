@@ -3,7 +3,7 @@ const Mailgen = require('mailgen');
 const { WEB_URL } = require('./config');;
 
 // Link to verify email
-LINK_TO_VERIFY_EMAIL = `${WEB_URL}/auth/verify-email`;
+LINK_TO_VERIFY_EMAIL = `${WEB_URL}/auth/register/verify-otp`;
 
 // Create a transporter for sending emails
 const transporter = nodemailer.createTransport({
@@ -12,6 +12,10 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASSWORD,
     },
+    debug: true,
+    logger: true,
+    connectionTimeout: 10000, // 10 seconds
+    socketTimeout: 10000, // 10 seconds
 });
 
 // Mailgen configuration
@@ -53,7 +57,7 @@ const sendOTPVerificationEmail = async (email, otp) => {
     try {
         // Send the email
         await transporter.sendMail(mailOptions);
-        console.log(`Verification email sent to ${email} successfully`);
+        console.log(`Verification OTP sent to ${email} successfully`);
     } catch (err) {
         console.error(err);
     }

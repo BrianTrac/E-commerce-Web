@@ -17,3 +17,12 @@
 2024-10-19 00:23:01 	 76f827c5-8175-437d-9589-d62e6067851b 	  Error: Login sessions require session support. Did you forget to use `express-session` middleware?
 2024-10-19 01:13:35 	 80deacdb-a8d4-448c-be26-bfc517efaf32 	  SequelizeDatabaseError: column "googleId" does not exist
 2024-10-19 01:15:41 	 3f4c1bb7-6d24-465d-836a-94b020156622 	  SequelizeDatabaseError: relation "Users" does not exist
+2024-10-22 13:46:35 	 7ae209db-e654-4853-90cf-8b5bb6bbb040 	  Error: Not allowed by CORS
+2024-10-22 16:35:46 	 11db5e45-951d-4230-a39b-58c7e6e31af2 	  Error: Not allowed by CORS
+2024-10-22 17:12:41 	 0b727e45-6068-4e36-884d-34df53e50c46 	  Error: Not allowed by CORS
+2024-10-22 17:19:38 	 efc5e3eb-38cd-47a6-a08b-53ef84fce5d2 	  SequelizeValidationError: notNull Violation: User.username cannot be null
+2024-10-22 17:20:11 	 b753f24b-d4a1-49fe-8ea0-83496a08d384 	  SequelizeValidationError: notNull Violation: User.username cannot be null
+2024-10-22 17:44:31 	 35f8d4e0-28d8-49da-bd78-f1ce6f9fec21 	  SequelizeValidationError: notNull Violation: User.username cannot be null
+2024-10-22 17:45:51 	 5ce96d1d-9637-4dee-9e0f-376f8df86ad7 	  SequelizeValidationError: notNull Violation: User.username cannot be null
+2024-10-22 17:54:30 	 b8c451f1-0709-4264-8de1-cef19fda8d6e 	  SequelizeValidationError: notNull Violation: User.username cannot be null
+2024-10-22 17:55:05 	 830e13e4-291b-4b55-b357-f194b5c393db 	  SequelizeValidationError: notNull Violation: User.username cannot be null

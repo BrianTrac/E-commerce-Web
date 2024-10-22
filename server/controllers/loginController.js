@@ -1,4 +1,4 @@
-const User = require('../model/User');
+const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const { generateAccessToken, generateRefreshToken } = require('../helper/jwtToken');
 
@@ -6,7 +6,7 @@ const handleLogin = async (req, res) => {
     const { username, password } = req.body;  
 //    console.log('req.body: ', req.body);
     if (!username || !password) {
-        return res.status(400).json('incorrect form submission');
+        return res.status(400).json({ message: 'incorrect form submission' });
     }
 
     const user = await User.findOne({
@@ -16,12 +16,12 @@ const handleLogin = async (req, res) => {
     });
     
     if (!user) {
-        return res.status(401).json('invalid credentials');
+        return res.status(401).json({ message: 'invalid credentials' });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-        return res.status(401).json('invalid credentials');
+        return res.status(401).json({ message: 'invalid credentials' });
     }
 
     const accessToken = generateAccessToken(user);
@@ -38,7 +38,7 @@ const handleLogin = async (req, res) => {
         sameSite: 'None',
     });
 
-    res.json({ accessToken });
+    res.json({message: accessToken });
 };
 
 module.exports = { handleLogin };

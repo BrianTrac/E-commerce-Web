@@ -1,6 +1,6 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
-const User = require('../model/User');
+const User = require('../models/User');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
@@ -12,7 +12,7 @@ passport.use(new GoogleStrategy({
     callbackURL: 'api/auth/google/callback'
 }, async (accessToken, refreshToken, profile, done) => {
     try {
-        let user = await User.findOne({ googleId: profile.id });
+        let user = await User.findOne({ where: { googleId: profile.id } });
 
         if (!user) {
             // check if user already exists by email
@@ -24,15 +24,17 @@ passport.use(new GoogleStrategy({
                 user = await User.create({
                     googleId: profile.id,
                     email: profile.emails[0].value,
-                    name: profile.displayName,
+                    username: profile.displayName,
                     role: 'User',
                     password: await bcrypt.hash(crypto.randomBytes(20).toString('hex'), 10)
                 });
+
             }
         }
 
         return done(null, user);
     } catch (err) {
+        console.log(err);
         return done(err, null);
     }
 }));
@@ -46,7 +48,7 @@ passport.use(new FacebookStrategy({
     profileFields: ['id', 'emails', 'name'] // Request these fields from Facebook
 }, async (accessToken, refreshToken, profile, done) => {
     try {
-        let user = await User.findOne({ facebookId: profile.id });
+        let user = await User.findOne({where: { facebookId: profile.id }});
 
         if (!user) {
             // check if user already exists by email

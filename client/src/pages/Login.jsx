@@ -61,7 +61,7 @@ const Login = () => {
                 setError('Network error. Please try again later.');
             }
             else {
-                setError('An error occurred. Please try again later.');
+                setError(err.response.data.message);
             }
         }
 

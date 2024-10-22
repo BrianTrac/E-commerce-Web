@@ -42,15 +42,18 @@ const ForgetPassword = () => {
                 }
             );
 
-            if (!response.data.success) {
-                throw new Error(response.data.message);
-            }
-
-            showToast('Password reset email sent successfully!', 'success');
-            navigate('/auth/login');
+            showToast('Password reset email sent successfully! Please check your inbox!', 'success');
+            setTimeout(() => {
+              navigate('/auth/login');
+            }, 3000);
 
         } catch (err) {
-            showToast(err.message || 'An error occurred. Please try again.', 'error');
+          if (!err.response) {
+            return showToast('Network error. Please try again later.', 'error');
+          }
+          else {
+            return showToast(err.response.data.message, 'error');
+          }  
         }
     };
 

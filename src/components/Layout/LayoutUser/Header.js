@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SearchOutlined, UserOutlined, ShoppingCartOutlined, BellOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import logo from "../../../images/logo.png";
 
 function Header() {
-  const isLogin = true;
+  const isLogin = false;
+  const [searchQuery, setSearchQuery] = useState(""); // State to store search query
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/search/${searchQuery}`);
+    }
+  };
+
+  const handleClickLogo = () => {
+    setSearchQuery(""); // Clear search query
+    navigate('/');
+  }
 
   return (
     <>
@@ -18,7 +32,8 @@ function Header() {
               <img
                 src={logo}
                 alt="Logo"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover hover:cursor-pointer"
+                onClick={handleClickLogo} // Redirect to homepage on logo click
               />
             </div>
           </div>
@@ -29,9 +44,15 @@ function Header() {
               <input
                 type="text"
                 placeholder="Bạn tìm gì..."
+                value={searchQuery} // Bind input value to searchQuery state
+                onChange={(e) => setSearchQuery(e.target.value)} // Update state on input change
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()} // Trigger search on Enter key press
                 className="w-full px-4 py-2 rounded-full bg-white border border-gray-200 focus:outline-none focus:border-sky-300"
               />
-              <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+              <button
+                onClick={handleSearch} // Trigger search on button click
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
                 <SearchOutlined style={{ fontSize: '24px' }} />
               </button>
             </div>
@@ -40,10 +61,15 @@ function Header() {
           {/* Conditional Rendering for User Login */}
           {isLogin ? (
             <div className="flex items-center space-x-6 mt-4 sm:mt-0">
-              <button className="flex items-center text-gray-600 hover:text-gray-800">
-                <ShoppingCartOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
-                Giỏ hàng
-              </button>
+              <div className='relative'>
+                <button className="flex items-center text-gray-600 hover:text-gray-800">
+                  <ShoppingCartOutlined style={{ fontSize: '20px', marginRight: '12px' }} />
+                  Giỏ hàng
+                </button>
+                <span className="absolute -top-2 left-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    2
+                </span>
+              </div>
               <div className="relative">
                 <BellOutlined style={{ fontSize: '20px', marginRight: '6px' }} />
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -57,10 +83,15 @@ function Header() {
             </div>
           ) : (
             <div className="flex items-center space-x-6 mt-4 sm:mt-0">
-              <button className="flex items-center text-gray-600 hover:text-gray-800">
-                <ShoppingCartOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
-                Giỏ hàng
-              </button>
+              <div className='relative'>
+                <button className="flex items-center text-gray-600 hover:text-gray-800">
+                  <ShoppingCartOutlined style={{ fontSize: '20px', marginRight: '12px' }} />
+                  Giỏ hàng
+                </button>
+                <span className="absolute -top-2 left-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    2
+                </span>
+              </div>
               <button className="flex items-center text-gray-600 hover:text-gray-800">
                 <UserOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
                 Đăng nhập

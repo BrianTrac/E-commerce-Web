@@ -1,5 +1,6 @@
 import Home from "../pages/Home";
 import LayoutUser from "../components/Layout/LayoutUser";
+import Search from "../pages/Search";
 
 export const routes = [
   //Public
@@ -10,6 +11,10 @@ export const routes = [
       {
         index: true,
         element: <Home/>
+      },
+      {
+        path: "search/:keyword",
+        element: <Search/>
       }
     ]
   }

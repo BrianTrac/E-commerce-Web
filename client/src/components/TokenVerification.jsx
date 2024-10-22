@@ -3,50 +3,63 @@ import axios from '../config/axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const EmailVerification = () => {
-    const [OTPinput, setOTPinput] = useState(['', '', '', '', '', '']);
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [disable, setDisable] = useState(true);
-    const [timer, setTimer] = useState(60);
-    const [email, setEmail] = useState('');
-    const [loading, setLoading] = useState(false); // Add loading state
 
-    useEffect(() => {
-        if (location.state) {
-            setEmail(location.state.email);
-            sendOTP();
-        } else {
-            navigate('/auth/register');
-        }
-    }, [location]);
+const TokenVerification = () => {
+  const [OTPinput, setOTPinput] = useState(['', '', '', '', '', '']);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [disable, setDisable] = useState(true);
+  const [timer, setTimer] = useState(60);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [loading, setLoading] = useState(false); // Add loading state
+  const [validInputOTP, setValidInputOTP] = useState(false);
 
-  const sendOTP = async () => {
+  // check if the user enter all the input OTP
+  useEffect(() => {
+    if (OTPinput.every((otp) => otp !== '')) {
+      setValidInputOTP(true);
+    } else {
+      setValidInputOTP(false);
+    }
+  }, [OTPinput]);
+    
+  
+  useEffect(() => {
+      if (location.state) {
+        setEmail(location.state.email);
+        setPassword(location.state.password);
+        setUsername(location.state.username);
+      } else {
+          navigate('/auth/register');
+      }
+  }, [location]);
+
+  const resendOTP = async () => {
     if (loading) return;  // Prevent function if already loading
     setDisable(true);
     setTimer(60);
     setLoading(true);  // Set loading state to true
     try {
-        const response = await axios.post('/api/auth/send-otp',
+        const response = await axios.post('/api/auth/register/resend-otp',
             JSON.stringify({ email }),
             {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true,
             }
         );
-
+      debugger;
         if (!response.data.success) {
-            throw new Error(response.data.message);
+            toast.error(response.data.message);
         }
 
-        toast.success('OTP sent successfully!');
+        toast.success(response.data.message);
 
         setDisable(true);
         setTimer(60); // Reset the timer
     } catch (err) {
-      // if the new error appears in the toast, it will replace the previous error
-      
-      toast.error('Failed to send OTP');
+      toast.error(err.message);
     }
     finally {
       setLoading(false);  // Set loading state to false
@@ -70,30 +83,28 @@ const EmailVerification = () => {
     }, [timer]);
 
     const verifyOTP = async () => {
-        const otp = OTPinput.join('');
-
+      const otp = OTPinput.join('');
+      const option = "registration"
+      debugger;
         try {
-            const response = await axios.post('/api/auth/verify-otp', 
-                JSON.stringify({ email, otp }),
+            const response = await axios.post('/api/auth/register/verify-otp', 
+                JSON.stringify({ email, otp, username, password}),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true,
                 }
             );
-
-            console.log(response.data.message);
-            
+          
             if (!response.data.success) {
-                throw new Error(response.data.message);
+                toast.error(response.data.message);
             }
           
-            
-
-            toast.success('OTP verified successfully!');
+            toast.success(response.data.message);
 
             if (location.state.type === 'register') {
                 navigate('/auth/login');
             } else if (location.state.type === 'forget-password') {
+                // This function has not been implemented yet
                 navigate('/auth/reset-password', { state: { email } });
           }
             else {
@@ -101,8 +112,14 @@ const EmailVerification = () => {
           }
           
         } catch (err) {
-          
-            toast.error('Failed to verify OTP');
+          // Check if there's a response from the server
+          if (err.response && err.response.data) {
+            // Server responded with a message, display it
+            toast.error(err.response.data.message);
+          } else {
+            // General error fallback
+            toast.error('An error occurred, please try again.');
+          }
         }
     };
 
@@ -145,6 +162,11 @@ const EmailVerification = () => {
                         <button
                           className="flex flex-row cursor-pointer items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm"
                           type="submit"
+                          style={{
+                            backgroundColor: !validInputOTP ? "gray" : "blue",
+                            cursor: !validInputOTP ? "not-allowed" : "pointer",
+                          }}
+                          disabled={!validInputOTP}
                         >
                           Verify Account
                         </button>
@@ -159,7 +181,7 @@ const EmailVerification = () => {
                             cursor: disable ? "not-allowed" : "pointer",
                             textDecoration: disable ? "none" : "underline",
                           }}
-                          onClick={sendOTP}
+                          onClick={resendOTP}
                           disabled={disable}
                           type="button"
                         >
@@ -176,4 +198,4 @@ const EmailVerification = () => {
     );
 };
 
-export default EmailVerification;
+export default TokenVerification;

@@ -1,21 +1,38 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SearchOutlined, UserOutlined, ShoppingCartOutlined, BellOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'; 
 import logo from "../../../images/logo.png";
 
 function Header() {
   const isLogin = false;
-  const [searchQuery, setSearchQuery] = useState(""); // State to store search query
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [searchQuery, setSearchQuery] = useState(""); 
+  const navigate = useNavigate(); 
+  const { keyword} = useParams();
+  const [searchParams] = useSearchParams();
 
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
+  useEffect(() => {
+    if (keyword) { // Chỉ thực hiện khi có keyword
+      if (searchParams.get('type') === 'category') {
+        setSearchQuery(`Tìm trong ${keyword}`);
+      } else {
+        setSearchQuery(keyword);
+      }
+    }
+  }, [keyword, searchParams]);
+
+
+  const handleChange = (e) => {
+    setSearchQuery(e.target.value);
+  }
+
+  const handleSearch = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
       navigate(`/search/${searchQuery}`);
     }
   };
 
   const handleClickLogo = () => {
-    setSearchQuery(""); // Clear search query
+    setSearchQuery("");
     navigate('/');
   }
 
@@ -44,13 +61,13 @@ function Header() {
               <input
                 type="text"
                 placeholder="Bạn tìm gì..."
-                value={searchQuery} // Bind input value to searchQuery state
-                onChange={(e) => setSearchQuery(e.target.value)} // Update state on input change
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()} // Trigger search on Enter key press
+                value={searchQuery} 
+                onChange={handleChange}
+                onKeyDown={handleSearch}
                 className="w-full px-4 py-2 rounded-full bg-white border border-gray-200 focus:outline-none focus:border-sky-300"
               />
               <button
-                onClick={handleSearch} // Trigger search on button click
+                onClick={handleSearch} 
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
                 <SearchOutlined style={{ fontSize: '24px' }} />

@@ -13,12 +13,16 @@ const passport = require('passport');
 require('./config/passport-setup');
 const session = require('express-session'); // Middleware for session handling
 const PORT = process.env.PORT || 5000;
-const User = require('./models/User'); 
-const OTP = require('./models/OTP');   
+const User = require('./models/User');
+const OTP = require('./models/OTP');
+const Product = require('./models/Product');
+const { Sequelize } = require('sequelize');
 require('./models/associations'); // Import associations
 
 
-// custom middleware logger
+
+
+// Custom middleware logger
 app.use(logger);
 
 // Custom middleware to set Access-Control-Allow-Credentials header  
@@ -54,7 +58,10 @@ sequelize.sync({ force: false })
         app.use(passport.initialize());
         app.use(passport.session());
 
-        // Routes
+        // Routes for products
+        app.use('/api/products', require('./routes/product')); // have not authenticated users yet (i.e. no JWT)
+
+        // Routes for authentication
         app.use('/api/auth/register', require('./routes/register'));
         app.use('/api/auth/login', require('./routes/login'));
         app.use('/api/auth/token/refresh', require('./routes/refreshToken'));
@@ -83,4 +90,4 @@ sequelize.sync({ force: false })
     .catch(err => {
         console.log('Failed to sync models:', err);
     }
-);
+    );

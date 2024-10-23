@@ -72,7 +72,7 @@ const Product = sequelize.define('Product', {
     },
 }, {
     tableName: 'product',
-    timestamps: true,
+    timestamps: false,
 });
 
 module.exports = Product;

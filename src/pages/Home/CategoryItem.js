@@ -6,7 +6,7 @@ function CategoryItem(props) {
 
   const handleClick = () => {
     if(name) {
-      navigate(`/search/${name}?type=category`);
+      navigate(`/${name}`);
     }
   }
   return (

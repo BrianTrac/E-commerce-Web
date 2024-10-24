@@ -1,5 +1,5 @@
-import Filter from './Filter';
-import ResultFound from './ResultFound';
+import Filter from "../../components/user/Filter";
+import ResultFound from "../../components/user/ResultFound";
 
 const Search = () => {
   return (

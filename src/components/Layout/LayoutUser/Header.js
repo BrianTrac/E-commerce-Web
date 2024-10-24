@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { SearchOutlined, UserOutlined, ShoppingCartOutlined, BellOutlined } from '@ant-design/icons';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'; 
+import { useNavigate, useParams} from 'react-router-dom'; 
 import logo from "../../../images/logo.png";
 
 function Header() {
   const isLogin = false;
   const [searchQuery, setSearchQuery] = useState(""); 
   const navigate = useNavigate(); 
-  const { keyword} = useParams();
-  const [searchParams] = useSearchParams();
+  const { category} = useParams();
 
   useEffect(() => {
-    if (keyword) { // Chỉ thực hiện khi có keyword
-      if (searchParams.get('type') === 'category') {
-        setSearchQuery(`Tìm trong ${keyword}`);
-      } else {
-        setSearchQuery(keyword);
-      }
+    if (category) { 
+      setSearchQuery(`Tìm trong ${category}`);
     }
-  }, [keyword, searchParams]);
+  }, [category]);
 
 
   const handleChange = (e) => {

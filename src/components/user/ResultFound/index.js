@@ -1,13 +1,15 @@
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import {Radio, Pagination } from 'antd';
 import { StarFilled } from '@ant-design/icons';
 
 function ResultFound() {
-  const { keyword } = useParams(); // Lấy từ khóa từ param URL
-  const [searchParams] = useSearchParams(); // Lấy các tham số từ URL
+  const { keyword } = useParams();
+  const location = useLocation();
 
-  const type = searchParams.get('type');  // Lấy tham số type từ URL để biết đây là tìm kiếm theo từ khóa hay theo danh mục
 
+  // Tách phần đầu tiên của URL (có thể lấy ra "search")
+  const pathSegments = location.pathname.split('/');
+  const route = decodeURIComponent(pathSegments[1]); // mã hóa thành "search"
 
   const sortOptions = [
     { label: 'Mới Nhất', value: 'newest' },
@@ -22,13 +24,9 @@ function ResultFound() {
         {/* Search Keyword */}
         <div className="mb-4">
           <h2 className="text-lg font-semibold">
-            {type === 'category' ? (
+            {route === 'search' && (
               <>
-                {/* Nothing */}
-              </>
-            ): (
-              <>
-                Kết quả tìm kiếm cho từ khóa: <span className="text-blue-500">{keyword}</span>
+                Kết quả tìm kiếm cho từ khóa: <span className='text-blue-500'>{keyword}</span>
               </>
             )}
           </h2>

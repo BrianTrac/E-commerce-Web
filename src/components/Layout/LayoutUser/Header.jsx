@@ -6,7 +6,7 @@ import {
   BellOutlined,
 } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
-import logo from "../images/logo.png";
+import logo from "../../images/logo.png";
 function Header() {
   const isLogin = false;
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,42 +36,19 @@ function Header() {
 
   return (
     <>
-      <header className="w-full bg-sky-100 px-4 py-3 shadow-sm">
+      <header className="w-full bg-white px-4 py-3 shadow-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between flex-wrap">
           {/* Wrapper for logo and text */}
           <div className="flex flex-col items-center sm:items-start">
-            <span className="font-light text-gray-500 -mt-3 sm:ml-16 text-xs ">
-              Kênh người bán
-            </span>
-
-            {/* Logo */}
-            <div className="w-12 h-12">
+            {/* Logo và văn bản */}
+            <div className="w-12 h-12 flex items-center space-x-2">
               <img
                 src={logo}
                 alt="Logo"
-                className="w-full h-full object-cover hover:cursor-pointer"
-                onClick={handleClickLogo} // Redirect to homepage on logo click
+                className="w-full h-full object-cover hover:cursor-pointer mr-3"
+                onClick={handleClickLogo} // Chuyển đến trang chủ khi nhấn vào logo
               />
-            </div>
-          </div>
-
-          {/* Search Bar */}
-          <div className="flex-1 max-w-2xl mx-8 mt-4 sm:mt-0 w-full sm:w-auto">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Bạn tìm gì..."
-                value={searchQuery}
-                onChange={handleChange}
-                onKeyDown={handleSearch}
-                className="w-full px-4 py-2 rounded-full bg-white border border-gray-200 focus:outline-none focus:border-sky-300"
-              />
-              <button
-                onClick={handleSearch}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                <SearchOutlined style={{ fontSize: "24px" }} />
-              </button>
+              <p className="font-bold text-lg text-2xl">Chat</p>
             </div>
           </div>
 
@@ -117,12 +94,6 @@ function Header() {
                   2
                 </span>
               </div>
-              <button className="flex items-center text-gray-600 hover:text-gray-800">
-                <UserOutlined
-                  style={{ fontSize: "20px", marginRight: "8px" }}
-                />
-                Đăng nhập
-              </button>
             </div>
           )}
         </div>

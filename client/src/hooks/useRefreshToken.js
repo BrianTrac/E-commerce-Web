@@ -1,26 +1,27 @@
-import axios from '../config/axios';
-import useAuth from './useAuth';
+import { useSelector, useDispatch } from 'react-redux';
+import { refreshToken } from '../redux/actions/user/authAction';
+
 
 const useRefreshToken = () => {
-    const { setAuth } = useAuth();    
-    
-    const refreshToken = async () => {
-        const response = await axios.get('api/auth/token/refresh', {
-            withCredentials: true,
-        });
+   
+    const dispatch = useDispatch();
+  
+    const refresh = async () => {
+        try {
+            const resultAction = await dispatch(refreshToken());
 
-        setAuth(prev => {
-            return {
-                ...prev,
-                role: response?.data?.role,
-                accessToken: response?.data?.accessToken
-            };
-        });
-
-        return response.data.accessToken;
+            if (refreshToken.fulfilled.match(resultAction)) {
+                return resultAction.payload.accessToken; // Updated access token
+            } else {
+                throw new Error('Token refresh failed');
+            }
+        } catch (err) {
+            console.error('Refresh token failed:', err);
+            return null;
+        }
     };
 
-    return refreshToken;
+    return refresh;
 };
 
 export default useRefreshToken;

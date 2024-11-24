@@ -1,27 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { SearchOutlined, UserOutlined, ShoppingCartOutlined, BellOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom'; 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { selectAuth } from '../../redux/reducers/user/authReducer';
 import logo from "../../assets/logo.png";
 import Search from './Search';
+import { setSearchQuery } from '../../redux/reducers/user/searchReducer';
+
 
 function Header() {
     
-    const [searchQuery, setSearchQuery] = useState(""); 
+    const searchQuery = useSelector((state) => state.user.search.query);
     const navigate = useNavigate(); 
-    const {user, isAuthenticated} = useSelector(selectAuth);
-    const { category} = useParams();
-
-    useEffect(() => {
-    if (category) { 
-        setSearchQuery(`Tìm trong ${category}`);
-    }
-    }, [category]);
-
+    const { user, isAuthenticated } = useSelector(selectAuth);
+    const dispatch = useDispatch();
+    
 
     const handleClickLogo = () => {
-        setSearchQuery("");
+        dispatch(setSearchQuery(''));
         navigate('/');
     }
 
@@ -43,10 +39,7 @@ function Header() {
                 </div>
 
                 {/* Search Bar */}
-                <Search
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                />
+                <Search/>
 
                 {/* Conditional Rendering for User Login */}
                 {isAuthenticated ? (

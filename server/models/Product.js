@@ -11,28 +11,7 @@ const Product = sequelize.define('Product', {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-    images: {
-        type: DataTypes.JSONB,
-        allowNull: false,
-    },
-    category_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    rating: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-    },
-    discount_rate: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-        defaultValue: 0,
-    },
-    original_price: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    status: {
+    url_key: {
         type: DataTypes.TEXT,
         allowNull: false,
     },
@@ -40,15 +19,52 @@ const Product = sequelize.define('Product', {
         type: DataTypes.TEXT,
         allowNull: true,
     },
-    description: {
+    images: {
+        type: DataTypes.JSONB,
+        allowNull: false,
+    },
+    category_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+
+    },
+    category_name: {
         type: DataTypes.TEXT,
-        allowNull: true,
+        allowNull: false,
+    },
+    original_price: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    price: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    rating_average: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+    discount_rate: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+    },
+    inventory_status: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        validate: {
+            isIn: [['available', 'non-available']]
+        }
     },
     thumbnail_url: {
         type: DataTypes.TEXT,
         allowNull: true,
     },
-    quantity: {
+    video_url: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
+    qty: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
@@ -65,6 +81,10 @@ const Product = sequelize.define('Product', {
     current_seller: {
         type: DataTypes.JSONB,
         allowNull: false,
+    },
+    description: {
+        type: DataTypes.TEXT,
+        allowNull: true,
     },
     created_at: {
         type: DataTypes.DATE,

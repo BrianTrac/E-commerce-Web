@@ -14,6 +14,9 @@ import ForgetPassword from "./pages/user/ForgetPasswordPage.jsx";
 import ResetPassword from "./pages/user/ResetPasswordPage.jsx";
 import GoogleAuthHandler from './pages/user/GoogleAuthHandlerPage.jsx';
 import Search from "./pages/user/SearchPage.jsx";
+import Category from "./components/user/Category.jsx";
+import CategoryWithProducts from "./components/user/CategoryWithProducts.jsx";
+import ProductDetails from "./components/user/ProductDetails.jsx";
 
 const ROLES = {
     User: 'User',
@@ -29,6 +32,8 @@ const App = () => {
                 <Route path="/" element={<UserLayout />}>
                     <Route index element={<Home />} />
                     <Route path="/search/:keyword" element={<Search />} />
+                    <Route path="/:url_key/:id" element={<CategoryWithProducts />} />
+                    <Route path="/:url_key" element={<ProductDetails />} />
                 </Route>
                 
                 <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>

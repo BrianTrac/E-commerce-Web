@@ -1,19 +1,13 @@
 
-import { useNavigate } from "react-router-dom";
-
 function CategoryItem(props) {
-  const { thumbnail, name} = props;
-  const navigate = useNavigate();
+  const { thumbnail, name, navigateTo} = props;
 
-  const handleClick = () => {
-    if(name) {
-      navigate(`/${name}`);
-    }
-  }
   return (
-    <div className="flex flex-col items-center p-2 hover:shadow-md transition-shadow rounded-lg cursor-pointer group" onClick={handleClick}>
+    <div
+      className="flex flex-col items-center p-1 hover:shadow-md transition-shadow rounded-lg cursor-pointer group"
+      onClick={navigateTo}>
       {/* Responsive image container */}
-      <div className="w-16 h-16 mb-2 overflow-hidden group-hover:scale-105 transition-transform">
+      <div className="w-12 h-12 mb-2 overflow-hidden group-hover:scale-105 transition-transform">
         <img 
           src={thumbnail} 
           alt={name}

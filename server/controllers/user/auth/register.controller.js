@@ -66,7 +66,8 @@ const handleRegister = async (req, res) => {
 };
 
 const verifyRegistrationOTP = async(req, res) => {
-    const { email, otp} = req.body;    
+    const { email, otp } = req.body;  
+//    console.log(email, otp);
     if (!email || !otp) {
         return res.status(400).json({ message: 'incorrect form submission' });
     }

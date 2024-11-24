@@ -1,5 +1,5 @@
 import Filter from "../../components/user/Filter";
-import ResultFound from "../../components/user/ResultFound";
+import ProductSearchList from "../../components/user/ProductSearchList";
 
 const Search = () => {
     return (
@@ -9,7 +9,7 @@ const Search = () => {
           <Filter />
   
           {/* Result Area */}
-          <ResultFound />
+          <ProductSearchList />
         </div>
       </div>
     );

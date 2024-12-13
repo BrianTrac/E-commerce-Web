@@ -1,53 +1,61 @@
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
-import MainLayout from "./layouts/MainLayout";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Register from "./pages/user/RegisterPage.jsx";
+import Login from "./pages/user/LoginPage.jsx";
+import Home from "./pages/user/HomePage.jsx";
+import UserLayout from "./layouts/UserLayout.jsx";
 import AuthLayout from "./layouts/AuthLayout";
 import MissingPage from "./pages/MissingPage.jsx";
-import { Routes, Route, Navigate } from "react-router-dom";
 import RequireAuth from "./hooks/RequireAuth";
-import Admin from "./pages/Admin";
-import Seller from "./pages/Seller";
+import Admin from "./pages/admin/AdminPage.jsx";
+import Shop from "./pages/shop/ShopPage.jsx";
 import PersistLogin from "./hooks/PersistLogin";
-import TokenVerification from "./components/TokenVerification.jsx";
-import ForgetPassword from "./components/ForgetPassword.jsx";
-import ResetPassword from "./components/ResetPassword.jsx";
-import GoogleAuthHandler from './components/GoogleAuthHandler';
-
+import OTPVerification from "./pages/user/OTPVerificationPage.jsx";
+import ForgetPassword from "./pages/user/ForgetPasswordPage.jsx";
+import ResetPassword from "./pages/user/ResetPasswordPage.jsx";
+import GoogleAuthHandler from './pages/user/GoogleAuthHandlerPage.jsx';
+import Search from "./pages/user/SearchPage.jsx";
+import Category from "./components/user/Category.jsx";
+import CategoryWithProducts from "./components/user/CategoryWithProducts.jsx";
+import ProductDetails from "./components/user/ProductDetails.jsx";
 
 const ROLES = {
-    'User':1236,
-    'Seller':1235,
-    'Admin':1234,
+    User: 'User',
+    Shop: 'Shop',
+    Admin: 'Admin',
 }
 
 const App = () => {
     return (     
-        <Routes>
-            <Route path="/" element={<MainLayout />}>
-                <Route index element={<Home />} />
-            </Route>
-            
+        <Routes>                 
             <Route element={<PersistLogin />}>
+                {/* USER ROUTE */}
+                <Route path="/" element={<UserLayout />}>
+                    <Route index element={<Home />} />
+                    <Route path="/search/:keyword" element={<Search />} />
+                    <Route path="/:url_key/:id" element={<CategoryWithProducts />} />
+                    <Route path="/:url_key" element={<ProductDetails />} />
+                </Route>
+                
                 <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
                     <Route path="/Admin" element={<Admin/>} />
                 </Route>
-                <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
-                    <Route path="/Seller" element={<Seller/>} />
+                <Route element={<RequireAuth allowedRoles={[ROLES.Shop]} />}>
+                    <Route path="/Shop" element={<Shop/>} />
                 </Route>
             </Route>
 
+            {/* AUTH ROUTE */}
             <Route path="/auth" element={<AuthLayout />}>
                 <Route index element={<Navigate to="/auth/login" replace />} />
                 <Route path="login" element={<Login />} state={{ title: "Login" }} />
                 <Route path="register" element={<Register />} state={{ title: "Register" }} />
             </Route>
-
             <Route path="/auth/forget-password" element={<ForgetPassword />} />
             <Route path="/auth/reset-password" element={<ResetPassword />} />
-            <Route path="/auth/register/verify-otp" element={<TokenVerification />}/>
+            <Route path="/auth/register/verify-otp" element={<OTPVerification />}/>
             <Route path="/auth/google/callback" element={<GoogleAuthHandler />} />
             
+
             <Route path="unauthorized" element={<MissingPage />} /> {/* 403 Page */}
             
             <Route path="*" element={<MissingPage />} /> {/* 404 Page */}

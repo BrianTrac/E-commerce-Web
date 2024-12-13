@@ -26,3 +26,4 @@
 2024-10-22 17:45:51 	 5ce96d1d-9637-4dee-9e0f-376f8df86ad7 	  SequelizeValidationError: notNull Violation: User.username cannot be null
 2024-10-22 17:54:30 	 b8c451f1-0709-4264-8de1-cef19fda8d6e 	  SequelizeValidationError: notNull Violation: User.username cannot be null
 2024-10-22 17:55:05 	 830e13e4-291b-4b55-b357-f194b5c393db 	  SequelizeValidationError: notNull Violation: User.username cannot be null
+2024-11-01 06:46:21 	 13596a54-0797-415b-9ca8-933f035c2025 	  Error: Not allowed by CORS

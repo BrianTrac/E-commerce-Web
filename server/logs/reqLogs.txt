@@ -722,3 +722,12 @@
 2024-10-24 00:09:17 	 5927d52e-d527-4c7f-8df6-91dda8128866 	  GET 	 /api/products/1000 	 ::1 	 PostmanRuntime/7.42.0
 2024-10-24 00:09:28 	 d0551a92-9760-461e-97a3-4c11c1478437 	  DELETE 	 /api/products/1000 	 ::1 	 PostmanRuntime/7.42.0
 2024-10-24 00:09:32 	 027fd071-5f93-474d-8e24-a54a481a051f 	  GET 	 /api/products/1000 	 ::1 	 PostmanRuntime/7.42.0
+2024-12-15 19:56:03 	 e8389c5a-4198-4df1-a834-d92b707bbd3d 	  GET 	 /api/products 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-15 19:56:12 	 93993a3d-bf1f-4231-aade-5b18e6d3dcaf 	  GET 	 /api/products/1000 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-15 20:00:48 	 6f8b5ccb-1666-4562-bd23-d50f10bf017e 	  GET 	 /api/products 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-15 20:03:22 	 2ef31ea9-faab-40ef-aba0-fb5b6ccba832 	  GET 	 /api/products/166209 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-15 20:07:05 	 87945ab7-5bca-4174-9c1c-f9c7549ad457 	  GET 	 /api/products 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-15 20:15:54 	 ce5e36d7-2773-4aa0-8c37-ac8574833dea 	  GET 	 /api/products 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-15 20:34:34 	 8e83f39f-abe2-43d8-8ce9-ce6a05bc5e54 	  GET 	 /api/products 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-15 20:35:28 	 176ce49e-4bbb-4dca-b671-f312da626893 	  GET 	 /api/products 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-15 20:36:20 	 f1fd1259-c930-4ef3-9d15-d3c67d413989 	  GET 	 /api/products/166209 	 ::1 	 PostmanRuntime/7.43.0

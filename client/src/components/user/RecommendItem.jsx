@@ -4,7 +4,7 @@ function RecommendItem (props) {
   const { image, title, rating, sold } = props;
 
   return (
-    <div className="bg-white p-3 hover:shadow-lg transition-shadow cursor-pointer">
+    <div className="bg-white p-3 hover:shadow-lg transition-shadow cursor-pointer rounded-md">
       <div className="relative aspect-square mb-3 overflow-hidden">
         <img
           src={image}

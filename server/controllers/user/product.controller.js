@@ -3,7 +3,7 @@ const Product = require('../../models/Product');
 const { Op } = require('sequelize');
 const sequelize = require('../../config/db');
 const { WEB_URL } = require('../../config/config');
-const { get } = require('../../routes/user/product.route');
+//const { get } = require('../../routes/user/product.route');
 
 let createNewProduct = async (req, res) => {
     try {
@@ -46,10 +46,14 @@ let getAllProducts = async (req, res) => {
     }
 };
 
+// GET /api/products/?id=1
 let getProductById = async (req, res) => {
-    const productId = req.params.id;
-
     try {
+        const productId = req.query.id;
+
+        if (!productId) {
+            return res.status(400).json({ error: 'Query parameter "id" is required' });
+        }
         const result = await Product.findByPk(productId);
 
         if (result === null) {

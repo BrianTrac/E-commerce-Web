@@ -14,7 +14,7 @@ const handleLogin = async (req, res) => {
             username: username 
         }
     });
-    
+
     if (!user) {
         return res.status(401).json({ message: 'invalid credentials' });
     }

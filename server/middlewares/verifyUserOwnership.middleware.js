@@ -2,7 +2,6 @@ const verifyUserOwnership = async (req, res, next) => {
     const userIdFromToken = req.user.id;
     const roleFromToken = req.user.role;
     const userIdFromParams = parseInt(req.params.id);
-    
 
     if (roleFromToken === 'Admin') {
         return next();

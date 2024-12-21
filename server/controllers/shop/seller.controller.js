@@ -5,7 +5,8 @@ const Seller = require('../../models/Seller');
 // GET /api/seller/:id
 let getSellerById = async (req, res) => {
     try {
-        const seller = await Seller.findByPk(req.params.id);
+        let storeId = req.params.id;
+        const seller = await Seller.findByPk(storeId);
         if (seller) {
             res.status(200).json(seller);
         } else {
@@ -20,7 +21,9 @@ let getSellerById = async (req, res) => {
 // GET /api/seller
 let getAllSellers = async (req, res) => {
     try {
-        const sellers = await Seller.findAll();
+        const sellers = await Seller.findAll({
+            attributes: ['id', 'name'] // return only id and name
+        });
         if (sellers.length) {
             res.status(200).json(sellers);
         } else {

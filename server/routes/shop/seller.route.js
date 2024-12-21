@@ -8,11 +8,11 @@ const verifyUserOwnership = require('../../middlewares/verifyUserOwnership.middl
 
 // Get all sellers - allow all roles
 router.route('/')
-    .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Shop, ROLES_LIST.User), verifyUserOwnership, sellerController.getAllSellers)
+    .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Shop, ROLES_LIST.User), sellerController.getAllSellers)
 
 
 // Get seller details by ID - allow all roles
 router.route('/:id')
-    .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Shop, ROLES_LIST.User), verifyUserOwnership, sellerController.getSellerById);
+    .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Shop, ROLES_LIST.User), sellerController.getSellerById);
 
 module.exports = router;

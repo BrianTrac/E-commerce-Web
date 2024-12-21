@@ -3,8 +3,7 @@ const jwt = require('jsonwebtoken');
 const verifyJWT = (req, res, next) => {
     // routes don't need authentication
     const skipRoutes = ['/api/seller/product'];
-
-    console.log("Current route:", req.path);  // In ra route hiện tại
+    // console.log("Current route:", req.path);  // In ra route hiện tại
 
     if (skipRoutes.some(route => new RegExp(route.replace(/:\w+/g, '\\w+')).test(req.path))) {
         console.log("Skipping authentication for route:", req.path);  // In ra nếu route này bỏ qua xác thực
@@ -15,7 +14,6 @@ const verifyJWT = (req, res, next) => {
 
 
     const authHeader = req.headers.authorization;
-//    console.log('authHeader:', authHeader);
     if (!authHeader?.startsWith('Bearer ')) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
@@ -27,8 +25,11 @@ const verifyJWT = (req, res, next) => {
         process.env.ACCESS_TOKEN_SECRET,
         (err, decoded) => {
             if (err) {
+                console.error('JWT Verification Error:', err.message);
                 return res.status(403).json({ message: 'Forbidden' });
             }
+
+            console.log('Decoded token:', decoded);  // Xem payload của token
 
             req.user = {
                 id: decoded.id,

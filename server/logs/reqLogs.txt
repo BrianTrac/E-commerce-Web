@@ -10591,3 +10591,99 @@
 2024-12-17 09:39:41 	 7a3bf527-9c49-4f1a-965a-7fdeb6592bd6 	  GET 	 /api/seller?id=38 	 ::1 	 PostmanRuntime/7.43.0
 2024-12-17 09:42:04 	 a7e6f3a1-1f8f-4a1c-9dbe-6f6494feeb0e 	  GET 	 /api/products/flash-sale?limit=36&page=1 	 ::1 	 PostmanRuntime/7.43.0
 2024-12-17 09:43:02 	 fbcdf2ed-785d-4cc7-8314-e7fb615ee989 	  GET 	 /api/products/flash-sale?limit=36&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-17 09:44:57 	 072b1802-6d12-4760-ab8a-f3f01485f1f2 	  GET 	 /api/products/flash-sale?limit=36&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-17 09:45:37 	 d58f678c-3129-4494-8e59-270c79556e56 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-17 09:46:55 	 ff8274be-cb2f-45f5-a57b-27b779a0ef74 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-17 10:12:58 	 f1c394c4-5c2f-4096-b527-1494bf9e81ca 	  GET 	 /api/products?limit=24&page=1&q=apple&rating=4,5&price=100,200&sort=default%0A 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-17 10:13:37 	 9fbeb154-5b9d-4a94-aa30-13c06ebf2d46 	  GET 	 /api/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-17 10:28:12 	 c361f834-35d6-4104-b037-ae5d24aca164 	  GET 	 / 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-17 10:36:19 	 ed47df55-06b6-4321-9b34-a74bedba6ae0 	  POST 	 /api/auth/token/refresh 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-17 10:36:19 	 b8c24af3-e450-4ce7-a63f-b26fd7c81b38 	  POST 	 /api/auth/token/refresh 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-17 10:36:19 	 013032b8-b4e0-4e4b-b4ae-b2d98b18197d 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-17 10:36:19 	 800f4712-cc6a-4698-8b15-062399342083 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-17 10:36:19 	 be1d8df7-328d-43fb-a1ef-8d8510b0f236 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-17 10:36:20 	 8fc78419-9333-4733-80db-1c4261067e6b 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-17 10:36:20 	 421b8326-825b-4b79-87cc-f04d57f20b35 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-17 10:36:20 	 8a702d10-1745-45ec-8da7-f9bd87a15304 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-18 16:48:08 	 d2ac692a-e7ee-479a-a260-67f529caf3f8 	  POST 	 /api/auth/token/refresh 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-18 16:48:08 	 39d6d75c-5860-4785-9ed3-d5fe4fb6b7f0 	  POST 	 /api/auth/token/refresh 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-18 16:48:08 	 850d3daa-67a9-4808-8db2-75b7cd42cd98 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-18 16:48:08 	 40861a98-fc68-442c-a794-42bb8b47de60 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-18 16:48:08 	 9458599a-78a4-49ab-9bd2-1d47155772fa 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-18 16:48:10 	 961518c5-f227-4faa-8932-dd1a46ff32ae 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-18 16:48:10 	 f3e56e5c-c0e8-47d4-82a1-7b4c8869ee38 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-18 16:48:13 	 341153d5-da77-4a13-8e42-08bf343f0432 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-21 14:16:21 	 836fd6e6-d8b1-4d61-b29a-89d874af89ba 	  POST 	 /api/auth/login 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 14:18:03 	 df0092c3-56d3-43bf-bffc-a2c457329439 	  POST 	 /api/auth/register 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 14:18:39 	 ab307c20-930b-4604-861e-da11694e83cb 	  POST 	 /api/auth/register 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 14:18:46 	 8eb18572-7748-4dbe-9706-18e64e089519 	  POST 	 /api/auth/register 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 14:20:44 	 29a38404-ecb0-4d56-8e17-78af82bcbd44 	  POST 	 /api/auth/register/verify-otp 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 14:21:01 	 38a8f89c-d614-4cba-8a34-f8c1eb96db00 	  POST 	 /api/auth/login 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 15:52:53 	 5001be7d-d774-49ce-b418-1172416c6fba 	  GET 	 /api/seller?id=38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 18:51:35 	 b5c72ea9-ca28-4e31-8056-8692e31ee6ae 	  GET 	 /api/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 18:54:11 	 391c8044-6f5f-4ce2-8760-9df55c0b0287 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 19:03:15 	 e6f5c7f9-0446-4d49-9387-0ee2298e0dc5 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 19:10:18 	 6302b3cd-ca1f-49a0-b839-421b9014908e 	  POST 	 /api/auth/login 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 19:10:30 	 1f6381f1-0181-4740-9a14-2914e8f9a2ae 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 19:10:40 	 98b1aa72-60d8-4a01-960a-b976439191fe 	  GET 	 /api/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 19:11:26 	 c7b7e7df-949b-49d8-9e7b-27bd52d65943 	  GET 	 /api/seller/product/40395/paging 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 19:11:40 	 4220fae4-283f-443c-8fec-51341555bdf8 	  GET 	 /api/seller/product/40395/paging 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 19:13:06 	 5b929d44-5bee-4057-81e0-087aa3390e0a 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 19:16:06 	 fb82c5ca-99e5-4245-9896-8620eca54f30 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 19:19:14 	 ec9403dc-ac7a-4aea-8751-245b870f96e7 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 19:24:15 	 5285cecb-0370-43df-98b2-13587b53294e 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 19:24:27 	 0525604a-8d92-4410-8fb7-eca126c06431 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 20:05:55 	 768b9588-7d11-4fb0-88fa-b621631832ab 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 20:28:04 	 54bd0ae6-fbf6-4a3d-b048-0ccdfb224a1d 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 20:58:37 	 25556dfe-6c17-47bf-a8fa-2b04ef4fc33b 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:05:36 	 ee33af16-7c90-4eb8-beb1-6fa90a326ae3 	  GET 	 /api/products/166209 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:06:01 	 dcf705fb-d1ba-478d-972b-f0b25c9106db 	  GET 	 /api/products/166209 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:12:25 	 6516fb2d-f61a-4588-ba7f-0d6316d87944 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:12:36 	 215c8c84-64a7-4bba-8fda-35e122cd5b50 	  POST 	 /api/auth/login 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:14:35 	 d9b46cb2-e46b-4130-8848-22a68f4c6374 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:14:44 	 a9acef8b-350e-4050-a5e8-e1916b0aefd3 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:15:26 	 2ba0483d-badc-40ee-916c-780c4b2fae6a 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:15:49 	 15254b9f-8933-4d19-8d65-71587ed0cc30 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:17:29 	 8c74cd47-7029-415a-a98c-a114021f3b47 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:19:44 	 5673c8d3-7433-40a8-9957-fa6c83f70ac8 	  GET 	 /api/seller/product/40395/paging 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:20:39 	 75df6cca-bbf4-4743-9c74-9501a1c5f95f 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:20:53 	 aa0ba0e9-38cb-42bb-9ba4-6afef2abed10 	  POST 	 /api/auth/login 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:21:06 	 f73ae1cb-fc65-476c-a4ef-7bdfba73bdef 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:22:27 	 846e0ddc-42a9-4c00-bc37-c8b23064fad7 	  POST 	 /api/auth/token/refresh 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:22:46 	 671e0f79-73ed-4d64-bf49-5efbd7b298da 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:23:46 	 01f345f2-a3e3-45c9-88e7-8e10480fd2dc 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:24:11 	 b2f2eb3b-b784-4f88-bc12-f6a9dfb2e95f 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:24:21 	 85f88214-f431-4483-a3c4-137c08b1b48e 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:24:26 	 22470488-de1e-4617-9a2f-7d29524db771 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:24:29 	 89568f30-8004-4d04-b52d-8e526b772bea 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:28:03 	 b5077310-420b-4b38-9270-3c4ce9058956 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:35:42 	 c730f90d-d910-4be4-96a3-0649863990bd 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:40:42 	 84f59ba6-42e3-4024-bb7d-4730278b8e9a 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:40:54 	 7b8ddc06-5218-4e25-9bad-cae6bc6d8bd0 	  POST 	 /api/auth/token/refresh 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:41:03 	 277f40b6-ace2-489b-b27a-d8c622d4b194 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:42:14 	 8468444f-0038-4331-b003-b04ad3f1083e 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:46:36 	 0cbe8f55-175c-4ab6-b7fc-dcebcaa3c0b3 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:46:49 	 c8172659-5b3d-4e5f-a2a6-bc590515867d 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:47:02 	 ef8b437b-6edd-4200-a48d-3710f326710e 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 21:50:17 	 f1c265c6-c008-46d5-88bd-027133e39cd9 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:01:20 	 9222c3af-ff99-473c-bca9-9e6b314d8301 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:04:41 	 461171aa-6aa4-4c9a-9dbf-aeee80825abe 	  POST 	 /api/auth/token/refresh 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:04:57 	 3a718b1b-d89e-48b6-9b83-1cc91a223158 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:05:29 	 c8cca206-7a52-48d4-8009-8f58d76f6df3 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:07:53 	 83f2384d-875f-410b-8e2c-5fb941b0f5cc 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:08:45 	 6b6ba20b-0df5-4be1-8d4f-2f9853e3c0f6 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:16:20 	 afe93d0d-8f94-472a-9eee-efb223eff020 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:22:07 	 8c219fdb-0a9e-45ae-8849-7bd2a7fb36fe 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:23:56 	 a045a496-9716-473c-8e60-700d6c795bf8 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:28:05 	 fe12b2a2-afec-4d99-8817-915929fdf411 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:33:03 	 cdcb515e-ba5b-4f81-b679-8c98dd5a7580 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:34:52 	 b55da7a6-b427-4fc7-b4a0-ff8b23c2f2dd 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:34:58 	 abfffe3b-77c2-4c85-a768-56e17751201a 	  GET 	 /api/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:35:15 	 6ceb415d-5972-4b6b-8aaf-493546a85f1e 	  POST 	 /api/auth/token/refresh 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:35:29 	 270112f5-8120-47a2-ace6-02462bbced60 	  GET 	 /api/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:35:38 	 0250ccbd-a469-4005-aa00-49615f497260 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:36:14 	 3ab57a88-a135-47d6-83c1-968fa44806bf 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:36:16 	 cd3ed53f-032d-4f13-925d-e56eb8328e7b 	  GET 	 /api/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:38:22 	 6549c23e-beba-4f7b-9a97-abf4db83d5c5 	  GET 	 /api/seller/38 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:38:25 	 104af207-db85-498f-b765-ebddc4afb12c 	  GET 	 /api/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-21 22:38:53 	 3b150e65-b071-419b-9ac3-c7f1290a11dd 	  GET 	 /api/seller/product/40395/paging 	 ::1 	 PostmanRuntime/7.43.0

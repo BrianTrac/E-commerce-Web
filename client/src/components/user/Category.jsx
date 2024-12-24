@@ -10,11 +10,11 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-const Category = ({id}) => {
+const Category = ({ id }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { childrenCategories, status, error } = useSelector(selectCategory);
-//  const { url_key, id } = useParams();
+  //  const { url_key, id } = useParams();
   // Track loading state for the new category
   const [isNewCategoryLoaded, setIsNewCategoryLoaded] = useState(false);
   const [isCategoryVisible, setIsCategoryVisible] = useState(false);  // New state for controlling visibility
@@ -57,7 +57,7 @@ const Category = ({id}) => {
   // Render spinner or error message
   if (status === 'loading') return <Spin />;
   if (status === 'failed') return <p className="text-red-500">{error || 'Failed to load categories.'}</p>;
-  
+
   // Render the old category until the new one is loaded
   if (!isNewCategoryLoaded || !isCategoryVisible) {
     return (<Spin />);
@@ -74,28 +74,28 @@ const Category = ({id}) => {
         navigation
         spaceBetween={20}
         slidesPerView={1}// Show 1 slide per view
-        
+
       >
         {chunkedCategories.map((categoryGroup, index) => (
           <SwiperSlide key={index}>
-          <div className="flex flex-col px-4 gap-6">
-            {/* All Items */}
-            <div className="flex flex-wrap justify-center gap-4 max-w-full bg-slate-600 p-2">
-              {categoryGroup.map((category) => (
-                <div
-                  key={category.id}
-                  className="flex justify-center flex-shrink-0 rounded-lg w-28 bg-transparent-600"
-                >
-                  <CategoryItem
-                    thumbnail={category.thumbnail_url}
-                    name={category.name}
-                    navigateTo={() => navigate(`/${category.url_path.split('/')[0]}/c${category.id}`)}
-                  />
-                </div>
-              ))}
+            <div className="flex flex-col px-4 gap-6">
+              {/* All Items */}
+              <div className="flex flex-wrap justify-center gap-4 max-w-full bg-slate-600 p-2">
+                {categoryGroup.map((category) => (
+                  <div
+                    key={category.id}
+                    className="flex justify-center flex-shrink-0 rounded-lg w-28 bg-transparent-600"
+                  >
+                    <CategoryItem
+                      thumbnail={category.thumbnail_url}
+                      name={category.name}
+                      navigateTo={() => navigate(`/${category.url_path.split('/')[0]}/c${category.id}`)}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </SwiperSlide>
+          </SwiperSlide>
         ))}
       </Swiper>
     </div>

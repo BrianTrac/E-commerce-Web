@@ -11792,3 +11792,110 @@
 2024-12-16 23:58:06 	 3ed79aea-e49b-43e8-a900-8e77b2461eb0 	  GET 	 /api/products?q=s%C3%A1ch&limit=20&page=1&sort=default 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
 2024-12-16 23:59:38 	 de0b812c-1726-4899-b020-93dbdadfb011 	  GET 	 /api/products/31509726 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
 2024-12-16 23:59:38 	 67d98dbf-8b2a-4e3d-b53d-e90498ca4984 	  GET 	 /api/categories?include=ancestor&parent_id=316 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:57:56 	 9323607a-f6a8-4e60-8cc7-a046d386bb1c 	  POST 	 /api/auth/token/refresh 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:57:56 	 d132d87f-65d2-4892-b421-652cafdc85ce 	  POST 	 /api/auth/token/refresh 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:57:56 	 b7ee0079-e4a6-4a57-a86f-6ee179e87aec 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:57:56 	 062bc384-0125-469c-aa62-5a6fcde94e1f 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:57:56 	 ec05663d-bc71-4590-87e9-1af060c7fb6c 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:57:57 	 32bf09d7-8282-46b3-adaa-26d2833bb539 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:57:57 	 a4d71fb4-3527-4637-ab0c-98c3fe0b191b 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:57:57 	 7d65ba7f-3382-470d-9150-1cf750b7f56b 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:04 	 8ca4ae13-da17-4703-9c94-96ea259a32a8 	  OPTIONS 	 /api/auth/login 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:04 	 d5e0dbef-047c-4e80-aa6c-f27d328eec6d 	  POST 	 /api/auth/login 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:06 	 9b7548d8-0658-48cd-8408-8ee22400acae 	  POST 	 /api/auth/login 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:07 	 17fa5e2d-10d7-42c0-b285-2ee182833034 	  POST 	 /api/auth/login 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:08 	 4587b5f4-bb64-4cc1-a15b-cf9ec7237f6a 	  POST 	 /api/auth/login 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:09 	 c7949ba4-fe7e-4de1-816a-c60d37e2e3f2 	  POST 	 /api/auth/login 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:09 	 f2820055-54a6-45ce-b5bc-84e61bcf242f 	  OPTIONS 	 /api/auth/login 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:09 	 3276904d-b617-40e2-abbb-f6fd87ea2cce 	  POST 	 /api/auth/login 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:39 	 8189cbdb-7373-49ec-bfbb-d354d5076034 	  POST 	 /api/auth/token/refresh 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:39 	 d4f821cf-3a57-4ec6-826c-e4b4cfac1acd 	  POST 	 /api/auth/token/refresh 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:39 	 005f7f77-774c-45ad-a670-387c7846b7a5 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:39 	 443bd58f-39b6-4590-bf58-2376c6f285f4 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:39 	 c92371a9-1a88-44fd-88ce-b03692a466be 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:40 	 d10f7443-733a-4653-939f-eff3b4b7d736 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:40 	 dcd0aa18-17b7-447c-9c50-848e48044b6d 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:58:40 	 ff33241a-0c96-4440-9685-d0a192c4d865 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:59:02 	 6f0ed166-6e10-4817-a921-b5e6bd5caf32 	  OPTIONS 	 /api/auth/register 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:59:02 	 f9dc5eae-6223-4d62-a1ba-119cededa1ef 	  POST 	 /api/auth/register 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:59:12 	 2393204f-f26b-42c0-b6bd-8ec19686aaf7 	  OPTIONS 	 /api/auth/register 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:59:12 	 c1c3c769-80a3-417a-9c9f-0b79e0ae58ce 	  POST 	 /api/auth/register 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:59:44 	 38e8c049-2905-45e9-8a30-00fc5725509d 	  OPTIONS 	 /api/auth/register/verify-otp 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:59:44 	 acc2a314-d8d2-4359-b182-4b4a7036b513 	  POST 	 /api/auth/register/verify-otp 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:59:52 	 5aec74e5-7a37-420b-a8fc-6a49ab2a61fa 	  OPTIONS 	 /api/auth/login 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:59:52 	 6b0a6cdd-45e1-44d7-9795-07790b480743 	  POST 	 /api/auth/login 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:59:52 	 30d79640-b288-45fe-87f1-22d9833d91b5 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:59:52 	 bb18c491-93d0-48e1-8566-280e88a7d9da 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:59:52 	 efc7f927-1d76-4950-bdb7-ea3af0adbbe6 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:59:53 	 b9f20ed9-2daf-4308-a1e9-471c4285f340 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:59:53 	 29c744d8-a14a-4713-8882-6c03c484ef7e 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 13:59:53 	 83611290-978d-44b9-95da-baee17c20769 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 14:45:50 	 f441ccb7-d331-4576-be4b-19dc76bcc4ea 	  GET 	 /api/categories?include=ancestor&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 14:45:50 	 b80d233f-bfe7-4c38-8214-c12b6363fb52 	  GET 	 /api/categories?include=children&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 14:45:50 	 9cd757f2-df33-47bb-ad06-137c88751b58 	  GET 	 /api/categories?include=ancestor&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 14:45:50 	 cd0175d5-6e1c-4646-9d1c-a6ca9a99a67a 	  GET 	 /api/categories?include=children&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 14:45:54 	 13cccf83-31b8-4e13-9c7c-53a7e543a226 	  GET 	 /api/categories?include=ancestor&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 14:45:54 	 db3deeea-e437-41e1-9e8a-a4580009c954 	  GET 	 /api/categories?include=children&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 14:45:54 	 bb8bba1e-4e90-4800-8019-2970f358f6e4 	  GET 	 /api/categories?include=ancestor&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 14:45:54 	 255c55c6-3f07-4734-9e56-9045d81b8bd2 	  GET 	 /api/categories?include=children&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 14:45:58 	 1723105f-5866-49d9-a8d3-9a0a6486a93a 	  GET 	 /api/categories?include=ancestor&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 14:45:58 	 43bd1b24-20e5-404d-b2bb-7ce6efaca058 	  GET 	 /api/categories?include=children&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 14:45:58 	 5d2717d0-47d5-4de7-9286-ed20cc9d7e8d 	  GET 	 /api/categories?include=ancestor&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 14:45:58 	 2e39268a-48c7-4982-9ab4-a9374a3e8b83 	  GET 	 /api/categories?include=children&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 15:17:26 	 c95ab539-e944-4bf8-a419-eeba97fd5eca 	  GET 	 /api/products/NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 15:17:27 	 0884a42d-ccef-463b-aab5-ff5c0c81d95e 	  GET 	 /api/products/NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 15:18:49 	 de971499-279c-4725-9fe2-b975413c1aa7 	  GET 	 /api/products/NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 15:18:50 	 4cdbb524-a056-46e5-b327-6934df9e93ad 	  GET 	 /api/products/NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 17:22:47 	 812bc222-1f8a-4479-a678-9a8ca16bab60 	  POST 	 /api/auth/token/refresh 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 17:22:47 	 6ed1c231-90a1-4ce0-9539-35cc9616bc07 	  POST 	 /api/auth/token/refresh 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 17:23:25 	 d537aabb-b195-4590-9c17-e194f5df7200 	  POST 	 /api/auth/token/refresh 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 17:23:25 	 c7b517ea-4b45-4b7b-99ac-05402342b3d1 	  POST 	 /api/auth/token/refresh 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 17:32:38 	 26e5a7db-3017-470e-bdd0-a2fb53f486d6 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:43:39 	 89d7006d-b0cc-4ce8-8772-bcff582c7c38 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:45:14 	 6bff378e-472a-4c0e-bf37-ed4015db509c 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:45:21 	 49e87bbd-3875-4b84-9e37-2bffad5880ea 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:45:23 	 ffead403-3808-4337-b75a-30f087597fa1 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:45:59 	 698d80cd-7099-4d03-b594-2ea9992d5679 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:46:16 	 7148ec1c-b2b7-4fdf-bc78-5309f35f9527 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:46:17 	 65ed61e9-5c38-40c8-a6ce-dcf22de10b75 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:46:31 	 f3dca36e-4d23-4855-8b25-4d649b7e58b3 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:50:19 	 e84b4264-bddf-4c45-9d38-cd5a4a6427a7 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:50:20 	 fb0ac151-8a69-494f-97ee-fe49db7a6dd4 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:50:21 	 2758aee2-0b9f-49e3-ac4e-14e7fb0742c2 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:51:23 	 f3d545c6-5acf-4d45-b3ba-cf270756cd9c 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:51:24 	 23698d56-c420-4efe-a6a4-98802b19e7f4 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:51:25 	 33f8d2c0-188f-4cb7-8a0a-902dc215b93c 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:51:26 	 a2b63b8a-ebe8-49fd-a259-b25297066276 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:51:27 	 fb29768b-4385-425f-b765-c8c045f83469 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:51:47 	 96690638-5c82-4ef1-946f-7a65e16c8a1f 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:51:48 	 673184bf-4f5a-4324-824b-92a6398dd279 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:51:49 	 9b665f5b-61b7-420d-91a6-1eea5da4f884 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:51:50 	 3687ca13-722e-4c03-9df2-d31292f25022 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:51:53 	 703900a4-7a0c-4a03-a852-16ac73fe1661 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:52:43 	 12ca31b5-a5c7-41ff-a125-30a4aa72dd70 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:53:01 	 0aba6343-7a52-4fae-b824-01c429182227 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:53:03 	 82a27188-cb24-4248-9a71-9c446cb8b3f6 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:53:05 	 f93321a3-883e-4d7c-8c7a-e9379108f9c2 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:54:51 	 e03f85cc-7792-4eb7-b99b-4926edf5c851 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:54:53 	 d8e1e317-d1df-4356-9f85-836dbf57010e 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:54:54 	 ddf9eea6-f373-4890-ab5d-50ffe0129ec7 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:55:59 	 0d44572f-30a2-4383-9249-d5bb01d5fd39 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:56:00 	 70d2c9cb-2ab0-45f9-b348-f953d730a365 	  POST 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:56:22 	 5d689d68-0b16-4946-a152-def34387e2cb 	  GET 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:56:35 	 7d0214c7-1e19-4737-92cc-d6a53b8d7692 	  GET 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:56:36 	 63f4a5ff-14f8-4d02-8fae-2fa94b01ea09 	  GET 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:56:37 	 294575c0-bf07-4a77-bb41-991db617dd56 	  GET 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:56:38 	 618a4aac-b281-4c7e-a252-e46354d2794b 	  GET 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:56:39 	 2b1d0d99-d87f-4048-83f1-59d92b42c9f3 	  GET 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:56:40 	 5f2f9cea-db4b-4eeb-8fbf-998e026390b7 	  GET 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:56:40 	 b410d31e-cafd-410b-b461-89adfff3cd76 	  GET 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:56:41 	 5b9e8fbe-bcc7-431a-aec0-f045c61b751d 	  GET 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 17:56:42 	 5e729b32-3d88-4b03-9f97-7ac32c898e70 	  GET 	 /api/products/top_deals?limit=1&page=1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 18:47:51 	 d91e3034-530b-4667-89e8-36098b79a9c0 	  POST 	 /api/auth/token/refresh 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 18:47:51 	 9e99edc0-65f9-42e3-9910-75162e6de53c 	  POST 	 /api/auth/token/refresh 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 18:48:03 	 6c875c87-76af-4246-8e48-66d61eb3cb8f 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 18:48:03 	 6f0786be-0c10-4a17-b618-8527bf6d02ca 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 18:48:04 	 bd6a9028-0e27-4bdb-aa39-6d14f23fbc09 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 18:48:04 	 6061f7a3-a26f-4133-a81b-f81e80d991f4 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 18:48:05 	 bc71dc95-90f2-4259-99e7-8a4a149dd127 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 18:48:09 	 15c29e30-06f3-4f4b-a6d8-8df9100bc2f9 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0

@@ -11899,3 +11899,16 @@
 2024-12-24 18:48:04 	 6061f7a3-a26f-4133-a81b-f81e80d991f4 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
 2024-12-24 18:48:05 	 bc71dc95-90f2-4259-99e7-8a4a149dd127 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
 2024-12-24 18:48:09 	 15c29e30-06f3-4f4b-a6d8-8df9100bc2f9 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-24 19:19:40 	 5cb9fd86-fb85-4933-a1c5-a5056c2c2f77 	  GET 	 /api/admin/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 19:20:35 	 36b6057d-a75c-4c74-bc3e-6a058cd04eb8 	  GET 	 /api/admin/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 19:21:52 	 b07905c6-1f3c-401b-a792-29add931e86e 	  GET 	 /api/admin/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 19:22:06 	 d40064f2-d18c-4c99-81df-28b63868e2a2 	  GET 	 /api/admin/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 19:24:35 	 18b2edf5-9ee7-4e46-9f6c-c02a606f2e73 	  GET 	 /api/admin/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 19:27:05 	 3c414d83-4bad-4c5e-bd80-fbc3496e7f23 	  GET 	 /api/products/top_deals 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 19:35:34 	 7dcce09b-d95d-4ec9-a36c-1e6cb576fc9b 	  GET 	 /api/admin/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 19:38:32 	 d501efa8-7168-4de0-8693-9140a684d256 	  GET 	 /api/admin/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 19:38:51 	 4d077cdc-98bd-49ba-ac3b-e5faa3b3613e 	  GET 	 /api/products 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 19:39:08 	 3d3c7705-1f3d-40d6-a853-e0a3fa16dbc6 	  GET 	 /api/sellers 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 19:39:16 	 0d2743bf-70f0-4ec2-9a98-cf43795af905 	  GET 	 /api/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 19:39:32 	 e5238102-27d8-453e-a978-f938e2fe811b 	  GET 	 /api/admin/seller 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-24 19:39:53 	 844c7c4c-e945-4879-b763-169baefdbd39 	  GET 	 /api/admin/seller 	 ::1 	 PostmanRuntime/7.43.0

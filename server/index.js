@@ -55,7 +55,7 @@ sequelize.sync({ force: false })
         require('./routes/user/index.route')(app);
 
         // Admin routes
-        // require('./routes/admin/index.route')(app);
+        require('./routes/admin/index.route')(app);
         // Shop routes
         
         app.all('*', (req, res) => {

@@ -5,31 +5,15 @@ import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { AiOutlineLike } from "react-icons/ai";
 import Recommend from "./Recommend";
 
+const formatPrice = (price) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+};
+
 const ProductDetails = () => {
     const { state } = useLocation();
     const { product } = state || {};
     const [isExpanded, setIsExpanded] = useState(false);
-//    const { id } = state || {};
-//    const [product, setProduct] = useState(null);
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             debugger;
-    //             const result = await fetchProductById(parseInt(id, 10));
-    //             setProduct(result);
-    //         } catch (err) {
-    //             console.error('Failed to fetch product details', err);
-    //         }
-    //     };
-
-    //     if (id) {
-    //         fetchData();
-    //     }
-
-    // }, [id]);
-
-    // If no product was passed via state, handle fallback logic
     if (!product) {
         return <div>No product details available. Please navigate through the product list.</div>;
     }
@@ -49,32 +33,32 @@ const ProductDetails = () => {
                     </div>
                     <div className="flex-1  space-y-4 flex flex-col justify-between">
                         <p className="text-2xl font-bold">{product.name}</p>
-                        <p className="text-xl text-red-500 font-bold">${product.price}</p>
+                        <p className="text-xl text-red-500 font-bold">{formatPrice(product.price)}</p>
                         <p className="text-lg">{product.short_description}</p>
                         <div class="flex flex-col mt-auto gap-4">
                             <div className="flex gap-3">
-                            <button className="bg-transparent border-2 border-blue-500 text-blue-500 w-1/2 px-4 py-2 rounded-md hover:bg-blue-600 hover:text-white
+                                <button className="bg-transparent border-2 border-blue-500 text-blue-500 w-1/2 px-4 py-2 rounded-md hover:bg-blue-600 hover:text-white
                             ">
-                                Thêm vào giỏ hàng
-                            </button>
-                            <button className="bg-transparent border-2 border-blue-500 text-blue-500 w-1/2 px-4 py-2 rounded-md hover:bg-blue-600 hover:text-white">
-                                Chat ngay
-                            </button>
+                                    Thêm vào giỏ hàng
+                                </button>
+                                <button className="bg-transparent border-2 border-blue-500 text-blue-500 w-1/2 px-4 py-2 rounded-md hover:bg-blue-600 hover:text-white">
+                                    Chat ngay
+                                </button>
+                            </div>
+                            <div>
+                                <button className="bg-orange-400 text-white w-full px-4 py-2 rounded-md hover:bg-orange-600">
+                                    Mua ngay
+                                </button>
+                            </div>
                         </div>
-                        <div>
-                            <button className="bg-orange-400 text-white w-full px-4 py-2 rounded-md hover:bg-orange-600">
-                                Mua ngay
-                            </button>
-                        </div>
-                        </div>
-                        
+
                     </div>
                 </div>
                 <div className="flex gap-8 bg-white bg-opacity-80 max-w-5xl p-5 min-h-[600px] mb-3 mx-auto items-start rounded-md">
                     {/* Discription Section */}
                     <div className="flex-1 basis-2/3 pl-10 gap-3 text-lg">
                         <p className="text-2xl font-bold mb-4">{product.name}</p>
-                        <div 
+                        <div
                             className={`overflow-hidden ${isExpanded ? "" : "line-clamp-6"}`}
                             dangerouslySetInnerHTML={{ __html: product.description }} />
                         <div className="flex justify-center mt-3">

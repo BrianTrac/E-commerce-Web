@@ -1,12 +1,12 @@
 import axios from '../config/axios';
 
 const getTopDeals = async ({ limit = 36, page = 1 } = {}) => {
-  const response = await axios.get(`api/products/top_deals?limit=${limit}&page=${page}`); 
+  const response = await axios.get(`api/products/top_deals?limit=${limit}&page=${page}`);
   return response.data.data;
 };
 
 const getFlashSale = async ({ limit = 36, page = 1 } = {}) => {
-  const response = await axios.get(`api/products/flash_sale?limit=${limit}&page=${page}`);  
+  const response = await axios.get(`api/products/flash_sale?limit=${limit}&page=${page}`);
   return response.data.data;
 };
 
@@ -19,7 +19,7 @@ const fetchProductByCategory = async (
     rating,
     price,
   }) => {
-  
+
   if (!category) {
     throw new Error('Category is required parameter');
   }
@@ -59,7 +59,7 @@ const fetchProductById = async (id) => {
     throw error;
   }
 }
-  
+
 
 export {
   getTopDeals,

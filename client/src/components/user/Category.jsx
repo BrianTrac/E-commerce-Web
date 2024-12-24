@@ -80,11 +80,11 @@ const Category = ({id}) => {
           <SwiperSlide key={index}>
           <div className="flex flex-col px-4 gap-6">
             {/* All Items */}
-            <div className="flex flex-wrap justify-center gap-4 max-w-full bg-slate-600">
+            <div className="flex flex-wrap justify-center gap-4 max-w-full bg-slate-600 p-2">
               {categoryGroup.map((category) => (
                 <div
                   key={category.id}
-                  className="flex justify-center flex-shrink-0 w-28 bg-blue-600"
+                  className="flex justify-center flex-shrink-0 rounded-lg w-28 bg-transparent-600"
                 >
                   <CategoryItem
                     thumbnail={category.thumbnail_url}

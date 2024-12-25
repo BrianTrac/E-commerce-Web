@@ -1,12 +1,10 @@
-// pages/admin/SellerManagementPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Table, Tag, Space, Button, Input, Card, Select, Modal } from 'antd';
-import { SearchOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { fetchSellers, updateSellerStatus, setSellersPagination } from '../../redux/reducers/admin';
-import { toast } from 'react-toastify';
+import { Table, Space, Button, Input, Card, Typography } from 'antd';
+import { SearchOutlined, RedoOutlined } from '@ant-design/icons';
+import { fetchSellers, setSellersPagination } from '../../redux/reducers/admin';
 
-const { confirm } = Modal;
+const { Text } = Typography;
 
 const SellerManagement = () => {
     const dispatch = useDispatch();
@@ -29,84 +27,107 @@ const SellerManagement = () => {
         dispatch(setSellersPagination(pagination));
     };
 
-    const handleStatusChange = (sellerId, newStatus) => {
-        confirm({
-            title: 'Are you sure you want to change this seller\'s status?',
-            icon: <ExclamationCircleOutlined />,
-            content: 'This action will update the seller\'s account status',
-            onOk() {
-                dispatch(updateSellerStatus({ sellerId, status: newStatus }));
-            }
-        });
-    };
-
     const columns = [
         {
-            title: 'Store Info',
-            dataIndex: 'storeName',
-            key: 'storeName',
-            render: (text, record) => (
-                <Space direction="vertical">
-                    <span className="font-medium">{text}</span>
-                    <span className="text-gray-500">{record.email}</span>
+            title: 'No.',
+            key: 'index',
+            width: '60px',
+            render: (_, __, index) => (
+                <Text>
+                    {(pagination.current - 1) * pagination.pageSize + index + 1}
+                </Text>
+            ),
+        },
+        {
+            title: 'Store',
+            key: 'icon',
+            width: '80px',
+            render: (_, record) => (
+                <img
+                    src={record.icon}
+                    alt={record.name}
+                    className="w-10 h-10 rounded-full object-cover border border-gray-200"
+                />
+            ),
+        },
+        {
+            title: '',
+            key: 'name',
+            render: (_, record) => (
+                <Space direction="vertical" size={1}>
+                    <Text strong>{record.name}</Text>
+                    {record.isOfficial && (
+                        <Text type="success" className="text-xs">
+                            Official Store
+                        </Text>
+                    )}
                 </Space>
             ),
         },
         {
-            title: 'Owner',
-            dataIndex: 'name',
-            key: 'name',
-        },
-        {
-            title: 'Products',
-            dataIndex: 'products',
-            key: 'products',
-            sorter: true,
-        },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
-            render: (status, record) => (
-                <Select
-                    value={status}
-                    onChange={(value) => handleStatusChange(record.id, value)}
-                    style={{ width: 120 }}
-                >
-                    <Select.Option value="active">Active</Select.Option>
-                    <Select.Option value="pending">Pending</Select.Option>
-                    <Select.Option value="suspended">Suspended</Select.Option>
-                </Select>
+            title: 'Rating',
+            dataIndex: 'rating',
+            key: 'rating',
+            width: '100px',
+            render: (rating) => (
+                <Text>
+                    {rating ? `${Number(rating).toFixed(1)} ⭐` : 'No rating'}
+                </Text>
             ),
+            sorter: (a, b) => (a.rating || 0) - (b.rating || 0),
+        },
+        {
+            title: 'Reviews',
+            dataIndex: 'reviewCount',
+            key: 'reviewCount',
+            width: '100px',
+            render: (count) => (
+                <Text>{count.toLocaleString()}</Text>
+            ),
+            sorter: (a, b) => a.reviewCount - b.reviewCount,
+        },
+        {
+            title: 'Followers',
+            dataIndex: 'followers',
+            key: 'followers',
+            width: '100px',
+            render: (count) => (
+                <Text>{count.toLocaleString()}</Text>
+            ),
+            sorter: (a, b) => a.followers - b.followers,
         },
         {
             title: 'Actions',
             key: 'actions',
+            width: '120px',
             render: (_, record) => (
-                <Space>
-                    <Button type="primary" onClick={() => handleViewDetails(record)}>
-                        View Details
-                    </Button>
-                    <Button onClick={() => handleViewProducts(record)}>
-                        View Products
-                    </Button>
-                </Space>
+                <Button
+                    type="primary"
+                    size="small"
+                    onClick={() => window.open(record.url, '_blank')}
+                >
+                    View Store
+                </Button>
             ),
         },
     ];
 
     return (
-        <Card title="Seller Management">
-            <div className="mb-4 flex justify-between">
+        <Card title="Seller Management" className="shadow-md">
+            <div className="mb-4 flex justify-between items-center">
                 <Input
                     placeholder="Search sellers..."
                     prefix={<SearchOutlined />}
                     value={searchText}
                     onChange={e => setSearchText(e.target.value)}
                     onPressEnter={loadSellers}
-                    style={{ width: 300 }}
+                    className="w-64"
                 />
-                <Button type="primary" onClick={() => loadSellers()}>
+                <Button
+                    type="primary"
+                    onClick={loadSellers}
+                    icon={<RedoOutlined />}
+                >
                     Refresh
                 </Button>
             </div>
@@ -120,9 +141,12 @@ const SellerManagement = () => {
                     ...pagination,
                     showSizeChanger: true,
                     showQuickJumper: true,
-                    showTotal: (total) => `Total ${total} sellers`
+                    showTotal: (total) => `Total ${total} sellers`,
+                    position: ['bottomCenter']
                 }}
                 onChange={handleTableChange}
+                className="border border-gray-200 rounded"
+                scroll={{ x: 'max-content' }}
             />
         </Card>
     );

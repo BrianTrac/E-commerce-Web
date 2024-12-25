@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Table, Space, Button, Input, Card, Typography } from 'antd';
-import { SearchOutlined, RedoOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { Table, Space, Button, Input, Card, Typography, Tooltip, Modal } from 'antd';
+import {
+    SearchOutlined,
+    EyeOutlined,
+    EditOutlined,
+    DeleteOutlined,
+    ExclamationCircleOutlined,
+    RedoOutlined
+} from '@ant-design/icons';
 import { fetchSellers, setSellersPagination } from '../../redux/reducers/admin';
 
 const { Text } = Typography;
+const { confirm } = Modal;
 
 const SellerManagement = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate(); // Define navigate
     const { data: sellers, loading, pagination } = useSelector(state => state.admin.sellers);
     const [searchText, setSearchText] = useState('');
 
@@ -27,6 +37,33 @@ const SellerManagement = () => {
         dispatch(setSellersPagination(pagination));
     };
 
+    const showDeleteConfirm = (seller) => {
+        confirm({
+            title: 'Are you sure you want to delete this seller?',
+            icon: <ExclamationCircleOutlined />,
+            content: `This will permanently delete ${seller.name}`,
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk() {
+                console.log('OK');
+                // Add your delete logic here
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    };
+
+    const handleEdit = (record) => {
+        console.log('Edit seller:', record);
+        // Add your edit logic here
+    };
+
+    const handleView = (record) => {
+        navigate(`/admin/seller-management/${record.id}`);
+    };
+
     const columns = [
         {
             title: 'No.',
@@ -39,7 +76,7 @@ const SellerManagement = () => {
             ),
         },
         {
-            title: 'Store',
+            title: 'Store Icon',
             key: 'icon',
             width: '80px',
             render: (_, record) => (
@@ -51,7 +88,7 @@ const SellerManagement = () => {
             ),
         },
         {
-            title: '',
+            title: 'Store Name',
             key: 'name',
             render: (_, record) => (
                 <Space direction="vertical" size={1}>
@@ -99,15 +136,34 @@ const SellerManagement = () => {
         {
             title: 'Actions',
             key: 'actions',
-            width: '120px',
+            width: '150px',
             render: (_, record) => (
-                <Button
-                    type="primary"
-                    size="small"
-                    onClick={() => window.open(record.url, '_blank')}
-                >
-                    View Store
-                </Button>
+                <Space size="middle">
+                    <Tooltip title="View Store">
+                        <Button
+                            type="link"
+                            icon={<EyeOutlined />}
+                            onClick={() => handleView(record)}
+                            className="text-blue-600 p-0 hover:text-blue-800"
+                        />
+                    </Tooltip>
+                    <Tooltip title="Edit">
+                        <Button
+                            type="link"
+                            icon={<EditOutlined />}
+                            onClick={() => handleEdit(record)}
+                            className="text-green-600 p-0 hover:text-green-800"
+                        />
+                    </Tooltip>
+                    <Tooltip title="Delete">
+                        <Button
+                            type="link"
+                            icon={<DeleteOutlined />}
+                            onClick={() => showDeleteConfirm(record)}
+                            className="text-red-600 p-0 hover:text-red-800"
+                        />
+                    </Tooltip>
+                </Space>
             ),
         },
     ];

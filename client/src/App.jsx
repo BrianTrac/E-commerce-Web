@@ -22,6 +22,7 @@ import AdminDashboard from "./pages/admin/DashboardPage.jsx";
 import RoleManagement from "./pages/admin/RoleManagementPage.jsx";
 import UserManagement from "./pages/admin/UserManagementPage.jsx";
 import SellerManagement from "./pages/admin/SellerManagementPage.jsx";
+import SellerDetailPage from "./pages/admin/SellerDetailPage.jsx";
 
 const ROLES = {
     User: 'User',
@@ -48,7 +49,10 @@ const App = () => {
                         <Route path="dashboards" element={<AdminDashboard />} />
                         <Route path="role-management" element={<RoleManagement />} />
                         <Route path="user-management" element={<UserManagement />} />
-                        <Route path="seller-management" element={<SellerManagement />} />
+                        <Route path="seller-management">
+                            <Route index element={<SellerManagement />} />
+                            <Route path=":id" element={<SellerDetailPage />} />
+                        </Route>
                     </Route>
                 </Route>
 

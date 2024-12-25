@@ -42,7 +42,7 @@ const getAllSeller = async (req, res) => {
                 'is_official'
             ]
         });
-        
+
         res.status(200).json({
             data: sellers.map(seller => ({
                 id: seller.id,
@@ -59,6 +59,58 @@ const getAllSeller = async (req, res) => {
             total: totalCount,
             page: page,
             limit: limit
+        });
+
+    } catch (error) {
+        console.error('Error in getAllSeller:', error);
+        res.status(500).json({
+            message: error.message,
+            error: error
+        });
+    }
+};
+
+const getOneSeller = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const seller = await Seller.findByPk(id, {
+            attributes: [
+                'id',
+                'name',
+                'avg_rating_point',
+                'icon',
+                'info',
+                'review_count',
+                'store_id',
+                'total_follower',
+                'url',
+                'is_official'
+            ]
+        });
+
+        if (!seller) {
+            return res.status(404).json({
+                message: 'Seller not found'
+            });
+        }
+
+        res.status(200).json({
+            data: [{
+                id: seller.id,
+                name: seller.name,
+                rating: seller.avg_rating_point,
+                icon: seller.icon,
+                info: seller.info,
+                reviewCount: seller.review_count,
+                storeId: seller.store_id,
+                followers: seller.total_follower,
+                url: seller.url,
+                isOfficial: seller.is_official
+            }],
+            total: 1,
+            page: 1,
+            limit: 1
         });
 
     } catch (error) {
@@ -133,5 +185,6 @@ const updateSellerStatus = async (req, res) => {
 
 module.exports = {
     getAllSeller,
+    getOneSeller,
     updateSellerStatus
 };

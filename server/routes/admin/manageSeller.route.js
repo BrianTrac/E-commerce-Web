@@ -5,6 +5,9 @@ const manageSellerController = require('../../controllers/admin/manageSeller.con
 // [GET] /api/admin/seller/
 router.get('/', manageSellerController.getAllSeller);
 
+// [GET] /api/admin/seller/:id
+router.get('/:id', manageSellerController.getOneSeller);
+
 // [PATCH] /api/admin/seller/:sellerId/status
 router.patch('/:sellerId/status', manageSellerController.updateSellerStatus);
 

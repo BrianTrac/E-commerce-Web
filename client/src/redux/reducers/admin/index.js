@@ -8,7 +8,6 @@ const adminReducer = combineReducers({
     // roles: roleReducer,
 });
 
-// Re-export actions and thunks
 export { fetchSellers, setSellersPagination };
 
 export default adminReducer;

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchOneSeller } from '../../redux/reducers/admin/sellerReducer'; 
+import { fetchOneSeller } from '../../redux/reducers/admin/sellerReducer';
 import { Card, Row, Col, Typography, Statistic, Button, Tag, Divider, Spin, Space } from 'antd';
 import {
     ShopOutlined,
@@ -63,7 +63,7 @@ const SellerDetailPage = () => {
                                     </Tag>
                                 )}
                             </div>
-                            <Text className="text-gray-500">Store ID: {currentSeller.store_id}</Text>
+                            <Text className="text-gray-500">Store ID: {currentSeller.id}</Text>
                         </div>
                         <Space>
                             <Button
@@ -83,19 +83,18 @@ const SellerDetailPage = () => {
                     </div>
 
                     <Divider />
-
                     {/* Stats Section */}
                     <Row gutter={[24, 24]} className="mb-6">
                         <Col span={8}>
                             <Card className="text-center bg-blue-50">
                                 <Statistic
                                     title={<span className="flex items-center justify-center gap-2"><StarFilled className="text-yellow-500" /> Rating</span>}
-                                    value={Number(currentSeller.avg_rating_point).toFixed(1)}
+                                    value={Number(currentSeller.rating).toFixed(1)}
                                     suffix={`/ 5.0`}
                                     precision={1}
                                 />
                                 <Text className="text-gray-500">
-                                    {Number(currentSeller.review_count).toLocaleString()} reviews
+                                            {Number(currentSeller.reviewCount).toLocaleString()} reviews
                                 </Text>
                             </Card>
                         </Col>
@@ -103,7 +102,7 @@ const SellerDetailPage = () => {
                             <Card className="text-center bg-green-50">
                                 <Statistic
                                     title={<span className="flex items-center justify-center gap-2"><UserOutlined /> Followers</span>}
-                                    value={Number(currentSeller.total_follower).toLocaleString()}
+                                            value={Number(currentSeller.followers).toLocaleString()}
                                 />
                                 <Text className="text-gray-500">Active followers</Text>
                             </Card>
@@ -112,8 +111,8 @@ const SellerDetailPage = () => {
                             <Card className="text-center bg-purple-50">
                                 <Statistic
                                     title="Store Performance"
-                                    value={Number(currentSeller.avg_rating_point) >= 4.5 ? "Excellent" :
-                                        Number(currentSeller.avg_rating_point) >= 4.0 ? "Good" : "Average"}
+                                    value={Number(currentSeller.rating) >= 4.5 ? "Excellent" :
+                                        Number(currentSeller.rating) >= 4.0 ? "Good" : "Average"}
                                     className="text-purple-600"
                                 />
                                 <Text className="text-gray-500">Based on ratings & followers</Text>
@@ -127,9 +126,7 @@ const SellerDetailPage = () => {
                         <Row gutter={[16, 16]}>
                             {[
                                 { label: 'View Products', action: () => navigate(`/admin/seller-management/${id}/products`) },
-                                { label: 'Review History', action: () => navigate(`/admin/seller-management/${id}/reviews`) },
                                 { label: 'Performance Analytics', action: () => navigate(`/admin/seller-management/${id}/analytics`) },
-                                { label: 'Settings', action: () => navigate(`/admin/seller-management/${id}/settings`) }
                             ].map((item) => (
                                 <Col span={12} key={item.label}>
                                     <Button className="w-full h-12" onClick={item.action}>

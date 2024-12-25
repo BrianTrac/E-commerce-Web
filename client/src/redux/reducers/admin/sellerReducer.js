@@ -1,14 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from '../../../config/axios';
 import { toast } from 'react-toastify';
-
-const BASE_URL = 'http://localhost:4000/api';
 
 export const fetchSellers = createAsyncThunk(
     'admin/sellers/fetchAll',
     async ({ page, limit, search }, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`${BASE_URL}/admin/seller`, {
+            const response = await axios.get(`/api/admin/seller`, {
                 params: { page, limit, search }
             });
             return response.data;
@@ -23,7 +21,7 @@ export const fetchOneSeller = createAsyncThunk(
     'admin/sellers/fetchOne',
     async (id, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`${BASE_URL}/admin/seller/${id}`);
+            const response = await axios.get(`/api/admin/seller/${id}`);
             return response.data;
         } catch (error) {
             toast.error(error.response?.data?.message || 'Failed to fetch seller details');

@@ -17,7 +17,11 @@ import Search from "./pages/user/SearchPage.jsx";
 import Category from "./components/user/Category.jsx";
 import CategoryWithProducts from "./components/user/CategoryWithProducts.jsx";
 import ProductDetails from "./components/user/ProductDetails.jsx";
-import SellerHome from "./pages/seller/SellerHome.jsx";
+
+
+// Seller page components
+import SellerDashboard from "./pages/seller/SellerDashboard.jsx";
+import ProductManagement from "./pages/seller/ProductManagement.jsx";
 
 const ROLES = {
     User: 'User',
@@ -40,17 +44,16 @@ const App = () => {
                 <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
                     <Route path="/Admin" element={<Admin />} />
                 </Route>
-
-                {/* <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
+                
+                {/* SELLER ROUTE */}
+                <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
                     <Route path="/seller" element={<SellerLayout/>}>
-                        <Route index element={<SellerHome />} />
+                        <Route index path="dashboard" element={<SellerDashboard />} />
+                        <Route path="product-management" element={<ProductManagement />} />
+                        {/* <Route path="/voucher" element={<SellerVoucher />} />
+                        <Route path="/info" element={<SellerInfo />} /> */}
                     </Route>
-                </Route> */}
-
-                <Route path="/seller" element={<SellerLayout />}>
-                    <Route index element={<SellerHome />} />
                 </Route>
-
             </Route>
 
             {/* AUTH ROUTE */}

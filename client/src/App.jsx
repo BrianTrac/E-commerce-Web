@@ -4,10 +4,10 @@ import Login from "./pages/user/LoginPage.jsx";
 import Home from "./pages/user/HomePage.jsx";
 import UserLayout from "./layouts/UserLayout.jsx";
 import AuthLayout from "./layouts/AuthLayout";
+import SellerLayout from "./layouts/SellerLayout.jsx";
 import MissingPage from "./pages/MissingPage.jsx";
 import RequireAuth from "./hooks/RequireAuth";
 import Admin from "./pages/admin/AdminPage.jsx";
-import Shop from "./pages/shop/ShopPage.jsx";
 import PersistLogin from "./hooks/PersistLogin";
 import OTPVerification from "./pages/user/OTPVerificationPage.jsx";
 import ForgetPassword from "./pages/user/ForgetPasswordPage.jsx";
@@ -17,16 +17,17 @@ import Search from "./pages/user/SearchPage.jsx";
 import Category from "./components/user/Category.jsx";
 import CategoryWithProducts from "./components/user/CategoryWithProducts.jsx";
 import ProductDetails from "./components/user/ProductDetails.jsx";
+import SellerHome from "./pages/seller/SellerHome.jsx";
 
 const ROLES = {
     User: 'User',
-    Shop: 'Shop',
+    Seller: 'Seller',
     Admin: 'Admin',
 }
 
 const App = () => {
-    return (     
-        <Routes>                 
+    return (
+        <Routes>
             <Route element={<PersistLogin />}>
                 {/* USER ROUTE */}
                 <Route path="/" element={<UserLayout />}>
@@ -35,13 +36,21 @@ const App = () => {
                     <Route path="/:url_key/:id" element={<CategoryWithProducts />} />
                     <Route path="/:url_key" element={<ProductDetails />} />
                 </Route>
-                
+
                 <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-                    <Route path="/Admin" element={<Admin/>} />
+                    <Route path="/Admin" element={<Admin />} />
                 </Route>
-                <Route element={<RequireAuth allowedRoles={[ROLES.Shop]} />}>
-                    <Route path="/Shop" element={<Shop/>} />
+
+                {/* <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
+                    <Route path="/seller" element={<SellerLayout/>}>
+                        <Route index element={<SellerHome />} />
+                    </Route>
+                </Route> */}
+
+                <Route path="/seller" element={<SellerLayout />}>
+                    <Route index element={<SellerHome />} />
                 </Route>
+
             </Route>
 
             {/* AUTH ROUTE */}
@@ -52,12 +61,12 @@ const App = () => {
             </Route>
             <Route path="/auth/forget-password" element={<ForgetPassword />} />
             <Route path="/auth/reset-password" element={<ResetPassword />} />
-            <Route path="/auth/register/verify-otp" element={<OTPVerification />}/>
+            <Route path="/auth/register/verify-otp" element={<OTPVerification />} />
             <Route path="/auth/google/callback" element={<GoogleAuthHandler />} />
-            
+
 
             <Route path="unauthorized" element={<MissingPage />} /> {/* 403 Page */}
-            
+
             <Route path="*" element={<MissingPage />} /> {/* 404 Page */}
         </Routes>
     );

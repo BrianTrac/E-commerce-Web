@@ -1,6 +1,8 @@
 // Desc: Product controller
 const Product = require('../../models/Product');
 const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
+
 
 
 // Get all products by store ID
@@ -106,9 +108,111 @@ let deleteProduct = async (req, res) => {
     }
 };
 
+
+// Get top selling products of a store
+// GET /api/seller/product/top-selling/:storeId
+let getTopSellingProducts = async (req, res) => {
+    try {
+        const storeId = req.params.storeId; 
+
+        if (!storeId) {
+            return res.status(400).json({ message: "Missing storeId parameter" });
+        }
+
+        const topSellingProducts = await Product.findAll({
+            attributes: [
+                'id',
+                'name',
+                'price',
+                'quantity_sold'
+            ],
+            where: Sequelize.json('current_seller.store_id', storeId), 
+            order: [['quantity_sold', 'DESC']], 
+            limit: 20
+        });
+
+        res.status(200).json({
+            message: "Top selling products",
+            products: topSellingProducts
+        });
+    } catch (error) {
+        console.error('Error fetching top selling products:', error);
+        res.status(500).json({ message: "Error fetching top selling products" });
+    }
+};
+
+
+// Get flash sale products of a store
+// GET /api/seller/product/flash-sale/:storeId?limit=36&page=1
+const getFlashSaleProducts = async (req, res) => {
+    try {
+        const { storeId } = req.params; 
+        if (!storeId) {
+            return res.status(400).json({ message: "Missing storeId parameter" });
+        }
+
+        const limit = parseInt(req.query.limit, 10) || 36; // Items per page
+        const MAX_PRODUCTS = 400; // Restrict to 400 products across all pages
+
+        const requestedPage = parseInt(req.query.page, 10) || 1; 
+        const offset = (requestedPage - 1) * limit;
+
+        // Get total count of products matching the criteria
+        const productCount = await Product.count({
+            where: {
+                discount_rate: {
+                    [Op.gt]: 10, // Only products with a discount
+                },
+                inventory_status: 'available', // Ensure the product is in stock
+                'current_seller.store_id': storeId, // Filter by store ID
+            },
+        });
+
+        const restrictedCount = Math.min(productCount, MAX_PRODUCTS); // Cap total items at MAX_PRODUCTS
+        const total_pages = Math.ceil(restrictedCount / limit); // Calculate pages based on restricted count
+
+        // Cap the requested page to ensure it does not exceed total_pages
+        const current_page = Math.min(requestedPage, total_pages);
+
+        const flashSale = await Product.findAll({
+            where: {
+                discount_rate: {
+                    [Op.gt]: 10, // Only products with a discount
+                },
+                inventory_status: 'available', // Ensure the product is in stock
+                'current_seller.store_id': storeId, // Filter by store ID
+            },
+            order: [
+                ['discount_rate', 'DESC'], // Sort by discount rate descending
+                ['rating_average', 'DESC'], // Then by rating average descending
+            ],
+            limit: limit,
+            offset: (current_page - 1) * limit, // Adjust offset based on capped page
+        });
+
+        res.status(200).json({
+            data: flashSale,
+            paging: {
+                current_page: current_page,
+                total_items: restrictedCount,
+                total_pages: total_pages,
+                items_per_page: limit,
+                from: (current_page - 1) * limit + 1,
+                to: Math.min(current_page * limit, restrictedCount),
+            },
+            title: `Flash Sale - Store ${storeId}`,
+        });
+    } catch (error) {
+        console.error('Error fetching flash sale:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 module.exports = {
     getAllProductsByStoreId,
     getProductsByStoreId,
     addProductToStore,
-    deleteProduct
+    deleteProduct,
+    getTopSellingProducts,
+    getFlashSaleProducts,
 };

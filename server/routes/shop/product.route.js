@@ -16,8 +16,11 @@ router.route('/add')
 router.route('/remove/:productId')
     .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Shop), productController.deleteProduct)
 
-// router.get('/:storeId', productController.getAllProductsByStoreId);
+router.route('/top-selling/:storeId')
+    .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Shop, ROLES_LIST.User), productController.getTopSellingProducts)
 
-// router.get('/:storeId/paging', productController.getProductsByStoreId);
+router.route('/flash-sale/:storeId')
+    .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Shop, ROLES_LIST.User), productController.getFlashSaleProducts)
+
 
 module.exports = router;

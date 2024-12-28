@@ -20,6 +20,6 @@ router.route('/statistic/:storeId')
     .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Shop), sellerController.getSummaryStatistic);
 
 // router.route('/statistic/:storeId')
-//     .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.User), sellerController.getSummaryStatistic);
+//     .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Shop, ROLES_LIST.User), sellerController.getSummaryStatistic);
 
 module.exports = router;

@@ -12,18 +12,16 @@ const RequireAuth = ({ allowedRoles }) => {
     const roles = Array.isArray(auth?.role) ? auth.role : [auth?.role];
 
     const isAuthorized = roles.some(role => allowedRoles.includes(role));
-
     return (
-        <Outlet />
-        // isAuthorized ? (
-        //     <Outlet />
-        // ) : auth?.accessToken ? (
-        //     // Redirect to the unauthorized page if authenticated but lacking the required role
-        //     <Navigate to="/unauthorized" state={{ from: location }} replace />
-        // ) : (
-        //     // Redirect to login if not authenticated
-        //     <Navigate to="/auth/login" state={{ from: location }} replace />
-        // )
+        isAuthorized ? (
+            <Outlet />
+        ) : auth?.accessToken ? (
+            // Redirect to the unauthorized page if authenticated but lacking the required role
+            <Navigate to="/unauthorized" state={{ from: location }} replace />
+        ) : (
+            // Redirect to login if not authenticated
+            <Navigate to="/auth/login" state={{ from: location }} replace />
+        )
     );
 };
 

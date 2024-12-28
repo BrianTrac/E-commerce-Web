@@ -174,7 +174,6 @@ const getAllSellerProducts = async (req, res) => {
             offset: offset,
             limit: limit,
         });
-
         return res.status(200).json({
             data: products,
             total: totalCount,

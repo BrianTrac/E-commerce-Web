@@ -20,7 +20,7 @@ const userRoutes = (app) => {
      app.use('/api/products', require('./product.route')); // have not authenticated users yet (i.e. no JWT)
 
     // Middleware to verify JWT
-    // app.use(verifyJWT);
+    app.use(verifyJWT);
 
 
     // User routes

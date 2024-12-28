@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Space, Button, Input, Card, Typography, Tooltip, message, Spin, Tag } from 'antd';
+import { Table, Space, Button, Input, Card, Typography, Tooltip, message, Tag } from 'antd';
 import { useParams, useNavigate } from 'react-router-dom';
+import { fetchSellerProducts } from '../../redux/actions/admin/sellerManagementAction';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useDispatch } from 'react-redux';
 import {
     SearchOutlined,
     EyeOutlined,
@@ -11,11 +14,12 @@ import {
 } from '@ant-design/icons';
 
 const { Text } = Typography;
-import { sellerApi } from '../../service/productApi';
 
 const SellerProductPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const axiosPrivate = useAxiosPrivate();
+    const dispatch = useDispatch(); // Added missing dispatch
     const [searchText, setSearchText] = useState('');
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -28,16 +32,27 @@ const SellerProductPage = () => {
     const fetchProducts = async (page = 1, pageSize = 10, search = '') => {
         setLoading(true);
         try {
+            const resultAction = await dispatch(
+                fetchSellerProducts({
+                    axiosInstance: axiosPrivate,
+                    id,
+                    page,
+                    limit: pageSize,
+                    search,
+                })
+            );
 
-            const data = await sellerApi.getProducts(id, { page, limit: pageSize, search });
-
-            setProducts(data.data);
-            setPagination({
-                ...pagination,
-                current: page,
-                pageSize,
-                total: data.total
-            });
+            if (fetchSellerProducts.fulfilled.match(resultAction)) {
+                const { products, totalCount, currentPage, pageSize } = resultAction.payload;
+                setProducts(products);
+                setPagination({
+                    current: currentPage,
+                    pageSize,
+                    total: totalCount,
+                });
+            } else {
+                message.error(resultAction.error?.message || 'Failed to load products');
+            }
         } catch (error) {
             message.error('Failed to load products: ' + error.message);
         } finally {
@@ -46,12 +61,13 @@ const SellerProductPage = () => {
     };
 
     useEffect(() => {
-        fetchProducts(pagination.current, pagination.pageSize);
-    }, [id]);
+        fetchProducts(pagination.current, pagination.pageSize, searchText);
+    }, [id]); // Added searchText to dependencies
 
-    const handleSearch = () => {
+    // Debounced search function
+    const handleSearch = React.useCallback(() => {
         fetchProducts(1, pagination.pageSize, searchText);
-    };
+    }, [searchText, pagination.pageSize]);
 
     const handleTableChange = (newPagination) => {
         fetchProducts(newPagination.current, newPagination.pageSize, searchText);
@@ -62,28 +78,16 @@ const SellerProductPage = () => {
         fetchProducts(1, pagination.pageSize, '');
     };
 
-    const handleView = (record) => {
-        console.log('View product:', record);
-        // Navigate or view product details
-    };
-
-    const handleEdit = (record) => {
-        console.log('Edit product:', record);
-        // Add edit logic here
-    };
-
     const handleDelete = async (record) => {
         try {
-            const response = await fetch(`http://localhost:4000/api/admin/seller/${id}/products/${record.id}`, {
-                method: 'DELETE'
-            });
+            const response = await axiosPrivate.delete(`/admin/seller/${id}/products/${record.id}`);
 
-            if (!response.ok) {
-                throw new Error(`Failed to delete product ${record.id}`);
+            if (response.status === 200) {
+                message.success('Product deleted successfully');
+                fetchProducts(pagination.current, pagination.pageSize, searchText);
+            } else {
+                throw new Error('Failed to delete product');
             }
-
-            message.success('Product deleted successfully');
-            fetchProducts(pagination.current, pagination.pageSize, searchText);
         } catch (error) {
             message.error('Failed to delete product: ' + error.message);
         }

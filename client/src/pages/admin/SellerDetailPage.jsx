@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchOneSeller } from '../../redux/actions/admin/sellerManagementAction';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { Card, Row, Col, Typography, Statistic, Button, Tag, Divider, Spin, Space } from 'antd';
 import {
     ShopOutlined,
@@ -17,12 +18,13 @@ const SellerDetailPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const axiosPrivate = useAxiosPrivate();
     const { currentSeller, loading } = useSelector(state => state.admin.sellers);
 
     useEffect(() => {
         if (id) {
             // Assuming you'll create this action
-            dispatch(fetchOneSeller(id));
+            dispatch(fetchOneSeller({ id, axiosInstance: axiosPrivate }));
         }
     }, [id, dispatch]);
 

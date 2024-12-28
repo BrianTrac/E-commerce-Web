@@ -60,43 +60,43 @@ const fetchProductById = async (id) => {
   }
 }
 
-const API_URL = 'http://localhost:4000/api/admin';
+// const API_URL = 'http://localhost:4000/api/admin';
 
-const sellerApi = {
-  getProducts: async (sellerId, params = {}) => {
-    const { page = 1, limit = 10, search = '' } = params;
-    const queryParams = new URLSearchParams({
-      page,
-      limit,
-      search
-    }).toString();
+// const sellerApi = {
+//   getProducts: async (sellerId, params = {}) => {
+//     const { page = 1, limit = 10, search = '' } = params;
+//     const queryParams = new URLSearchParams({
+//       page,
+//       limit,
+//       search
+//     }).toString();
 
-    const response = await fetch(`${API_URL}/seller/${sellerId}/products?${queryParams}`);
+//     const response = await fetch(`${API_URL}/seller/${sellerId}/products?${queryParams}`);
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch products');
-    }
+//     if (!response.ok) {
+//       throw new Error(response.statusText);
+//     }
 
-    return await response.json();
-  },
+//     return await response.json();
+//   },
 
-  deleteProduct: async (sellerId, productId) => {
-    const response = await fetch(`${API_URL}/seller/${sellerId}/products/${productId}`, {
-      method: 'DELETE'
-    });
+//   deleteProduct: async (sellerId, productId) => {
+//     const response = await fetch(`${API_URL}/seller/${sellerId}/products/${productId}`, {
+//       method: 'DELETE'
+//     });
 
-    if (!response.ok) {
-      throw new Error('Failed to delete product');
-    }
+//     if (!response.ok) {
+//       throw new Error('Failed to delete product');
+//     }
 
-    return await response.json();
-  }
-};
+//     return await response.json();
+//   }
+// };
 
 export {
   getTopDeals,
   getFlashSale,
   fetchProductByCategory,
   fetchProductById,
-  sellerApi
+  // sellerApi
 };

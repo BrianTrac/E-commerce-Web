@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Table, Space, Button, Input, Card, Typography, Tooltip, Modal } from 'antd';
+import { fetchSellers } from '../../redux/actions/admin/sellerManagementAction';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import {
     SearchOutlined,
     EyeOutlined,
@@ -10,14 +12,14 @@ import {
     ExclamationCircleOutlined,
     RedoOutlined
 } from '@ant-design/icons';
-import { fetchSellers } from '../../redux/actions/admin/sellerManagementAction'; // Import the action
 
 const { Text } = Typography;
 const { confirm } = Modal;
 
 const SellerManagement = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate(); // Define navigate
+    const navigate = useNavigate();
+    const axiosPrivate = useAxiosPrivate();
     const { data: sellers, loading, pagination } = useSelector(state => state.admin.sellers);
     const [searchText, setSearchText] = useState('');
 
@@ -27,6 +29,7 @@ const SellerManagement = () => {
 
     const loadSellers = () => {
         dispatch(fetchSellers({
+            axiosInstance: axiosPrivate,
             page: pagination.current,
             limit: pagination.pageSize,
             search: searchText

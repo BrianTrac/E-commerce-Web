@@ -7,11 +7,13 @@ import {
   EditOutlined,
   DeleteOutlined,
 } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const { Text } = Typography;
 
 const ProductManagement = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { data: products, loading, pagination } = useSelector(state => state.seller.products);
   const [searchText, setSearchText] = useState('');
 
@@ -34,6 +36,14 @@ const ProductManagement = () => {
       })
     );
     loadProducts();
+  };
+
+  const handleView = (record) => {
+    navigate(`/seller/product-management/detail/${record.id}`);
+  };
+
+  const handleAddProduct = () => {
+    navigate('/seller/product-management/add');
   };
 
   const handleTableChange = (pagination) => {
@@ -133,14 +143,24 @@ const ProductManagement = () => {
   return (
     <Card title="Product Management" className="shadow-md">
       <div className="mb-4 flex justify-between items-center">
-        <Input
-          placeholder="Search products..."
-          value={searchText}
-          onChange={e => setSearchText(e.target.value)}
-          onPressEnter={handleSearch}
-          className="w-64"
-        />
-        <Button type="primary" onClick={handleSearch}>Search</Button>
+        <div className='flex'>
+          <Input
+            placeholder="Search products..."
+            value={searchText}
+            onChange={e => setSearchText(e.target.value)}
+            onPressEnter={handleSearch}
+            className="w-64 mr-2"
+          />
+          <Button type="primary" onClick={handleSearch}>Search</Button>
+        </div>
+
+        <Button
+          type="primary"
+          onClick={handleAddProduct}
+          style={{ marginLeft: '10px' }}
+        >
+          Add New Product
+        </Button>
       </div>
       <Table
         columns={columns}

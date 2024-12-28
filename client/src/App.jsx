@@ -21,7 +21,9 @@ import ProductDetails from "./components/user/ProductDetails.jsx";
 
 // Seller page components
 import SellerDashboard from "./pages/seller/SellerDashboard.jsx";
-import ProductManagement from "./pages/seller/ProductManagement.jsx";
+import SellerProductManagement from "./pages/seller/SellerProductManagement.jsx";
+import SellerProductDetail from "./pages/seller/SellerProductDetail.jsx";
+import SellerAddProduct from "./pages/seller/SellerAddProduct.jsx";
 
 const ROLES = {
     User: 'User',
@@ -49,7 +51,11 @@ const App = () => {
                 <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
                     <Route path="/seller" element={<SellerLayout/>}>
                         <Route index path="dashboard" element={<SellerDashboard />} />
-                        <Route path="product-management" element={<ProductManagement />} />
+                        <Route path="product-management">
+                            <Route index element={<SellerProductManagement />} />
+                            <Route path="detail/:productId" element={<SellerProductDetail />} />
+                            <Route path="add" element={<SellerAddProduct />} />
+                        </Route>
                         {/* <Route path="/voucher" element={<SellerVoucher />} />
                         <Route path="/info" element={<SellerInfo />} /> */}
                     </Route>

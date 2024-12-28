@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchOneSeller } from '../../redux/reducers/admin/sellerReducer';
+import { fetchOneSeller } from '../../redux/actions/admin/sellerManagementAction';
 import { Card, Row, Col, Typography, Statistic, Button, Tag, Divider, Spin, Space } from 'antd';
 import {
     ShopOutlined,
@@ -26,14 +26,14 @@ const SellerDetailPage = () => {
         }
     }, [id, dispatch]);
 
-    const pageContent = (
+    return (
         <div className="p-6">
             <Space className="mb-4">
                 <Button
                     icon={<ArrowLeftOutlined />}
                     onClick={() => navigate('/admin/seller-management')}
                 >
-                    Back to Sellers
+                    Back
                 </Button>
             </Space>
 
@@ -89,12 +89,12 @@ const SellerDetailPage = () => {
                             <Card className="text-center bg-blue-50">
                                 <Statistic
                                     title={<span className="flex items-center justify-center gap-2"><StarFilled className="text-yellow-500" /> Rating</span>}
-                                    value={Number(currentSeller.rating).toFixed(1)}
+                                    value={Number(currentSeller.avg_rating_point).toFixed(1)}
                                     suffix={`/ 5.0`}
                                     precision={1}
                                 />
                                 <Text className="text-gray-500">
-                                            {Number(currentSeller.reviewCount).toLocaleString()} reviews
+                                    {Number(currentSeller.review_count).toLocaleString()} reviews
                                 </Text>
                             </Card>
                         </Col>
@@ -102,7 +102,7 @@ const SellerDetailPage = () => {
                             <Card className="text-center bg-green-50">
                                 <Statistic
                                     title={<span className="flex items-center justify-center gap-2"><UserOutlined /> Followers</span>}
-                                            value={Number(currentSeller.followers).toLocaleString()}
+                                    value={Number(currentSeller.total_follower).toLocaleString()}
                                 />
                                 <Text className="text-gray-500">Active followers</Text>
                             </Card>
@@ -111,8 +111,8 @@ const SellerDetailPage = () => {
                             <Card className="text-center bg-purple-50">
                                 <Statistic
                                     title="Store Performance"
-                                    value={Number(currentSeller.rating) >= 4.5 ? "Excellent" :
-                                        Number(currentSeller.rating) >= 4.0 ? "Good" : "Average"}
+                                    value={Number(currentSeller.avg_rating_point) >= 4.5 ? "Excellent" :
+                                        Number(currentSeller.avg_rating_point) >= 4.0 ? "Good" : "Average"}
                                     className="text-purple-600"
                                 />
                                 <Text className="text-gray-500">Based on ratings & followers</Text>
@@ -139,10 +139,6 @@ const SellerDetailPage = () => {
                 </Card>
             )}
         </div>
-    );
-
-    return (
-        pageContent
     );
 };
 

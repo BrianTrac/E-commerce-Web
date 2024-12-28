@@ -1,39 +1,11 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from '../../../config/axios';
-import { toast } from 'react-toastify';
-
-export const fetchSellers = createAsyncThunk(
-    'admin/sellers/fetchAll',
-    async ({ page, limit, search }, { rejectWithValue }) => {
-        try {
-            const response = await axios.get(`/api/admin/seller`, {
-                params: { page, limit, search }
-            });
-            return response.data;
-        } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to fetch sellers');
-            return rejectWithValue(error.response?.data);
-        }
-    }
-);
-
-export const fetchOneSeller = createAsyncThunk(
-    'admin/sellers/fetchOne',
-    async (id, { rejectWithValue }) => {
-        try {
-            const response = await axios.get(`/api/admin/seller/${id}`);
-            return response.data;
-        } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to fetch seller details');
-            return rejectWithValue(error.response?.data);
-        }
-    }
-);
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchSellers, fetchOneSeller } from '../../actions/admin/sellerManagementAction';
 
 const sellerSlice = createSlice({
     name: 'adminSellers',
     initialState: {
         data: [],
+        currentSeller: null, 
         loading: false,
         error: null,
         pagination: {
@@ -57,15 +29,15 @@ const sellerSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchSellers.fulfilled, (state, action) => {
-                state.data = action.payload.data;
-                state.pagination.total = action.payload.total;
-                state.pagination.current = action.payload.page;
-                state.pagination.pageSize = action.payload.limit;
+                state.data = action.payload.sellers; 
+                state.pagination.total = action.payload.totalCount;
+                state.pagination.current = action.payload.currentPage;
+                state.pagination.pageSize = action.payload.pageSize;
                 state.loading = false;
             })
             .addCase(fetchSellers.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                state.error = action.payload?.message || 'An error occurred';
                 state.data = [];
             })
             .addCase(fetchOneSeller.pending, (state) => {
@@ -73,12 +45,12 @@ const sellerSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchOneSeller.fulfilled, (state, action) => {
-                state.currentSeller = action.payload.data[0];
+                state.currentSeller = action.payload.seller; // Updated to match API response
                 state.loading = false;
             })
             .addCase(fetchOneSeller.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                state.error = action.payload?.message || 'An error occurred';
                 state.currentSeller = null;
             });
     }

@@ -8,7 +8,7 @@ router.get('/', manageSellerController.getAllSeller);
 // [GET] /api/admin/seller/:id
 router.get('/:id', manageSellerController.getOneSeller);
 
-// [PATCH] /api/admin/seller/:sellerId/status
-router.patch('/:sellerId/status', manageSellerController.updateSellerStatus);
+// [GET] /api/admin/seller/:id/products
+router.get('/:id/products', manageSellerController.getAllSellerProducts);
 
 module.exports = router;

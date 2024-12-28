@@ -23,6 +23,7 @@ import RoleManagement from "./pages/admin/RoleManagementPage.jsx";
 import UserManagement from "./pages/admin/UserManagementPage.jsx";
 import SellerManagement from "./pages/admin/SellerManagementPage.jsx";
 import SellerDetailPage from "./pages/admin/SellerDetailPage.jsx";
+import SellerProductPage from "./pages/admin/SellerWithProductPage.jsx";
 
 const ROLES = {
     User: 'User',
@@ -45,16 +46,23 @@ const App = () => {
                 {/* ADMIN ROUTES */}
                 <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
                     <Route path="/admin" element={<AdminLayout />}>
+                        {/* Redirect to /admin/dashboards */}
                         <Route index element={<Navigate to="/admin/dashboards" replace />} />
+                        {/* Admin Dashboards */}
                         <Route path="dashboards" element={<AdminDashboard />} />
+                        {/* Role Management */}
                         <Route path="role-management" element={<RoleManagement />} />
+                        {/* User Management */}
                         <Route path="user-management" element={<UserManagement />} />
+                        {/* Seller Management */}
                         <Route path="seller-management">
                             <Route index element={<SellerManagement />} />
                             <Route path=":id" element={<SellerDetailPage />} />
+                            <Route path=":id/products" element={<SellerProductPage />} />
                         </Route>
                     </Route>
                 </Route>
+
 
                 {/* SHOP ROUTE */}
                 <Route element={<RequireAuth allowedRoles={[ROLES.Shop]} />}>

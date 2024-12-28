@@ -1,16 +1,18 @@
 const Seller = require('../../models/Seller');
+const Product = require('../../models/Product');
+
 const { Op } = require('sequelize');
 
+
+// [GET] /api/admin/seller/
 const getAllSeller = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const search = req.query.search || '';
 
-        // Calculate offset
         const offset = (page - 1) * limit;
 
-        // Build search condition
         const whereCondition = search ? {
             [Op.or]: [
                 { name: { [Op.iLike]: `%${search}%` } },
@@ -47,12 +49,12 @@ const getAllSeller = async (req, res) => {
             data: sellers.map(seller => ({
                 id: seller.id,
                 name: seller.name,
-                rating: seller.avg_rating_point,
+                avg_rating_point: seller.avg_rating_point,
                 icon: seller.icon,
                 info: seller.info,
-                reviewCount: seller.review_count,
+                review_count: seller.review_count,
                 storeId: seller.store_id,
-                followers: seller.total_follower,
+                total_follower: seller.total_follower,
                 url: seller.url,
                 isOfficial: seller.is_official
             })),
@@ -70,6 +72,7 @@ const getAllSeller = async (req, res) => {
     }
 };
 
+// [GET] /api/admin/seller/:id
 const getOneSeller = async (req, res) => {
     try {
         const { id } = req.params;
@@ -99,12 +102,12 @@ const getOneSeller = async (req, res) => {
             data: [{
                 id: seller.id,
                 name: seller.name,
-                rating: seller.avg_rating_point,
+                avg_rating_point: seller.avg_rating_point,
                 icon: seller.icon,
                 info: seller.info,
-                reviewCount: seller.review_count,
+                review_count: seller.review_count,
                 storeId: seller.store_id,
-                followers: seller.total_follower,
+                total_follower: seller.total_follower,
                 url: seller.url,
                 isOfficial: seller.is_official
             }],
@@ -122,63 +125,67 @@ const getOneSeller = async (req, res) => {
     }
 };
 
-// FIX LATTER
-const updateSellerStatus = async (req, res) => {
+// [GET] /api/admin/seller/:id/products
+const getAllSellerProducts = async (req, res) => {
     try {
-        const { sellerId } = req.params;
-        const { status } = req.body;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const offset = (page - 1) * limit;
 
-        // Validate status
-        const validStatuses = ['active', 'pending', 'suspended'];
-        if (!validStatuses.includes(status)) {
-            return res.status(400).json({
-                message: 'Invalid status value'
-            });
-        }
+        const { id } = req.params;
 
-        // Find and update seller
-        const seller = await Seller.findByPk(sellerId);
-
+        const seller = await Seller.findByPk(id);
         if (!seller) {
             return res.status(404).json({
                 message: 'Seller not found'
             });
         }
+        const storeId = seller.store_id;
 
-        // Update status
-        await seller.update({ status });
+        // Count total products
+        const totalCount = await Product.count({
+            where: {
+                'current_seller.store_id': storeId
+            }
+        });
 
-        // Get updated seller with product count
-        const updatedSeller = await Seller.findByPk(sellerId, {
+        // Retrieve products with pagination
+        const products = await Product.findAll({
+            where: {
+                'current_seller.store_id': storeId
+            },
             attributes: [
                 'id',
-                'storeName',
-                'email',
                 'name',
-                'status',
-                'avg_rating_point',
-                [
-                    Seller.sequelize.literal('(SELECT COUNT(*) FROM Products WHERE Products.sellerId = Seller.id)'),
-                    'products'
-                ]
-            ]
+                'category_id',
+                'category_name',
+                'original_price',
+                'price',
+                'rating_average',
+                'discount_rate',
+                'inventory_status',
+                'thumbnail_url',
+                'video_url',
+                'qty',
+                'quantity_sold',
+                'specifications',
+                'current_seller'
+            ],
+            offset: offset,
+            limit: limit,
         });
 
-        res.status(200).json({
-            id: updatedSeller.id,
-            storeName: updatedSeller.storeName,
-            email: updatedSeller.email,
-            name: updatedSeller.name,
-            status: updatedSeller.status,
-            products: updatedSeller.getDataValue('products'),
-            rating: updatedSeller.avg_rating_point
+        return res.status(200).json({
+            data: products,
+            total: totalCount,
+            page: page,
+            limit: limit
         });
-
     } catch (error) {
-        console.error('Error in updateSellerStatus:', error);
+        console.error('Error in getAllProducts:', error);
         res.status(500).json({
-            message: 'Failed to update seller status',
-            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+            message: error.message,
+            error: error
         });
     }
 };
@@ -186,5 +193,5 @@ const updateSellerStatus = async (req, res) => {
 module.exports = {
     getAllSeller,
     getOneSeller,
-    updateSellerStatus
+    getAllSellerProducts
 };

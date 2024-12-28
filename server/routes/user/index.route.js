@@ -22,7 +22,6 @@ const userRoutes = (app) => {
     // Middleware to verify JWT
     // app.use(verifyJWT);
 
-    
 
     // User routes
     app.use('/api/users', require('./users.route'));

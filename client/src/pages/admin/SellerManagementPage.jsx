@@ -6,11 +6,11 @@ import {
     SearchOutlined,
     EyeOutlined,
     EditOutlined,
-    DeleteOutlined,
+    StopOutlined,
     ExclamationCircleOutlined,
     RedoOutlined
 } from '@ant-design/icons';
-import { fetchSellers, setSellersPagination } from '../../redux/reducers/admin';
+import { fetchSellers } from '../../redux/actions/admin/sellerManagementAction'; // Import the action
 
 const { Text } = Typography;
 const { confirm } = Modal;
@@ -37,11 +37,11 @@ const SellerManagement = () => {
         dispatch(setSellersPagination(pagination));
     };
 
-    const showDeleteConfirm = (seller) => {
+    const showDeactivateConfirm = (seller) => {
         confirm({
-            title: 'Are you sure you want to delete this seller?',
+            title: 'Are you sure you want to deactivate this seller?',
             icon: <ExclamationCircleOutlined />,
-            content: `This will permanently delete ${seller.name}`,
+            content: `This will permanently deactivate ${seller.name}`,
             okText: 'Yes',
             okType: 'danger',
             cancelText: 'No',
@@ -103,35 +103,35 @@ const SellerManagement = () => {
         },
         {
             title: 'Rating',
-            dataIndex: 'rating',
-            key: 'rating',
+            dataIndex: 'avg_rating_point',
+            key: 'avg_rating_point',
             width: '100px',
-            render: (rating) => (
+            render: (avg_rating_point) => (
                 <Text>
-                    {rating ? `${Number(rating).toFixed(1)} ⭐` : 'No rating'}
+                    {avg_rating_point ? `${Number(avg_rating_point).toFixed(1)} ⭐` : 'No rating'}
                 </Text>
             ),
             sorter: (a, b) => (a.rating || 0) - (b.rating || 0),
         },
         {
             title: 'Reviews',
-            dataIndex: 'reviewCount',
-            key: 'reviewCount',
+            dataIndex: 'review_count',
+            key: 'review_count',
             width: '100px',
             render: (count) => (
                 <Text>{count.toLocaleString()}</Text>
             ),
-            sorter: (a, b) => a.reviewCount - b.reviewCount,
+            sorter: (a, b) => a.review_count - b.review_count,
         },
         {
             title: 'Followers',
-            dataIndex: 'followers',
-            key: 'followers',
+            dataIndex: 'total_follower',
+            key: 'total_follower',
             width: '100px',
             render: (count) => (
                 <Text>{count.toLocaleString()}</Text>
             ),
-            sorter: (a, b) => a.followers - b.followers,
+            sorter: (a, b) => a.total_follower - b.total_follower,
         },
         {
             title: 'Actions',
@@ -155,11 +155,11 @@ const SellerManagement = () => {
                             className="text-green-600 p-0 hover:text-green-800"
                         />
                     </Tooltip>
-                    <Tooltip title="Delete">
+                    <Tooltip title="Deactivate">
                         <Button
                             type="link"
-                            icon={<DeleteOutlined />}
-                            onClick={() => showDeleteConfirm(record)}
+                            icon={<StopOutlined />}
+                            onClick={() => showDeactivateConfirm(record)}
                             className="text-red-600 p-0 hover:text-red-800"
                         />
                     </Tooltip>

@@ -1,6 +1,6 @@
 import { axiosPrivate } from '../config/axios';
 import { useEffect } from 'react';
-//import useAuth from './useAuth';
+// import useAuth from './useAuth';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../redux/reducers/user/authReducer';
 import useRefreshToken from "./useRefreshToken";
@@ -8,7 +8,7 @@ import useRefreshToken from "./useRefreshToken";
 const useAxiosPrivate = () => {
     const refreshToken = useRefreshToken();
     const { user } = useSelector(selectAuth);
-//    const { auth } = useAuth();
+    //  const { auth } = useAuth();
 
     useEffect(() => {
         debugger;

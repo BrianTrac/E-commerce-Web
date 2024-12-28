@@ -1,5 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import sellerReducer, { fetchSellers, setSellersPagination } from './sellerReducer';
+import sellerReducer from './sellerReducer';
 
 const adminReducer = combineReducers({
     sellers: sellerReducer,
@@ -8,6 +8,5 @@ const adminReducer = combineReducers({
     // roles: roleReducer,
 });
 
-export { fetchSellers, setSellersPagination };
 
 export default adminReducer;

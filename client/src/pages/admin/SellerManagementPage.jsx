@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Table, Space, Button, Input, Card, Typography, Tooltip, Modal, message } from 'antd';
 import { fetchSellers, activateSeller, deactivateSeller } from '../../redux/actions/admin/sellerManagementAction';
+import { setSellersPagination } from '../../redux/reducers/admin/sellerReducer';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import {
+    SearchOutlined,
     EyeOutlined,
     EditOutlined,
     StopOutlined,
@@ -201,7 +203,23 @@ const SellerManagement = () => {
 
     return (
         <Card title="Seller Management" className="shadow-md">
-            {/* Search and Refresh buttons remain the same */}
+            <div className="mb-4 flex justify-between items-center">
+                <Input
+                    placeholder="Search sellers..."
+                    prefix={<SearchOutlined />}
+                    value={searchText}
+                    onChange={e => setSearchText(e.target.value)}
+                    onPressEnter={loadSellers}
+                    className="w-64"
+                />
+                <Button
+                    type="primary"
+                    onClick={loadSellers}
+                    icon={<RedoOutlined />}
+                >
+                    Refresh
+                </Button>
+            </div>
             <Table
                 columns={columns}
                 dataSource={sellers}

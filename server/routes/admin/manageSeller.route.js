@@ -17,4 +17,7 @@ router.put('/:id/activate', manageSellerController.activateSeller);
 // [PUT] /api/admin/seller/:id/deactivate
 router.put('/:id/deactivate', manageSellerController.deactivateSeller);
 
+// [GET] /api/admin/seller/:id/statistics
+router.get('/:id/statistics', manageSellerController.getSellerStatistics);
+
 module.exports = router;

@@ -1,7 +1,7 @@
 const Seller = require('../../models/Seller');
 const Product = require('../../models/Product');
-
-const { Op } = require('sequelize');
+const { Op, QueryTypes } = require('sequelize');
+const sequelize = require('../../config/db');
 
 
 // [GET] /api/admin/seller/
@@ -113,7 +113,7 @@ const getOneSeller = async (req, res) => {
                 total_follower: seller.total_follower,
                 url: seller.url,
                 isOfficial: seller.is_official,
-                is_active: seller.is_active 
+                is_active: seller.is_active
             }],
             total: 1,
             page: 1,
@@ -243,10 +243,93 @@ const deactivateSeller = async (req, res) => {
     }
 };
 
+// [GET] /api/admin/seller/:id/statistics
+const getSellerStatistics = async (req, res) => {
+    const user_id = req.params.id;
+    try {
+        const categoryStat = `
+            SELECT 
+                seller_id, 
+                category_id, 
+                category_name, 
+                SUM(total_sales) AS total_sales
+            FROM (
+                SELECT
+                    (current_seller->>'id')::INT AS seller_id,
+                    SUM(quantity_sold * (current_seller->>'price')::NUMERIC) AS total_sales,
+                    cat.id AS category_id,
+                    cat.name AS category_name
+                FROM
+                    product p
+                LEFT JOIN
+                    category cat
+                ON
+                    cat.id = p.category_id
+                WHERE
+                    (current_seller->>'id')::INT = ${user_id}
+                GROUP BY
+                    (current_seller->>'id')::INT,
+                    cat.id,
+                    cat.name
+            ) AS sellerStat
+            GROUP BY
+                seller_id, 
+                category_id, 
+                category_name;
+        `;
+        const catResult = await sequelize.query(categoryStat, { type: QueryTypes.SELECT });
+
+        // Calculate total statistics for the seller
+        const totalProducts = catResult.length;
+        const totalRevenue = catResult.reduce((sum, row) => sum + parseFloat(row.total_sales || 0), 0);
+
+        // Select top 20 categories has the highest total sales
+        catResult.sort((a, b) => b.total_sales - a.total_sales);
+        const topCategories = catResult.slice(0, 20);
+        const minorTotalSales = totalRevenue - topCategories.reduce((sum, row) => sum + parseFloat(row.total_sales || 0), 0);
+
+        topCategories.push({
+            category_id: -1,
+            category_name: 'Others',
+            total_sales: minorTotalSales
+        });
+
+        const productStat = `
+            SELECT
+                id,
+                name,
+                (images[1]::JSONB->>'base_url') AS thumbnail_url, 
+                quantity_sold * (current_seller->>'price')::NUMERIC AS total_sales
+            FROM product
+            WHERE (current_seller->>'id')::INT = ${user_id}
+        `;
+        const productResult = await sequelize.query(productStat, { type: QueryTypes.SELECT });
+        // Select top 10 products has the highest total sales
+        productResult.sort((a, b) => b.quantity_sold - a.quantity_sold);
+        const topProducts = productResult.slice(0, 10);
+
+        res.status(200).json({
+            data: {
+                totalProducts: totalProducts,
+                totalRevenue: totalRevenue,
+                categories: topCategories,
+                products: topProducts,
+            }
+        });
+    } catch (error) {
+        console.error('Error in getSellerStatistics:', error);
+        res.status(500).json({
+            message: error.message,
+            error: error
+        });
+    }
+};
+
 module.exports = {
     getAllSeller,
     getOneSeller,
     getAllSellerProducts,
     activateSeller,
     deactivateSeller,
+    getSellerStatistics,
 };

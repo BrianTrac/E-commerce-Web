@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchSellers, fetchOneSeller, activateSeller, deactivateSeller } from '../../actions/admin/sellerManagementAction';
+import { fetchSellers, fetchOneSeller, fetchSellerAnalytics, activateSeller, deactivateSeller } from '../../actions/admin/sellerManagementAction';
 
 const sellerSlice = createSlice({
     name: 'adminSellers',
     initialState: {
         data: [],
         currentSeller: null,
+        analytics: null,
         loading: false,
         error: null,
         pagination: {
@@ -99,7 +100,28 @@ const sellerSlice = createSlice({
             .addCase(activateSeller.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload?.message || 'Failed to activate seller';
-            });
+            })
+            .addCase(fetchSellerAnalytics.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+
+            // Fetch Seller Analytics
+            .addCase(fetchSellerAnalytics.fulfilled, (state, action) => {
+                state.loading = false;
+                // Store analytics data in the state
+                state.analytics = {
+                    totalProducts: action.payload.totalProducts,
+                    totalRevenue: action.payload.totalRevenue,
+                    categories: action.payload.categories,
+                    products: action.payload.products,
+                };
+            })
+            .addCase(fetchSellerAnalytics.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload?.message || 'Failed to fetch seller analytics';
+                state.analytics = null;
+            })
     }
 });
 

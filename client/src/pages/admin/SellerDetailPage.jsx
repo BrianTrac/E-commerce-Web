@@ -9,6 +9,9 @@ import {
     StarFilled,
     UserOutlined,
     CheckCircleFilled,
+    DollarCircleOutlined,
+    ShoppingCartOutlined,
+    BoxPlotOutlined,
     ArrowLeftOutlined
 } from '@ant-design/icons';
 
@@ -23,11 +26,10 @@ const SellerDetailPage = () => {
 
     useEffect(() => {
         if (id) {
-            // Assuming you'll create this action
             dispatch(fetchOneSeller({ id, axiosInstance: axiosPrivate }));
         }
     }, [id, dispatch]);
-
+    
     return (
         <div className="p-6">
             <Space className="mb-4">
@@ -123,6 +125,7 @@ const SellerDetailPage = () => {
                     </Row>
 
                     {/* Quick Links */}
+                    <Divider />
                     <div className="space-y-4">
                         <Title level={4}>Management Actions</Title>
                         <Row gutter={[16, 16]}>

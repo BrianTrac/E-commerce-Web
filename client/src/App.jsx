@@ -24,6 +24,7 @@ import UserManagement from "./pages/admin/UserManagementPage.jsx";
 import SellerManagement from "./pages/admin/SellerManagementPage.jsx";
 import SellerDetailPage from "./pages/admin/SellerDetailPage.jsx";
 import SellerProductPage from "./pages/admin/SellerWithProductPage.jsx";
+import SellerAnalyticsPage from "./pages/admin/SellerAnalyticsPage.jsx";
 
 const ROLES = {
     User: 'User',
@@ -59,6 +60,7 @@ const App = () => {
                             <Route index element={<SellerManagement />} />
                             <Route path=":id" element={<SellerDetailPage />} />
                             <Route path=":id/products" element={<SellerProductPage />} />
+                            <Route path=":id/analytics" element={<SellerAnalyticsPage />} />
                         </Route>
                     </Route>
                 </Route>

@@ -142,38 +142,6 @@ const getProductById = async (req, res) => {
     }
 };
 
-
-// Get products by store ID with pagination
-// GET /api/seller/product/:storeId/paging?limit=10&page=1
-let getProductsByStoreId = async (req, res) => {
-    const storeId = req.params.storeId;
-    console.log('storeId:', storeId);
-    const page = parseInt(req.query.page) || 1;     // Page number, deafult is 1
-    const limit = parseInt(req.query.limit) || 10; // Items per page, default is 10 items
-    const offset = (page - 1) * limit;
-
-    try {
-        const { count, rows: products } = await Product.findAndCountAll({
-            where: { 'current_seller.store_id': storeId }, 
-            limit: limit, 
-            offset: offset,
-        });
-
-        res.status(200).json({
-            storeId: storeId,
-            currentPage: page,     
-            count: products.length,   
-            totalProducts: count,    
-            totalPages: Math.ceil(count / limit), 
-            products: products       
-        });
-    } catch (error) {
-        console.error('Error fetching products by shop ID', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-};
-
-
 // Add a product to a store
 // POST /api/seller/products/add
 const addProductToStore = async (req, res) => {
@@ -224,7 +192,6 @@ const deleteProduct = async (req, res) => {
 
 module.exports = {
     getAllProductsByStoreId,
-    getProductsByStoreId,
     getProductById,
     addProductToStore,
     deleteProduct

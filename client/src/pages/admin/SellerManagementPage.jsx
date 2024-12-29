@@ -19,87 +19,60 @@ const SellerManagement = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const axiosPrivate = useAxiosPrivate();
-    const { data: sellers, loading, pagination } = useSelector(state => state.admin.sellers);
+
+    const { data: sellers, loading, pagination } = useSelector((state) => state.admin.sellers);
     const [searchText, setSearchText] = useState('');
 
     useEffect(() => {
         loadSellers();
-    }, [pagination.current, pagination.pageSize]);
+    }, [pagination.current, pagination.pageSize, searchText]);
 
     const loadSellers = () => {
-        dispatch(fetchSellers({
-            axiosInstance: axiosPrivate,
-            page: pagination.current,
-            limit: pagination.pageSize,
-            search: searchText
-        }));
+        dispatch(
+            fetchSellers({
+                axiosInstance: axiosPrivate,
+                page: pagination.current,
+                limit: pagination.pageSize,
+                search: searchText,
+            })
+        );
     };
 
     const handleTableChange = (pagination) => {
         dispatch(setSellersPagination(pagination));
     };
 
-    const handleDeactivateSeller = async (seller) => {
+    const handleSellerStatusChange = async (seller, isActive) => {
+        const action = isActive ? deactivateSeller : activateSeller;
+        const successMessage = isActive ? 'Deactivated seller successfully' : 'Activated seller successfully';
+
         try {
-            const result = await dispatch(deactivateSeller({
-                sellerId: seller.id,
-                axiosInstance: axiosPrivate
-            })).unwrap();
-
-            message.success('Deactivated seller successfully');
-            loadSellers(); // Reload the list to get updated data
-        } catch (error) {
-            message.error(error.message || 'Failed to deactivate seller');
-        }
-    };
-
-    const showDeactivateConfirm = (seller) => {
-        confirm({
-            title: 'Are you sure you want to deactivate this seller?',
-            icon: <ExclamationCircleOutlined />,
-            content: `This will deactivate ${seller.name} and their listings will be hidden from customers.`,
-            okText: 'Yes',
-            okType: 'danger',
-            cancelText: 'No',
-            onOk() {
-                return handleDeactivateSeller(seller);
-            },
-            onCancel() {
-                message.info('Cancelled');
-            },
-        });
-    };
-
-    const handleActivateSeller = async (seller) => {
-        try {
-            const result = await dispatch(
-                activateSeller({
+            await dispatch(
+                action({
                     sellerId: seller.id,
                     axiosInstance: axiosPrivate,
                 })
             ).unwrap();
 
-            message.success(`Activated seller ${seller.name} successfully`);
-            loadSellers(); // Reload the list to get updated data
+            message.success(successMessage);
+            loadSellers();
         } catch (error) {
-            message.error(error.message || 'Failed to activate seller');
+            message.error(error.message || `Failed to ${isActive ? 'deactivate' : 'activate'} seller`);
         }
     };
 
-    const showActivateConfirm = (seller) => {
+    const showStatusConfirm = (seller, isActive) => {
         confirm({
-            title: 'Activate Seller',
+            title: `${isActive ? 'Deactivate' : 'Activate'} Seller`,
             icon: <ExclamationCircleOutlined />,
-            content: `Are you sure you want to activate "${seller.name}"? This will make their listings visible to customers.`,
+            content: `Are you sure you want to ${isActive ? 'deactivate' : 'activate'} "${seller.name}"?`,
             okText: 'Yes',
-            okType: 'primary',
+            okType: isActive ? 'danger' : 'primary',
             cancelText: 'No',
-            onOk: () => handleActivateSeller(seller),
-            onCancel: () => {
-                message.info('Activation cancelled');
-            },
+            onOk: () => handleSellerStatusChange(seller, isActive),
         });
     };
+
 
 
     const handleEdit = (record) => {
@@ -201,7 +174,7 @@ const SellerManagement = () => {
                         <Button
                             type="link"
                             icon={<EyeOutlined />}
-                            onClick={() => handleView(record)}
+                            onClick={() => navigate(`/admin/seller-management/${record.id}`)}
                             className="text-blue-600 p-0 hover:text-blue-800"
                             disabled={!record.is_active}
                         />
@@ -210,31 +183,17 @@ const SellerManagement = () => {
                         <Button
                             type="link"
                             icon={<EditOutlined />}
-                            onClick={() => handleEdit(record)}
                             className="text-green-600 p-0 hover:text-green-800"
-                            disabled={!record.is_active}
                         />
                     </Tooltip>
-                    {record.is_active ? (
-                        <Tooltip title="Deactivate">
-                            <Button
-                                type="link"
-                                icon={<StopOutlined />}
-                                onClick={() => showDeactivateConfirm(record)}
-                                className="text-red-600 p-0 hover:text-red-800"
-                            />
-                        </Tooltip>
-                    ) : (
-                        <Tooltip title="Activate">
-                            <Button
-                                type="link"
-                                icon={<RedoOutlined />}
-                                onClick={() => showActivateConfirm(record)}
-                                className="text-green-600 p-0 hover:text-green-800"
-                            />
-                        </Tooltip>
-                    )}
-
+                    <Tooltip title={record.is_active ? 'Deactivate' : 'Activate'}>
+                        <Button
+                            type="link"
+                            icon={record.is_active ? <StopOutlined /> : <RedoOutlined />}
+                            onClick={() => showStatusConfirm(record, record.is_active)}
+                            className={record.is_active ? 'text-red-600 hover:text-red-800' : 'text-green-600 hover:text-green-800'}
+                        />
+                    </Tooltip>
                 </Space>
             ),
         },

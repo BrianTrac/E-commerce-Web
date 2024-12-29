@@ -11,4 +11,10 @@ router.get('/:id', manageSellerController.getOneSeller);
 // [GET] /api/admin/seller/:id/products
 router.get('/:id/products', manageSellerController.getAllSellerProducts);
 
+// [PUT] /api/admin/seller/:id/activate
+router.put('/:id/activate', manageSellerController.activateSeller);
+
+// [PUT] /api/admin/seller/:id/deactivate
+router.put('/:id/deactivate', manageSellerController.deactivateSeller);
+
 module.exports = router;

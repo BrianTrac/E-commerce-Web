@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchSellers, fetchOneSeller } from '../../actions/admin/sellerManagementAction';
+import { fetchSellers, fetchOneSeller, activateSeller, deactivateSeller } from '../../actions/admin/sellerManagementAction';
 
 const sellerSlice = createSlice({
     name: 'adminSellers',
     initialState: {
         data: [],
-        currentSeller: null, 
+        currentSeller: null,
         loading: false,
         error: null,
         pagination: {
@@ -24,12 +24,13 @@ const sellerSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            // Fetch Sellers
             .addCase(fetchSellers.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(fetchSellers.fulfilled, (state, action) => {
-                state.data = action.payload.sellers; 
+                state.data = action.payload.sellers;
                 state.pagination.total = action.payload.totalCount;
                 state.pagination.current = action.payload.currentPage;
                 state.pagination.pageSize = action.payload.pageSize;
@@ -40,18 +41,64 @@ const sellerSlice = createSlice({
                 state.error = action.payload?.message || 'An error occurred';
                 state.data = [];
             })
+            // Fetch One Seller
             .addCase(fetchOneSeller.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(fetchOneSeller.fulfilled, (state, action) => {
-                state.currentSeller = action.payload.seller; // Updated to match API response
+                state.currentSeller = action.payload.seller;
                 state.loading = false;
             })
             .addCase(fetchOneSeller.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload?.message || 'An error occurred';
                 state.currentSeller = null;
+            })
+            // Deactivate Seller
+            .addCase(deactivateSeller.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(deactivateSeller.fulfilled, (state, action) => {
+                state.loading = false;
+                // Update the seller's status in the list
+                state.data = state.data.map(seller =>
+                    seller.id === action.payload.id
+                        ? { ...seller, isActive: false }
+                        : seller
+                );
+                // Update currentSeller if it's the same seller
+                if (state.currentSeller && state.currentSeller.id === action.payload.id) {
+                    state.currentSeller = { ...state.currentSeller, isActive: false };
+                }
+            })
+            .addCase(deactivateSeller.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload?.message || 'Failed to deactivate seller';
+            })
+
+            // Activate Seller
+            .addCase(activateSeller.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(activateSeller.fulfilled, (state, action) => {
+                state.loading = false;
+                // Update the seller's status in the list
+                state.data = state.data.map(seller =>
+                    seller.id === action.payload.id
+                        ? { ...seller, isActive: true }
+                        : seller
+                );
+                // Update currentSeller if it's the same seller
+                if (state.currentSeller && state.currentSeller.id === action.payload.id) {
+                    state.currentSeller = { ...state.currentSeller, isActive: true };
+                }
+            })
+            .addCase(activateSeller.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload?.message || 'Failed to activate seller';
             });
     }
 });

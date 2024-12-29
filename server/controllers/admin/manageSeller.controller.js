@@ -41,7 +41,8 @@ const getAllSeller = async (req, res) => {
                 'store_id',
                 'total_follower',
                 'url',
-                'is_official'
+                'is_official',
+                'is_active'
             ]
         });
 
@@ -56,7 +57,8 @@ const getAllSeller = async (req, res) => {
                 storeId: seller.store_id,
                 total_follower: seller.total_follower,
                 url: seller.url,
-                isOfficial: seller.is_official
+                isOfficial: seller.is_official,
+                is_active: seller.is_active
             })),
             total: totalCount,
             page: page,
@@ -88,7 +90,8 @@ const getOneSeller = async (req, res) => {
                 'store_id',
                 'total_follower',
                 'url',
-                'is_official'
+                'is_official',
+                'is_active'
             ]
         });
 
@@ -109,7 +112,8 @@ const getOneSeller = async (req, res) => {
                 storeId: seller.store_id,
                 total_follower: seller.total_follower,
                 url: seller.url,
-                isOfficial: seller.is_official
+                isOfficial: seller.is_official,
+                is_active: seller.is_active 
             }],
             total: 1,
             page: 1,
@@ -169,7 +173,7 @@ const getAllSellerProducts = async (req, res) => {
                 'qty',
                 'quantity_sold',
                 'specifications',
-                'current_seller'
+                'current_seller',
             ],
             offset: offset,
             limit: limit,
@@ -189,8 +193,60 @@ const getAllSellerProducts = async (req, res) => {
     }
 };
 
+// [PUT] /api/admin/seller/:id/activate
+const activateSeller = async (req, res) => {
+    const user_id = req.params.id;
+    try {
+        const seller = await Seller.findByPk(user_id);
+        if (!seller) {
+            return res.status(404).json({
+                message: 'Seller not found'
+            });
+        }
+        seller.is_active = true;
+        await seller.save();
+        res.status(200).json({
+            message: 'Activated seller successfully',
+            data: seller
+        });
+    } catch (error) {
+        console.error('Error in activateSeller:', error);
+        res.status(500).json({
+            message: error.message,
+            error: error
+        });
+    }
+};
+
+// [PUT] /api/admin/seller/:id/deactivate
+const deactivateSeller = async (req, res) => {
+    const user_id = req.params.id;
+    try {
+        const seller = await Seller.findByPk(user_id);
+        if (!seller) {
+            return res.status(404).json({
+                message: 'Seller not found'
+            });
+        }
+        seller.is_active = false;
+        await seller.save();
+        res.status(200).json({
+            message: 'Deactivated seller successfully',
+            data: seller
+        });
+    } catch (error) {
+        console.error('Error in deactivateSeller:', error);
+        res.status(500).json({
+            message: error.message,
+            error: error
+        });
+    }
+};
+
 module.exports = {
     getAllSeller,
     getOneSeller,
-    getAllSellerProducts
+    getAllSellerProducts,
+    activateSeller,
+    deactivateSeller,
 };

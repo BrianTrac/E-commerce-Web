@@ -44,8 +44,16 @@ const Seller = sequelize.define('Seller', {
         type: DataTypes.BOOLEAN,
         allowNull: false,
     },
+    user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    is_active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    }
 }, {
-    tableName: 'seller', 
+    tableName: 'seller',
     timestamps: true,
 });
 

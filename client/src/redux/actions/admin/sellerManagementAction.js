@@ -62,3 +62,33 @@ export const fetchSellerProducts = createAsyncThunk(
         }
     }
 );
+
+export const deactivateSeller = createAsyncThunk(
+    'admin/deactivateSeller',
+    async ({ sellerId, axiosInstance }, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.put(`/api/admin/seller/${sellerId}/deactivate`);
+            return response.data.data; 
+        } catch (error) {
+            return rejectWithValue({
+                message: error.response?.data?.message || 'Failed to deactivate seller',
+                status: error.response?.status
+            });
+        }
+    }
+);
+
+export const activateSeller = createAsyncThunk(
+    'admin/activateSeller',
+    async ({ sellerId, axiosInstance }, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.put(`/api/admin/seller/${sellerId}/activate`);
+            return response.data.data;
+        } catch (error) {
+            return rejectWithValue({
+                message: error.response?.data?.message || 'Failed to activate seller',
+                status: error.response?.status
+            });
+        }
+    }
+);

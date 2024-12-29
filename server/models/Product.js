@@ -75,7 +75,7 @@ const Product = sequelize.define('Product', {
         defaultValue: 0,
     },
     specifications: {
-        type: DataTypes.TEXT,
+        type: DataTypes.JSONB,
         allowNull: true,
     },
     current_seller: {

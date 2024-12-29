@@ -87,7 +87,60 @@ const getAllProductsByStoreId = async (req, res) => {
     }
 };
 
+const getProductById = async (req, res) => {
+    const id = req.params.productId;
 
+    if (!id) {
+        return res.status(400).json({ message: 'Product ID is required' });
+    }
+
+    try {
+        // Tìm sản phẩm theo ID
+        const product = await Product.findByPk(id, {
+            attributes: [
+                'name',
+                'images', // Giả sử hình ảnh là chuỗi JSON chứa các URL thumbnail
+                'discount_rate',
+                'original_price',
+                'short_description',
+                'description',
+                'quantity_sold',
+                'specifications', // Giả sử đây là kiểu dữ liệu JSON
+                'rating_average',
+                'price',
+            ]
+        });
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Xử lý dữ liệu hình ảnh
+        const images = Array.isArray(product.images)
+            ? product.images
+            : JSON.parse(product.images || '[]');
+        const thumbnails = images.map(image => image.thumbnail_url);
+
+        // Trả về dữ liệu sản phẩm
+        const productDetail = {
+            name: product.name,
+            thumbnails, // Hình ảnh thumbnail
+            discount_rate: product.discount_rate,
+            original_price: product.original_price,
+            short_description: product.short_description,
+            description: product.description,
+            quantity_sold: product.quantity_sold,
+            specifications: product.specifications, // JSON specifications
+            rating_average: product.rating_average,
+            price: product.price
+        };
+
+        res.status(200).json({ data: productDetail });
+    } catch (error) {
+        console.error('Error fetching product by ID:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
 
 
 // Get products by store ID with pagination
@@ -122,35 +175,47 @@ let getProductsByStoreId = async (req, res) => {
 
 
 // Add a product to a store
-// POST /api/seller/product/add
-let addProductToStore = async (req, res) => {
+// POST /api/seller/products/add
+const addProductToStore = async (req, res) => {
     try {
         const productData = req.body;
-        console.log('productData:', productData);
+
+        // Kiểm tra và xử lý dữ liệu nếu cần (có thể bạn sẽ cần xử lý ảnh hay thông tin trước khi lưu)
         const newProduct = await Product.create(productData);
-        res.status(201).json({ message: "Product created", product: newProduct });
+
+        res.status(201).json({
+            message: 'Product successfully created',
+            product: newProduct
+        });
     } catch (error) {
         console.error('Error adding product to store:', error);
-        res.status(500).json({ message: "Error adding product to store" });
+        res.status(500).json({
+            message: 'Internal server error while adding product',
+            error: error.message
+        });
     }
 };
 
-
 // Remove a product from a store
-// DELETE /api/seller/product/remove/:id
-let deleteProduct = async (req, res) => {
-    const productId = req.params.id;
+// DELETE /api/seller/products/remove/:productId
+const deleteProduct = async (req, res) => {
+    const productId = req.params.productId;
 
     try {
+        console.log(`Attempting to delete product with ID: ${productId}`); // Debug log
         const result = await Product.destroy({
             where: {
-                id: productId
-            }
+                id: productId,
+            },
         });
+
         if (result === 0) {
+            console.warn(`Product with ID: ${productId} not found`);
             return res.status(404).json({ message: "Product not found" });
         }
-        res.status(200).json({ message: "Product deleted" });
+
+        console.log(`Product with ID: ${productId} deleted successfully`);
+        res.status(200).json({ message: "Product deleted successfully" });
     } catch (error) {
         console.error('Error deleting product:', error);
         res.status(500).json({ message: "Error deleting product" });
@@ -160,6 +225,7 @@ let deleteProduct = async (req, res) => {
 module.exports = {
     getAllProductsByStoreId,
     getProductsByStoreId,
+    getProductById,
     addProductToStore,
     deleteProduct
 };

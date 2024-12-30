@@ -201,7 +201,6 @@ const SellerAnalyticsPage = () => {
                                         formatter={(value) => formatRevenue(value)}
                                         cursor={{ fill: 'rgba(0, 0, 0, 0.1)' }}
                                     />
-                                    <Legend />
                                     <Bar
                                         dataKey="totalSales"
                                         fill="#1890ff"

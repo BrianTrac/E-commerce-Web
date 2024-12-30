@@ -287,12 +287,13 @@ const getSellerStatistics = async (req, res) => {
         catResult.sort((a, b) => b.total_sales - a.total_sales);
         const topCategories = catResult.slice(0, 20);
         const minorTotalSales = totalRevenue - topCategories.reduce((sum, row) => sum + parseFloat(row.total_sales || 0), 0);
-
-        topCategories.push({
-            category_id: -1,
-            category_name: 'Others',
-            total_sales: minorTotalSales
-        });
+        if (minorTotalSales > 0) {
+            topCategories.push({
+                category_id: -1,
+                category_name: 'Others',
+                total_sales: minorTotalSales
+            });
+        }
 
         const productStat = `
             SELECT

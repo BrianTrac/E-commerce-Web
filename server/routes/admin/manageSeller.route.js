@@ -20,4 +20,14 @@ router.put('/:id/deactivate', manageSellerController.deactivateSeller);
 // [GET] /api/admin/seller/:id/statistics
 router.get('/:id/statistics', manageSellerController.getSellerStatistics);
 
+// [PATCH] /api/admin/seller/:id/products/:productId/suspend
+router.patch('/:id/products/:productId/suspend', manageSellerController.suspendSellerProduct);
+
+// [PATCH] /api/admin/seller/:id/products/:productId/unsuspend
+router.patch('/:id/products/:productId/unsuspend', manageSellerController.unsuspendProduct);
+
+// [PATCH] /api/admin/seller/:id/products/:productId/approve
+router.patch('/:id/products/:productId/approve', manageSellerController.approveProduct);
+
+
 module.exports = router;

@@ -25,7 +25,6 @@ export const fetchSellers = createAsyncThunk(
     }
 );
 
-
 export const fetchOneSeller = createAsyncThunk(
     'admin/sellers/fetchOne',
     async ({ axiosInstance, id }, { rejectWithValue }) => {

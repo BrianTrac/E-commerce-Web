@@ -135,7 +135,7 @@ const getAllSellerProducts = async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const offset = (page - 1) * limit;
-
+        const search = req.query.search || ''; // Get search query
         const { id } = req.params;
 
         const seller = await Seller.findByPk(id);
@@ -146,18 +146,24 @@ const getAllSellerProducts = async (req, res) => {
         }
         const storeId = seller.store_id;
 
-        // Count total products
+        // Filter conditions
+        const whereCondition = {
+            'current_seller.store_id': storeId
+        };
+
+        // Add search condition if provided
+        if (search) {
+            whereCondition.name = { [Op.like]: `%${search}%` }; // Search by product name
+        }
+
+        // Count total products matching the condition
         const totalCount = await Product.count({
-            where: {
-                'current_seller.store_id': storeId
-            }
+            where: whereCondition
         });
 
-        // Retrieve products with pagination
+        // Retrieve products with pagination and filters
         const products = await Product.findAll({
-            where: {
-                'current_seller.store_id': storeId
-            },
+            where: whereCondition,
             attributes: [
                 'id',
                 'name',
@@ -178,6 +184,7 @@ const getAllSellerProducts = async (req, res) => {
             offset: offset,
             limit: limit,
         });
+
         return res.status(200).json({
             data: products,
             total: totalCount,
@@ -185,13 +192,14 @@ const getAllSellerProducts = async (req, res) => {
             limit: limit
         });
     } catch (error) {
-        console.error('Error in getAllProducts:', error);
+        console.error('Error in getAllSellerProducts:', error);
         res.status(500).json({
             message: error.message,
             error: error
         });
     }
 };
+
 
 // [PUT] /api/admin/seller/:id/activate
 const activateSeller = async (req, res) => {
@@ -326,6 +334,94 @@ const getSellerStatistics = async (req, res) => {
     }
 };
 
+// [PATCH] /api/admin/seller/:id/products/:productId/suspend
+const suspendSellerProduct = async (req, res) => {
+    const { id, productId } = req.params;
+    try {
+        const seller = await Seller.findByPk(id);
+        if (!seller) {
+            return res.status(404).json({
+                message: 'Seller not found'
+            });
+        }
+        
+        // Verify the product exists and belongs to the seller
+        const product = await Product.findByPk(productId);
+        if (!product || product.current_seller.store_id !== seller.store_id) {
+            return res.status(404).json({ message: 'Product not found for this seller' });
+        }
+
+        product.inventory_status = 'suspend';
+        await product.save();
+
+        res.status(200).json({
+            message: 'Product is temporarily suspended',
+        });
+    } catch (error) {
+        console.log('Error in suspendSellerProduct:', error);
+        res.status(500).json({
+            message: error.message,
+            error: error
+        });
+    }
+};
+
+// [PATCH] /api/admin/seller/:id/products/:productId/unsuspend
+const unsuspendProduct = async (req, res) => {
+    try {
+        const { id, productId } = req.params;
+
+        // Verify the seller exists
+        const seller = await Seller.findByPk(id);
+        if (!seller) {
+            return res.status(404).json({ message: 'Seller not found' });
+        }
+
+        // Verify the product exists and belongs to the seller
+        const product = await Product.findByPk(productId);
+        if (!product || product.current_seller.store_id !== seller.store_id) {
+            return res.status(404).json({ message: 'Product not found for this seller' });
+        }
+
+        // Update product status to available
+        product.inventory_status = 'available';
+        await product.save();
+
+        return res.status(200).json({ message: 'Product unsuspended successfully' });
+    } catch (error) {
+        console.error('Error unsuspending product:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// [PATCH] /api/admin/seller/:id/products/:productId/approve
+const approveProduct = async (req, res) => {
+    try {
+        const { id, productId } = req.params;
+
+        // Verify the seller exists
+        const seller = await Seller.findByPk(id);
+        if (!seller) {
+            return res.status(404).json({ message: 'Seller not found' });
+        }
+
+        // Verify the product exists and belongs to the seller
+        const product = await Product.findByPk(productId);
+        if (!product || product.current_seller.store_id !== seller.store_id) {
+            return res.status(404).json({ message: 'Product not found for this seller' });
+        }
+
+        // Update product status to available
+        product.inventory_status = 'available';
+        await product.save();
+
+        return res.status(200).json({ message: 'Product unsuspended successfully' });
+    } catch (error) {
+        console.error('Error unsuspending product:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     getAllSeller,
     getOneSeller,
@@ -333,4 +429,7 @@ module.exports = {
     activateSeller,
     deactivateSeller,
     getSellerStatistics,
+    suspendSellerProduct,
+    unsuspendProduct,
+    approveProduct,
 };

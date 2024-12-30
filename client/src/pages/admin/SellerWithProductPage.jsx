@@ -10,8 +10,11 @@ import {
     EditOutlined,
     DeleteOutlined,
     RedoOutlined,
-    ArrowLeftOutlined
+    ArrowLeftOutlined,
+    UndoOutlined,
+    ClockCircleOutlined
 } from '@ant-design/icons';
+import { ResponsiveContainer } from 'recharts';
 
 const { Text } = Typography;
 
@@ -19,7 +22,7 @@ const SellerProductPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const axiosPrivate = useAxiosPrivate();
-    const dispatch = useDispatch(); // Added missing dispatch
+    const dispatch = useDispatch();
     const [searchText, setSearchText] = useState('');
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -62,9 +65,8 @@ const SellerProductPage = () => {
 
     useEffect(() => {
         fetchProducts(pagination.current, pagination.pageSize, searchText);
-    }, [id]); // Added searchText to dependencies
+    }, [id]);
 
-    // Debounced search function
     const handleSearch = React.useCallback(() => {
         fetchProducts(1, pagination.pageSize, searchText);
     }, [searchText, pagination.pageSize]);
@@ -80,23 +82,54 @@ const SellerProductPage = () => {
 
     const handleDelete = async (record) => {
         try {
-            const response = await axiosPrivate.delete(`/admin/seller/${id}/products/${record.id}`);
+            const response = await axiosPrivate.patch(`/api/admin/seller/${id}/products/${record.id}/suspend`);
 
             if (response.status === 200) {
-                message.success('Product deleted successfully');
+                message.success('Product suspended successfully');
                 fetchProducts(pagination.current, pagination.pageSize, searchText);
             } else {
-                throw new Error('Failed to delete product');
+                throw new Error(response.message);
             }
         } catch (error) {
-            message.error('Failed to delete product: ' + error.message);
+            message.error('Failed to suspend product: ' + error.message);
         }
     };
 
+    const handleRecover = async (record) => {
+        try {
+            const response = await axiosPrivate.patch(`/api/admin/seller/${id}/products/${record.id}/unsuspend`);
+
+            if (response.status === 200) {
+                message.success('Product recovered successfully');
+                fetchProducts(pagination.current, pagination.pageSize, searchText);
+            } else {
+                throw new Error(response.message);
+            }
+        } catch (error) {
+            message.error('Failed to recover product: ' + error.message);
+        }
+    };
+    const handleAccept = async (record) => {
+        try {
+            const response = await axiosPrivate.patch(`/api/admin/seller/${id}/products/${record.id}/approve`);
+
+            if (response.status === 200) {
+                message.success('Product recovered successfully');
+                fetchProducts(pagination.current, pagination.pageSize, searchText);
+            } else {
+                throw new Error(response.message);
+            }
+        } catch (error) {
+            message.error('Failed to recover product: ' + error.message);
+        }
+    };
+
+    // 1. Điều chỉnh các cột để responsive hơn
     const columns = [
         {
             title: 'No.',
             key: 'index',
+            responsive: ['lg'],
             width: '60px',
             render: (_, __, index) => (
                 <Text>
@@ -107,6 +140,7 @@ const SellerProductPage = () => {
         {
             title: 'Image',
             key: 'thumbnail_url',
+            responsive: ['md'],
             width: '80px',
             render: (_, record) => (
                 <img
@@ -119,140 +153,60 @@ const SellerProductPage = () => {
         {
             title: 'Product Name',
             key: 'name',
+            responsive: ['md'],
             render: (_, record) => (
-                <div>
-                    <Text strong className="block">{record.name}</Text>
-                    <Text type="secondary" className="text-xs">SKU: {record.current_seller?.sku}</Text>
+                <div className="min-w-[150px]">
+                    <Text strong className="block text-sm md:text-base">{record.name}</Text>
+                    <Text type="secondary" className="text-xs md:text-sm">SKU: {record.current_seller?.sku}</Text>
                 </div>
-            ),
-        },
-        {
-            title: 'Category',
-            key: 'category_name',
-            width: '120px',
-            render: (_, record) => <Text>{record.category_name}</Text>,
-        },
-        {
-            title: 'Price',
-            key: 'price',
-            width: '150px',
-            render: (_, record) => (
-                <div>
-                    <Text strong className="block">
-                        ₫{Number(record.price).toLocaleString()}
-                    </Text>
-                    {record.discount_rate > 0 && (
-                        <div className="flex items-center gap-2">
-                            <Text delete type="secondary" className="text-xs">
-                                ₫{Number(record.original_price).toLocaleString()}
-                            </Text>
-                            <Tag color="red">-{record.discount_rate}%</Tag>
-                        </div>
-                    )}
-                </div>
-            ),
-        },
-        {
-            title: 'Stock',
-            key: 'qty',
-            width: '100px',
-            render: (_, record) => (
-                <div>
-                    <Text>{record.qty}</Text>
-                    <Tag
-                        color={record.inventory_status === 'available' ? 'green' : 'red'}
-                        className="ml-2"
-                    >
-                        {record.inventory_status}
-                    </Tag>
-                </div>
-            ),
-        },
-        {
-            title: 'Sold',
-            key: 'quantity_sold',
-            width: '100px',
-            render: (_, record) => <Text>{record.quantity_sold}</Text>,
-        },
-        {
-            title: 'Rating',
-            key: 'rating_average',
-            width: '100px',
-            render: (_, record) => (
-                <Text>
-                    {record.rating_average ? `${record.rating_average} ⭐` : 'No rating'}
-                </Text>
-            ),
-        },
-        {
-            title: 'Actions',
-            key: 'actions',
-            width: '150px',
-            fixed: 'right',
-            render: (_, record) => (
-                <Space size="middle">
-                    <Tooltip title="View Product">
-                        <Button
-                            type="link"
-                            icon={<EyeOutlined />}
-                            onClick={() => handleView(record)}
-                            className="text-blue-600 p-0 hover:text-blue-800"
-                        />
-                    </Tooltip>
-                    <Tooltip title="Edit">
-                        <Button
-                            type="link"
-                            icon={<EditOutlined />}
-                            onClick={() => handleEdit(record)}
-                            className="text-green-600 p-0 hover:text-green-800"
-                        />
-                    </Tooltip>
-                    <Tooltip title="Delete">
-                        <Button
-                            type="link"
-                            icon={<DeleteOutlined />}
-                            onClick={() => handleDelete(record)}
-                            className="text-red-600 p-0 hover:text-red-800"
-                        />
-                    </Tooltip>
-                </Space>
             ),
         },
     ];
 
     return (
-        <div>
-            <Space className="mb-4">
+        <div className="p-2 md:p-4">
+            <Space className="mb-2 md:mb-4">
                 <Button
                     icon={<ArrowLeftOutlined />}
                     onClick={() => navigate(`/admin/seller-management/${id}`)}
+                    className="text-sm md:text-base"
                 >
                     Back
                 </Button>
             </Space>
-            <Card title="Seller's Products" className="shadow-md">
-                <div className="mb-4 flex justify-between items-center">
-                    <Space>
+            <Card
+                title="Seller's Products"
+                className="shadow-md overflow-hidden"
+            >
+                {/* Search và Refresh button */}
+                <div className="mb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-4">
+                    <Space className="flex-1 w-full md:w-auto flex flex-col md:flex-row">
                         <Input
                             placeholder="Search products..."
                             prefix={<SearchOutlined />}
                             value={searchText}
                             onChange={(e) => setSearchText(e.target.value)}
                             onPressEnter={handleSearch}
-                            className="w-64"
+                            className="w-full md:w-64 text-sm md:text-base"
                         />
-                        <Button type="primary" onClick={handleSearch}>
+                        <Button
+                            type="primary"
+                            onClick={handleSearch}
+                            className="w-full md:w-auto mt-2 md:mt-0"
+                        >
                             Search
                         </Button>
                     </Space>
                     <Button
                         onClick={handleRefresh}
                         icon={<RedoOutlined />}
+                        className="w-full md:w-auto"
                     >
                         Refresh
                     </Button>
                 </div>
 
+                {/* Table với các tùy chọn responsive */}
                 <Table
                     columns={columns}
                     dataSource={products}
@@ -264,10 +218,13 @@ const SellerProductPage = () => {
                         showQuickJumper: true,
                         showTotal: (total) => `Total ${total} products`,
                         position: ['bottomCenter'],
+                        size: 'small', // Giảm kích thước trên mobile
+                        responsive: true,
                     }}
                     onChange={handleTableChange}
                     className="border border-gray-200 rounded"
-                    scroll={{ x: 1200 }}
+                    scroll={{ x: 'max-content' }} // Thay đổi giá trị cố định
+                    size="small" // Giảm kích thước table trên mobile
                 />
             </Card>
         </div>

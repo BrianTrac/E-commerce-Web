@@ -53,7 +53,7 @@ const Product = sequelize.define('Product', {
         type: DataTypes.TEXT,
         allowNull: false,
         validate: {
-            isIn: [['available', 'non-available']]
+            isIn: [['available', 'unavailable', 'suspend']],
         }
     },
     thumbnail_url: {

@@ -1,53 +1,79 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Table, Card, Space, Input, Tooltip, Button, Typography } from 'antd';
-import { fetchProducts, setProductsPagination } from '../../redux/reducers/seller';
-import {
-  EyeOutlined,
-  EditOutlined,
-  DeleteOutlined,
-} from '@ant-design/icons';
+import { Table, Card, Space, Input, Tooltip, Button, Typography, Modal, message } from 'antd';
+import { EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { deleteProductById, getProductsByStatus } from '../../service/seller/productApi';
 
+const { confirm } = Modal;
 const { Text } = Typography;
 
-const ProductManagement = () => {
-  const dispatch = useDispatch();
+const SellerProductManagement = () => {
   const navigate = useNavigate();
-  const { data: products, loading, pagination } = useSelector(state => state.seller.products);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
   const [searchText, setSearchText] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
 
   useEffect(() => {
     loadProducts();
-  }, [pagination.current, pagination.pageSize]);
+  }, [pagination.current, statusFilter]);
 
-  const loadProducts = () => {
-    dispatch(fetchProducts({
-      page: pagination.current,
-      limit: pagination.pageSize,
-      search: searchText,
-    }));
+  const loadProducts = async () => {
+    setLoading(true);
+    try {
+      const response = await getProductsByStatus(
+        '40395', // Store ID
+        statusFilter,
+        pagination.current,
+        pagination.pageSize,
+        searchText
+      );
+      setProducts(response.data);
+      setPagination({ ...pagination, total: response.total });
+    } catch (error) {
+      message.error(error.message || 'Failed to load products');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSearch = () => {
-    dispatch(
-      setProductsPagination({
-        current: 1,
-      })
-    );
+    setPagination({ ...pagination, current: 1 });
     loadProducts();
   };
 
-  const handleView = (record) => {
-    navigate(`/seller/product-management/detail/${record.id}`);
+  const handleStatusClick = (status) => {
+    setStatusFilter(status);
+    setPagination({ ...pagination, current: 1 });
   };
 
-  const handleAddProduct = () => {
-    navigate('/seller/product-management/add');
+  const handleView = (product) => {
+    navigate(`/seller/product-management/detail/${product.id}`);
   };
 
-  const handleTableChange = (pagination) => {
-    dispatch(setProductsPagination(pagination));
+  const handleEdit = (product) => {
+    navigate(`/seller/product-management/edit/${product.id}`);
+  };
+
+  const handleDelete = (productId) => {
+    confirm({
+      title: 'Are you sure you want to delete this product?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'This action cannot be undone.',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk: async () => {
+        try {
+          await deleteProductById(productId);
+          message.success('Product deleted successfully');
+          loadProducts();
+        } catch (error) {
+          message.error(error.message || 'Failed to delete product');
+        }
+      },
+    });
   };
 
   const columns = [
@@ -55,33 +81,35 @@ const ProductManagement = () => {
       title: 'No.',
       key: 'index',
       width: '60px',
-      render: (_, __, index) => (
-        <Text>{(pagination.current - 1) * pagination.pageSize + index + 1}</Text>
-      ),
+      render: (_, __, index) => <Text>{(pagination.current - 1) * pagination.pageSize + index + 1}</Text>,
     },
     {
       title: 'Image',
       key: 'image',
       width: '80px',
       render: (_, record) => (
-        <img
-          src={record.thumbnails[0] || ''}
-          alt={record.name}
-          className="w-10 h-10 object-cover border border-gray-200 rounded"
-        />
+        <img src={record.thumbnails[0] || ''} alt={record.name} className="w-10 h-10 object-cover border rounded" />
       ),
     },
     {
       title: 'Product Name',
       dataIndex: 'name',
-      width: '400px',
       key: 'name',
+      width: '350px',
     },
     {
       title: 'Category Name',
       dataIndex: 'category',
-      width: '250px',
       key: 'category',
+      width: '250px',
+    },
+    {
+      title: 'Rating',
+      dataIndex: 'rating',
+      key: 'rating',
+      render: (rating) =>
+        rating !== undefined && rating !== null ? `${parseFloat(rating).toFixed(1)} ⭐` : 'No rating',
+      sorter: (a, b) => (parseFloat(a.rating) || 0) - (parseFloat(b.rating) || 0),
     },
     {
       title: 'Price',
@@ -93,17 +121,18 @@ const ProductManagement = () => {
           : 'N/A',
     },
     {
-      title: 'Rating',
-      dataIndex: 'rating',
-      key: 'rating',
-      render: (rating) => (typeof rating === 'number' ? `${rating.toFixed(1)} ⭐` : 'No rating'),
-      sorter: (a, b) => (a.rating || 0) - (b.rating || 0),
-    },
-    {
-      title: 'Qty',
-      dataIndex: 'qty',
-      key: 'qty',
-      sorter: (a, b) => a.qty - b.qty,
+      title: 'Status',
+      dataIndex: 'inventory_status',
+      key: 'status',
+      render: (status) => (
+        <span
+          className={
+            status === 'pending' ? 'text-orange-500' : status === 'suspend' ? 'text-red-500' : 'text-green-500'
+          }
+        >
+          {status === 'pending' ? 'Pending' : status === 'suspend' ? 'Suspend' : 'Available'}
+        </span>
+      ),
     },
     {
       title: 'Actions',
@@ -131,7 +160,7 @@ const ProductManagement = () => {
             <Button
               type="link"
               icon={<DeleteOutlined />}
-              onClick={() => showDeleteConfirm(record)}
+              onClick={() => handleDelete(record.id)}
               className="text-red-600 p-0 hover:text-red-800"
             />
           </Tooltip>
@@ -143,22 +172,28 @@ const ProductManagement = () => {
   return (
     <Card title="Product Management" className="shadow-md">
       <div className="mb-4 flex justify-between items-center">
-        <div className='flex'>
-          <Input
-            placeholder="Search products..."
-            value={searchText}
-            onChange={e => setSearchText(e.target.value)}
-            onPressEnter={handleSearch}
-            className="w-64 mr-2"
-          />
-          <Button type="primary" onClick={handleSearch}>Search</Button>
+        <Input.Search
+          placeholder="Search products..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          onSearch={handleSearch}
+          style={{ width: 300 }}
+        />
+        <div className="flex space-x-2">
+          <Button type={statusFilter === '' ? 'primary' : 'default'} onClick={() => handleStatusClick('')}>
+            All
+          </Button>
+          <Button type={statusFilter === 'available' ? 'primary' : 'default'} onClick={() => handleStatusClick('available')}>
+            Available
+          </Button>
+          <Button type={statusFilter === 'pending' ? 'primary' : 'default'} onClick={() => handleStatusClick('pending')}>
+            Pending
+          </Button>
+          <Button type={statusFilter === 'suspend' ? 'primary' : 'default'} onClick={() => handleStatusClick('suspend')}>
+            Suspend
+          </Button>
         </div>
-
-        <Button
-          type="primary"
-          onClick={handleAddProduct}
-          style={{ marginLeft: '10px' }}
-        >
+        <Button type="primary" onClick={() => navigate('/seller/product-management/add')}>
           Add New Product
         </Button>
       </div>
@@ -174,13 +209,10 @@ const ProductManagement = () => {
           showTotal: (total) => `Total ${total} products`,
           position: ['bottomCenter'],
         }}
-        onChange={handleTableChange}
-        className="border border-gray-200 rounded"
-        scroll={{ x: 'max-content' }}
+        onChange={(pag) => setPagination({ ...pagination, current: pag.current, pageSize: pag.pageSize })}
       />
-
     </Card>
   );
 };
 
-export default ProductManagement;
+export default SellerProductManagement;

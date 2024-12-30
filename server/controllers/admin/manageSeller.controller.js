@@ -274,7 +274,7 @@ const getSellerStatistics = async (req, res) => {
                 ON
                     cat.id = p.category_id
                 WHERE
-                    (current_seller->>'id')::INT = ${user_id}
+                    (current_seller->>'id')::INT = ${user_id} AND cat.id IS NOT NULL
                 GROUP BY
                     (current_seller->>'id')::INT,
                     cat.id,
@@ -305,11 +305,12 @@ const getSellerStatistics = async (req, res) => {
 
         const productStat = `
             SELECT
-                id,
-                name,
+                product.id,
+                product.name,
                 (images[1]::JSONB->>'base_url') AS thumbnail_url, 
                 quantity_sold * (current_seller->>'price')::NUMERIC AS total_sales
             FROM product
+            JOIN category ON category.id = product.category_id
             WHERE (current_seller->>'id')::INT = ${user_id}
         `;
         const productResult = await sequelize.query(productStat, { type: QueryTypes.SELECT });

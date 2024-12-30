@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-import html2canvas from 'html2canvas';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSellerAnalytics } from '../../redux/actions/admin/sellerManagementAction';
@@ -8,7 +7,7 @@ import { Card, Row, Col, Typography, Statistic, Space, Button, Divider, Spin, Pa
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
-
+import { ExportButtons } from '../../components/admin/ExportButtons';
 const { Title, Text } = Typography;
 
 const SellerAnalyticsPage = () => {
@@ -37,30 +36,6 @@ const SellerAnalyticsPage = () => {
     }, [analytics]);
 
     const COLORS = ['#1890ff', '#52c41a', '#faad14', '#f5222d', '#13c2c2', '#722ed1', '#eb2f96', '#fa541c'];
-
-    const exportChart = async (chartRef, filename) => {
-        if (chartRef.current) {
-            const canvas = await html2canvas(chartRef.current);
-            const link = document.createElement('a');
-            link.download = filename;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        }
-    };
-
-    const printChart = async (chartRef) => {
-        if (chartRef.current) {
-            const canvas = await html2canvas(chartRef.current);
-            const image = new Image();
-            image.src = canvas.toDataURL('image/png');
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write('<html><body style="margin: 0;">');
-            printWindow.document.body.appendChild(image);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.print();
-        }
-    };
 
     const formatRevenue = (value) => {
         return new Intl.NumberFormat('vi-VN', {
@@ -94,18 +69,6 @@ const SellerAnalyticsPage = () => {
                 >
                     Back
                 </Button>
-                <Button onClick={() => exportChart(pieChartRef, 'pie_chart.png')}>
-                    Export Pie Chart
-                </Button>
-                <Button onClick={() => printChart(pieChartRef)}>
-                    Print Pie Chart
-                </Button>
-                <Button onClick={() => exportChart(barChartRef, 'bar_chart.png')}>
-                    Export Bar Chart
-                </Button>
-                <Button onClick={() => printChart(barChartRef)}>
-                    Print Bar Chart
-                </Button>
             </Space>
 
             {loading ? (
@@ -119,8 +82,8 @@ const SellerAnalyticsPage = () => {
             ) : (
                 <Card className="shadow-lg">
                     <Title level={4}>Analytics Overview</Title>
-
-                    <Row gutter={[24, 24]} className="mb-6">
+                    <ExportButtons analytics={analytics} />
+                    <Row gutter={[24, 24]} className="m-6">
                         <Col span={8}>
                             <Card className="text-center bg-blue-50">
                                 <Statistic
@@ -148,10 +111,8 @@ const SellerAnalyticsPage = () => {
                     </Row>
 
                     <Divider />
-
                     <Title level={5}>Tỉ lệ bán của các danh mục</Title>
-
-                    <Row ref={pieChartRef} gutter={[24, 24]} className="mt-6">
+                    <Row gutter={[24, 24]} className="mt-6">
                         <Col span={16}>
                             <Card style={{ height: '400px' }}>
                                 <ResponsiveContainer width="100%" height={300}>
@@ -217,39 +178,37 @@ const SellerAnalyticsPage = () => {
 
                     <Title level={5}>Top 10 sản phẩm bán chạy nhất</Title>
                     <Card className="mt-6">
-                        <div ref={barChartRef}>
-                            <div style={{ height: '600px', width: '100%' }}>
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart
-                                        data={barChartData}
-                                        margin={{ top: 20, right: 30, left: 60, bottom: 60 }}
-                                    >
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis
-                                            dataKey="name"
-                                            formatter={(value) => value.length > 10 ? `${value.slice(0, 10)}...` : value}
-                                            tick={{ fontSize: 12 }}
-                                            angle={-45}
-                                            textAnchor="end"
-                                            height={60}
-                                        />
-                                        <YAxis
-                                            tickFormatter={(value) => `${(value / 1_000_000).toFixed(0)}M`}
-                                            width={50}
-                                        />
-                                        <Tooltip
-                                            formatter={(value) => formatRevenue(value)}
-                                            cursor={{ fill: 'rgba(0, 0, 0, 0.1)' }}
-                                        />
-                                        <Bar
-                                            dataKey="totalSales"
-                                            fill="#1890ff"
-                                            name="Revenue"
-                                            maxBarSize={50}
-                                        />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </div>
+                        <div style={{ height: '600px', width: '100%' }}>
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                    data={barChartData}
+                                    margin={{ top: 20, right: 30, left: 60, bottom: 60 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis
+                                        dataKey="name"
+                                        formatter={(value) => value.length > 10 ? `${value.slice(0, 10)}...` : value}
+                                        tick={{ fontSize: 12 }}
+                                        angle={-45}
+                                        textAnchor="end"
+                                        height={60}
+                                    />
+                                    <YAxis
+                                        tickFormatter={(value) => `${(value / 1_000_000).toFixed(0)}M`}
+                                        width={50}
+                                    />
+                                    <Tooltip
+                                        formatter={(value) => formatRevenue(value)}
+                                        cursor={{ fill: 'rgba(0, 0, 0, 0.1)' }}
+                                    />
+                                    <Bar
+                                        dataKey="totalSales"
+                                        fill="#1890ff"
+                                        name="Revenue"
+                                        maxBarSize={50}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
                         </div>
                     </Card>
                 </Card>

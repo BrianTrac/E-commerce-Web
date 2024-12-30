@@ -6,15 +6,9 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { useDispatch } from 'react-redux';
 import {
     SearchOutlined,
-    EyeOutlined,
-    EditOutlined,
-    DeleteOutlined,
     RedoOutlined,
     ArrowLeftOutlined,
-    UndoOutlined,
-    ClockCircleOutlined
 } from '@ant-design/icons';
-import { ResponsiveContainer } from 'recharts';
 
 const { Text } = Typography;
 
@@ -206,7 +200,6 @@ const SellerProductPage = () => {
                     </Button>
                 </div>
 
-                {/* Table với các tùy chọn responsive */}
                 <Table
                     columns={columns}
                     dataSource={products}
@@ -218,13 +211,13 @@ const SellerProductPage = () => {
                         showQuickJumper: true,
                         showTotal: (total) => `Total ${total} products`,
                         position: ['bottomCenter'],
-                        size: 'small', // Giảm kích thước trên mobile
+                        size: 'small',
                         responsive: true,
                     }}
                     onChange={handleTableChange}
                     className="border border-gray-200 rounded"
-                    scroll={{ x: 'max-content' }} // Thay đổi giá trị cố định
-                    size="small" // Giảm kích thước table trên mobile
+                    scroll={{ x: 'max-content' }}
+                    size="small"
                 />
             </Card>
         </div>

@@ -9,9 +9,6 @@ import {
     StarFilled,
     UserOutlined,
     CheckCircleFilled,
-    DollarCircleOutlined,
-    ShoppingCartOutlined,
-    BoxPlotOutlined,
     ArrowLeftOutlined
 } from '@ant-design/icons';
 

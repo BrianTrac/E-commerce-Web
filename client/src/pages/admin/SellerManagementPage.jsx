@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Table, Space, Button, Input, Card, Typography, Tooltip, Modal, message } from 'antd';
 import { fetchSellers, activateSeller, deactivateSeller } from '../../redux/actions/admin/sellerManagementAction';
 import { setSellersPagination } from '../../redux/reducers/admin/sellerReducer';
@@ -78,8 +78,7 @@ const SellerManagement = () => {
 
 
     const handleEdit = (record) => {
-        console.log('Edit seller:', record);
-        // Add your edit logic here
+        navigate(`/admin/seller-management/${record.id}/edit`);
     };
 
     const handleView = (record) => {
@@ -186,6 +185,7 @@ const SellerManagement = () => {
                             type="link"
                             icon={<EditOutlined />}
                             className="text-green-600 p-0 hover:text-green-800"
+                            onClick={() => handleEdit(record)}
                         />
                     </Tooltip>
                     <Tooltip title={record.is_active ? 'Deactivate' : 'Activate'}>

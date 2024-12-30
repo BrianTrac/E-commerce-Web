@@ -344,7 +344,7 @@ const suspendSellerProduct = async (req, res) => {
                 message: 'Seller not found'
             });
         }
-        
+
         // Verify the product exists and belongs to the seller
         const product = await Product.findByPk(productId);
         if (!product || product.current_seller.store_id !== seller.store_id) {
@@ -422,6 +422,32 @@ const approveProduct = async (req, res) => {
     }
 };
 
+// [PUT] /api/admin/seller/:id/edit
+const editSeller = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, isOfficial, icon } = req.body;
+
+        const seller = await Seller.findByPk(id);
+        if (!seller) {
+            return res.status(404).json({ message: 'Seller not found' });
+        }
+        if (name) {
+            seller.name = name;
+        }
+        if (isOfficial) {
+            seller.is_official = isOfficial;
+        }
+        if (icon) {
+            seller.icon = icon;
+        }
+        await seller.save();
+
+        res.status(200).json({ message: 'Edit seller successfully' });
+    } catch {
+        res.status(500).json({ message: error.message });
+    }
+};
 module.exports = {
     getAllSeller,
     getOneSeller,
@@ -432,4 +458,5 @@ module.exports = {
     suspendSellerProduct,
     unsuspendProduct,
     approveProduct,
+    editSeller,
 };

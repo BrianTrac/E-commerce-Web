@@ -68,7 +68,7 @@ const SellerDetailPage = () => {
                         </div>
                         <Space>
                             <Button
-                                onClick={() => navigate(`/admin/seller-management/edit/${id}`)}
+                                        onClick={() => navigate(`/admin/seller-management/${id}/edit`)}
                                 type="default"
                             >
                                 Edit Seller

@@ -8,6 +8,11 @@ import {
     SearchOutlined,
     RedoOutlined,
     ArrowLeftOutlined,
+    EyeOutlined,
+    EditOutlined,
+    DeleteOutlined,
+    CheckOutlined,
+    UndoOutlined,
 } from '@ant-design/icons';
 
 const { Text } = Typography;
@@ -103,22 +108,84 @@ const SellerProductPage = () => {
             message.error('Failed to recover product: ' + error.message);
         }
     };
+
     const handleAccept = async (record) => {
         try {
             const response = await axiosPrivate.patch(`/api/admin/seller/${id}/products/${record.id}/approve`);
 
             if (response.status === 200) {
-                message.success('Product recovered successfully');
+                message.success('Product approved successfully');
                 fetchProducts(pagination.current, pagination.pageSize, searchText);
             } else {
                 throw new Error(response.message);
             }
         } catch (error) {
-            message.error('Failed to recover product: ' + error.message);
+            message.error('Failed to approve product: ' + error.message);
         }
     };
 
-    // 1. Điều chỉnh các cột để responsive hơn
+    const renderActionButtons = (record) => {
+        const buttons = [
+            <Tooltip key="view" title="View Product">
+                <Button
+                    type="link"
+                    icon={<EyeOutlined />}
+                    onClick={() => handleView(record)}
+                    className="text-blue-600 p-0 hover:text-blue-800"
+                />
+            </Tooltip>,
+            <Tooltip key="edit" title="Edit">
+                <Button
+                    type="link"
+                    icon={<EditOutlined />}
+                    onClick={() => handleEdit(record)}
+                    className="text-green-600 p-0 hover:text-green-800"
+                />
+            </Tooltip>
+        ];
+
+        switch (record.inventory_status) {
+            case 'available':
+                buttons.push(
+                    <Tooltip key="delete" title="Suspend">
+                        <Button
+                            type="link"
+                            icon={<DeleteOutlined />}
+                            onClick={() => handleDelete(record)}
+                            className="text-red-600 p-0 hover:text-red-800"
+                        />
+                    </Tooltip>
+                );
+                break;
+            case 'suspend':
+                buttons.push(
+                    <Tooltip key="recover" title="Recover">
+                        <Button
+                            type="link"
+                            icon={<UndoOutlined />}
+                            onClick={() => handleRecover(record)}
+                            className="text-blue-600 p-0 hover:text-blue-800"
+                        />
+                    </Tooltip>
+                );
+                break;
+            case 'pending':
+                buttons.push(
+                    <Tooltip key="accept" title="Approve">
+                        <Button
+                            type="link"
+                            icon={<CheckOutlined />}
+                            onClick={() => handleAccept(record)}
+                            className="text-green-600 p-0 hover:text-green-800"
+                        />
+                    </Tooltip>
+                );
+                break;
+        }
+
+        return <Space size="middle">{buttons}</Space>;
+    };
+
     const columns = [
         {
             title: 'No.',
@@ -154,6 +221,35 @@ const SellerProductPage = () => {
                     <Text type="secondary" className="text-xs md:text-sm">SKU: {record.current_seller?.sku}</Text>
                 </div>
             ),
+        },
+        {
+            title: 'Stock',
+            key: 'qty',
+            width: '100px',
+            render: (_, record) => (
+                <div>
+                    <Text>{record.qty}</Text>
+                    <Tag
+                        color={record.inventory_status == 'available' ? 'green' : (record.inventory_status == 'pending' ? 'yellow' : 'red')}
+                        className="ml-2"
+                    >
+                        {record.inventory_status}
+                    </Tag>
+                </div>
+            ),
+        },
+        {
+            title: 'Sold',
+            key: 'quantity_sold',
+            width: '100px',
+            render: (_, record) => <Text>{record.quantity_sold}</Text>,
+        },
+        {
+            title: 'Actions',
+            key: 'actions',
+            width: '150px',
+            fixed: 'right',
+            render: (_, record) => renderActionButtons(record),
         },
     ];
 

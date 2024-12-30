@@ -1,17 +1,20 @@
-import React from "react";
+import React, { use } from "react";
 import { Link } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { BarChart, Bar } from 'recharts';
+import { getTopSellingProducts } from '../../service/seller/productApi';
 import {
     ShoppingCart,
     DollarSign,
     Calendar,
+    Users,
     CreditCard,
     ChevronDown,
     MoreVertical,
     Bell,
     Settings,
 } from 'lucide-react';
+import { get } from "react-hook-form";
 
 const SellerDashboard = () => {
     const lineChartData = [
@@ -34,6 +37,42 @@ const SellerDashboard = () => {
         { month: 'Aug', min: 320, max: 580 },
     ];
 
+    const [topSellingProducts, setTopSellingProducts] = useState(null);
+    const [loading, setLoading] = useState(true);
+      const [error, setError] = useState(null);
+
+    useEffect(() => {
+        // Fetch data from API
+        const fetchData = async () => {
+            // Fetch data here
+            try {
+                // Hardcoded store ID for now
+                const result = await getTopSellingProducts(40395);
+                setTopSellingProducts(result.data);
+
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        }
+    }, []);
+
+    if (loading) {
+        return <div className="text-center text-xl">Loading...</div>;
+      }
+    
+      if (error) {
+        return <div className="text-center text-xl text-red-500">Error: {error}</div>;
+      }
+
+    const columns = [
+        { title: 'Name', dataIndex: 'name', key: 'name' },
+        { title: 'Sold', dataIndex: 'sold', key: 'sold' },
+        { title: 'Price', dataIndex: 'price', key: 'price' },
+        { title: 'Earnings', dataIndex: 'earnings', key: 'earnings' },
+    ];
+
     return (
         <div className="flex min-h-screen bg-gray-100">
             {/* Main Content */}
@@ -54,14 +93,19 @@ const SellerDashboard = () => {
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-4 gap-6 mb-8">
+                    {/* Total Revenue */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-2xl text-gray-500 font-bold text-xl">Total Revenue</h3>
+                            <MoreVertical className="w-4 h-4 text-gray-400" />
+                        </div>
+                        <div className="flex items-center justify-start mb-4">
                             <div className="p-2 bg-purple-100 rounded-full">
                                 <DollarSign className="w-6 h-6 text-purple-600" />
                             </div>
-                            <MoreVertical className="w-4 h-4 text-gray-400" />
+                            <h3 className="text-2xl font-bold mb-1 ml-4">12,463</h3>
                         </div>
-                        <h3 className="text-2xl font-bold mb-1">12,463</h3>
+                        
                         <p className="text-sm text-gray-500">Compared to Jan 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
@@ -70,14 +114,19 @@ const SellerDashboard = () => {
                         </div>
                     </div>
 
+                    {/* Total orders */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-2xl text-gray-500 font-bold text-xl">Total Orders</h3>
+                            <MoreVertical className="w-4 h-4 text-gray-400" />
+                        </div>
+                        <div className="flex items-center justify-start mb-4">
                             <div className="p-2 bg-blue-100 rounded-full">
                                 <ShoppingCart className="w-6 h-6 text-blue-600" />
                             </div>
-                            <MoreVertical className="w-4 h-4 text-gray-400" />
+                            <h3 className="text-2xl font-bold mb-1 ml-4" >78,596</h3>
                         </div>
-                        <h3 className="text-2xl font-bold mb-1">78,596</h3>
+                        
                         <p className="text-sm text-gray-500">Compared to Aug 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
@@ -86,55 +135,65 @@ const SellerDashboard = () => {
                         </div>
                     </div>
 
+                    {/* Total Followers */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="p-2 bg-orange-100 rounded-full">
-                                <Calendar className="w-6 h-6 text-orange-600" />
-                            </div>
+                            <h3 className="text-2xl text-gray-500 font-bold text-xl">Total Followers</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
-                        <h3 className="text-2xl font-bold mb-1">95,789</h3>
+                        <div className="flex items-center justify-start mb-4">
+                            <div className="p-2 bg-orange-100 rounded-full">
+                                <Users className="w-6 h-6 text-orange-600" />    
+                            </div>
+                            <h3 className="text-2xl font-bold mb-1 ml-4" >78,596</h3>
+                        </div>
+                        
                         <p className="text-sm text-gray-500">Compared to May 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
-                                <Line type="monotone" dataKey="value" stroke="#f97316" strokeWidth={2} dot={false} />
+                            <Line type="monotone" dataKey="value" stroke="#f97316" strokeWidth={2} dot={false} />
                             </LineChart>
                         </div>
                     </div>
 
+                    {/* Total Reviews */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="p-2 bg-pink-100 rounded-full">
-                                <CreditCard className="w-6 h-6 text-pink-600" />
-                            </div>
+                            <h3 className="text-2xl text-gray-500 font-bold text-xl">Total Reviews</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
-                        <h3 className="text-2xl font-bold mb-1">41,954</h3>
+                        <div className="flex items-center justify-start mb-4">
+                            <div className="p-2 bg-pink-100 rounded-full">
+                                <CreditCard className="w-6 h-6 text-pink-600" />    
+                            </div>
+                            <h3 className="text-2xl font-bold mb-1 ml-4">41,954</h3>
+                        </div>
+                        
                         <p className="text-sm text-gray-500">Compared to July 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
-                                <Line type="monotone" dataKey="value" stroke="#ec4899" strokeWidth={2} dot={false} />
+                            <Line type="monotone" dataKey="value" stroke="#ec4899" strokeWidth={2} dot={false} />
                             </LineChart>
                         </div>
                     </div>
                 </div>
 
-                {/* Recent Orders and Sales Overview */}
+                {/* Top Selling Products and Sales Overview */}
                 <div className="grid grid-cols-2 gap-6 mb-8">
-                    {/* Recent Orders */}
+                    {/* Top Selling Products */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-semibold">Recent Orders</h3>
+                            <h3 className="text-lg font-semibold">Top selling products</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead>
                                     <tr className="text-left">
-                                        <th className="pb-4">Recent Orders</th>
-                                        <th className="pb-4">Order Date</th>
+                                        <th className="pb-4">Name</th>
+                                        <th className="pb-4">Sold</th>
                                         <th className="pb-4">Price</th>
-                                        <th className="pb-4">Status</th>
+                                        <th className="pb-4">Earnings</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -163,7 +222,7 @@ const SellerDashboard = () => {
                             <h3 className="text-lg font-semibold">Sales Overview</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
-                        <BarChart width={500} height={300} data={salesData}>
+                        <BarChart width={460} height={300} data={salesData}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="month" />
                             <YAxis />
@@ -174,16 +233,17 @@ const SellerDashboard = () => {
                     </div>
                 </div>
 
-                {/* Recent Customers and Top Sellers */}
-                <div className="grid grid-cols-2 gap-6">
-                    {/* Recent Customers */}
+                {/*
+                {/* Recent Customers and Top Sellers 
+                <div className="grid grid-cols-2 gap-6"> 
+                    {/* Recent Customers 
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-lg font-semibold">Recent Customers</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
                         <div className="space-y-4">
-                            {/* Customer items */}
+                            {/* Customer items 
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-3">
                                     <img src="/api/placeholder/40/40" alt="Customer" className="w-10 h-10 rounded-full" />
@@ -194,11 +254,11 @@ const SellerDashboard = () => {
                                 </div>
                                 <span className="px-2 py-1 bg-green-100 text-green-600 rounded">Paid</span>
                             </div>
-                            {/* Add more customer items */}
+                            {/* Add more customer items *
                         </div>
                     </div>
 
-                    {/* Top Sellers */}
+                    {/* Top Sellers 
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-lg font-semibold">Top Seller Of The Month</h3>
@@ -227,11 +287,12 @@ const SellerDashboard = () => {
                                     <td className="py-2">$37.50</td>
                                     <td className="py-2">$24,375</td>
                                 </tr>
-                                {/* Add more rows as needed */}
+                                {/* Add more rows as needed *
                             </tbody>
                         </table>
                     </div>
                 </div>
+                */}
             </div>
         </div>
     );

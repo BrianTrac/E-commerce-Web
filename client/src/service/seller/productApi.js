@@ -20,3 +20,12 @@ export const addProduct = async (productData) => {
       throw new Error(error.response?.data?.message || 'Failed to add product');
   }
 };
+
+export const getTopSellingProducts = async (storeId) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/seller/products/top-selling/${storeId}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch top selling products');
+    }
+}

@@ -25,6 +25,8 @@ router.post('/add', productController.addProductToStore);
 
 router.delete('/remove/:productId', productController.deleteProduct);
 
+router.put('/update/:productId', productController.updateProduct);
+
 
 
 // router.get('/:storeId/paging', productController.getProductsByStoreId);

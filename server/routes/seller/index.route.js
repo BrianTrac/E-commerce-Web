@@ -7,5 +7,4 @@ const sellerRoutes = (app) => {
     // Routes for categories
     app.use('/api/seller/categories', require('./category.route')); // have not authenticated categories yet (i.e. no JWT)
 }
-
 module.exports = sellerRoutes;

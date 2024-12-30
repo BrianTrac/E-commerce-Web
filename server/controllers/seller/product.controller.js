@@ -18,6 +18,7 @@ const getAllProductsByStoreId = async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const search = req.query.search || '';
+        const status = req.query.status || '';
 
         // Tính toán offset cho phân trang
         const offset = (page - 1) * limit;
@@ -30,6 +31,7 @@ const getAllProductsByStoreId = async (req, res) => {
                     { name: { [Op.iLike]: `%${search}%` } }, // Tìm kiếm theo name
                 ]
             }),
+            ...(status && { inventory_status: status }) // Lọc theo trạng thái
         };
 
         // Lấy tổng số sản phẩm để dùng cho phân trang
@@ -50,7 +52,8 @@ const getAllProductsByStoreId = async (req, res) => {
                 'category_name',
                 'price',
                 'rating_average',
-                'qty'
+                'qty',
+                'inventory_status'
             ]
         });
 
@@ -67,7 +70,8 @@ const getAllProductsByStoreId = async (req, res) => {
                 price: product.price,
                 rating: product.rating_average,
                 qty: product.qty,
-                thumbnails
+                thumbnails,
+                inventory_status: product.inventory_status
             };
         });
 
@@ -108,6 +112,7 @@ const getProductById = async (req, res) => {
                 'specifications', // Giả sử đây là kiểu dữ liệu JSON
                 'rating_average',
                 'price',
+                'inventory_status'
             ]
         });
 
@@ -132,7 +137,8 @@ const getProductById = async (req, res) => {
             quantity_sold: product.quantity_sold,
             specifications: product.specifications, // JSON specifications
             rating_average: product.rating_average,
-            price: product.price
+            price: product.price,
+            inventory_status: product.inventory_status
         };
 
         res.status(200).json({ data: productDetail });
@@ -190,9 +196,36 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+const updateProduct = async (req, res) => {
+    const productId = req.params.productId;
+    const updateData = req.body;
+
+    try {
+        const product = await Product.findByPk(productId);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Cập nhật dữ liệu sản phẩm
+        const updatedProduct = await product.update(updateData);
+
+        res.status(200).json({
+            message: 'Product updated successfully',
+            product: updatedProduct,
+        });
+    } catch (error) {
+        console.error('Error updating product:', error);
+        res.status(500).json({
+            message: 'Internal server error while updating product',
+            error: error.message,
+        });
+    }
+};
+
 module.exports = {
     getAllProductsByStoreId,
     getProductById,
     addProductToStore,
-    deleteProduct
+    deleteProduct,
+    updateProduct
 };

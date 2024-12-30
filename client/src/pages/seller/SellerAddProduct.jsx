@@ -79,6 +79,7 @@ const SellerAddProduct = () => {
           />
           {errors.url_key && <p className="text-red-500 text-sm">{errors.url_key.message}</p>}
         </div>
+        
         {/* Category ID */}
         <div>
           <label className="block font-medium mb-1">ID danh mục</label>

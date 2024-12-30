@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import slugify from 'slugify'; // Dùng để chuyển tên thành slug
 import { addProduct } from '../../service/seller/productApi';
-import { getAllCategories } from '../../service/seller/categoryApi';
 import { uploadImages } from '../../helpers/upload'; // Import hàm upload ảnh
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import Select from 'react-select';
+import useCategories from '../../hooks/useCategories'; // Import custom hook
 
 // Xác thực dữ liệu bằng Yup
 const schema = yup.object().shape({
@@ -35,16 +36,19 @@ const SellerAddProduct = () => {
     control,
     handleSubmit,
     register,
-    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const [categories, setCategories] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const [imageUploads, setImageUploads] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+
+  // Sử dụng custom hook để tải danh mục với tìm kiếm
+  const { categories, loading, error, loadCategories } = useCategories(searchTerm, 1, 50); // Tải danh mục với tìm kiếm từ backend
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -73,16 +77,15 @@ const SellerAddProduct = () => {
     }
   };
 
-
+  // Gửi dữ liệu lên backend khi form được submit
   const onSubmit = async (data) => {
     try {
-      // Gọi hàm uploadImages để upload ảnh
       const imageUrls = await uploadImages(imageUploads);
-  
+
       const formattedData = {
         ...data,
-        category_id: data.category.id, // Lấy id từ danh mục đã chọn
-        category_name: data.category.name, // Lấy name từ danh mục đã chọn
+        category_id: selectedCategory ? selectedCategory.value : 0, // Lấy id từ danh mục đã chọn
+        category_name: selectedCategory ? selectedCategory.label : '', // Lấy name từ danh mục đã chọn
         images: imageUrls,
         thumbnail_url: imageUrls[0]?.thumbnail_url || '',
         current_seller: { store_id: '40395' },
@@ -91,9 +94,8 @@ const SellerAddProduct = () => {
         rating_average: 0.0,
         inventory_status: 'pending',
       };
-  
-      console.log('Formatted data:', formattedData);
-      const response = await addProduct(formattedData);
+
+      await addProduct(formattedData);
       alert('Thêm sản phẩm thành công, đang chờ duyệt!');
       navigate('/seller/product-management');
     } catch (error) {
@@ -102,34 +104,25 @@ const SellerAddProduct = () => {
     }
   };
 
-
-  useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        const { data } = await getAllCategories({ page: 1, limit: 10 });
-        setCategories(data);
-      } catch (error) {
-        console.error('Failed to load categories:', error);
-      }
-    };
-
-    loadCategories();
-  }, []);
+  // Cập nhật giá trị tìm kiếm
+  const handleSearchChange = (inputValue) => {
+    setSearchTerm(inputValue);
+    loadCategories(inputValue, 1); // Gọi lại API để tìm kiếm và lấy trang 1
+  };
 
   return (
     <>
       <div className="relative">
         {/* Back button */}
         <button
-          onClick={() => navigate(-1)}  // Go back to the previous page
+          onClick={() => navigate(-1)} // Go back to the previous page
           className="absolute top-1 left-1 text-white bg-gray-800 p-2 rounded-full shadow-lg hover:bg-gray-700"
         >
           <FaArrowLeft size={20} />
         </button>
       </div>
       <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-        <div className='relative'>
-
+        <div className="relative">
           <h2 className="text-2xl text-center font-semibold mb-6">Thêm Sản Phẩm Mới</h2>
         </div>
 
@@ -148,41 +141,28 @@ const SellerAddProduct = () => {
           {/* Danh mục */}
           <div>
             <label className="block font-medium mb-1">Danh mục</label>
-            <Controller
-              name="category"
-              control={control}
-              defaultValue={null} // Đảm bảo giá trị mặc định là null
-              rules={{ required: 'Vui lòng chọn danh mục' }}
-              render={({ field }) => (
-                <select
-                  {...field}
-                  value={field.value ? field.value.id : ''} // Hiển thị giá trị đã chọn
-                  onChange={(e) => {
-                    const selectedCategory = categories.find((cat) => cat.id === parseInt(e.target.value));
-                    field.onChange(selectedCategory); // Cập nhật cả id và name
-                  }}
-                  className={`w-full p-2 border rounded ${errors.category ? 'border-red-500' : 'border-gray-300'}`}
-                >
-                  <option value="">Chọn danh mục</option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-              )}
+            <Select
+              value={selectedCategory}
+              onChange={setSelectedCategory}
+              onInputChange={handleSearchChange} // Cập nhật từ khóa tìm kiếm khi người dùng gõ
+              options={categories.map((category) => ({
+                value: category.id,
+                label: category.name,
+              }))}
+              placeholder="Chọn danh mục"
+              isClearable
             />
             {errors.category && <p className="text-red-500 text-sm">{errors.category.message}</p>}
           </div>
 
-          {/* Ảnh sản phẩm (Cho phép chọn nhiều ảnh) */}
+          {/* Ảnh sản phẩm */}
           <div>
             <label className="block font-medium mb-1">Ảnh sản phẩm</label>
             <input
               type="file"
               onChange={handleImageChange}
               accept="image/*"
-              multiple  // Cho phép chọn nhiều ảnh
+              multiple
               className={`w-full p-2 border rounded ${errors.images ? 'border-red-500' : 'border-gray-300'}`}
             />
             {previewImages.length > 0 && (

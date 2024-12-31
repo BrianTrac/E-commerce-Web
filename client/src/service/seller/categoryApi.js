@@ -3,10 +3,11 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:5000/api';
 
-export const getAllCategories = async ({ page, limit }) => {
+export const getAllCategories = async ({ page = 1, limit = 10, search = '' }) => {
     try {
+        // Gửi yêu cầu với các tham số: page, limit, và search
         const response = await axios.get(`${BASE_URL}/seller/categories`, {
-            params: { page, limit },
+            params: { page, limit, search },
         });
 
         // Kiểm tra và trả về dữ liệu chính xác

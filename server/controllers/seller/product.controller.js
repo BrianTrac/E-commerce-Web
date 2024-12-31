@@ -2,6 +2,7 @@
 const Product = require('../../models/Product');
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
+const { addNotification } = require('../../services/adminNotifcation.service');
 
 
 // Get all products by store ID
@@ -27,9 +28,9 @@ const getAllProductsByStoreId = async (req, res) => {
         const whereCondition = {
             'current_seller.store_id': storeId, // Điều kiện bắt buộc cho store_id
             ...(search && {
-                [Op.or]: [
-                    { name: { [Op.iLike]: `%${search}%` } }, // Tìm kiếm theo name
-                ]
+                name: {
+                    [Op.iLike]: `${search}%`, // Tìm kiếm những category_name bắt đầu với từ khóa
+                },
             }),
             ...(status && { inventory_status: status }) // Lọc theo trạng thái
         };
@@ -91,6 +92,52 @@ const getAllProductsByStoreId = async (req, res) => {
     }
 };
 
+// Get top 10 selling products
+// GET /api/seller/products/top-selling/:storeId
+const getTopSellingProducts = async (req, res) => {
+    try {
+        const storeId = req.params.storeId;
+
+        const products = await Product.findAll({
+            where: { 'current_seller.store_id': storeId },
+            order: [['quantity_sold', 'DESC']],
+            limit: 10,
+            attributes: [
+                'id',
+                'name',
+                'images',
+                'category_name',
+                'price',
+                'rating_average',
+                'quantity_sold',
+                'inventory_status'
+            ]
+        });
+
+        const formattedProducts = products.map(product => {
+            const images = Array.isArray(product.images)
+                ? product.images
+                : JSON.parse(product.images || '[]');
+            const thumbnails = images.map(image => image.thumbnail_url);
+            return {
+                id: product.id,
+                name: product.name,
+                category: product.category_name,
+                price: product.price,
+                rating: product.rating_average,
+                quantity_sold: product.quantity_sold,
+                thumbnails
+            };
+        });
+
+        res.status(200).json({ data: formattedProducts });
+    } catch (error) {
+        console.error('Error fetching top 10 best-selling products:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+
 const getProductById = async (req, res) => {
     const id = req.params.productId;
 
@@ -103,6 +150,8 @@ const getProductById = async (req, res) => {
         const product = await Product.findByPk(id, {
             attributes: [
                 'name',
+                'category_id',
+                'category_name',
                 'images', // Giả sử hình ảnh là chuỗi JSON chứa các URL thumbnail
                 'discount_rate',
                 'original_price',
@@ -129,6 +178,8 @@ const getProductById = async (req, res) => {
         // Trả về dữ liệu sản phẩm
         const productDetail = {
             name: product.name,
+            category_id: product.category_id,
+            category_name: product.category_name,
             thumbnails, // Hình ảnh thumbnail
             discount_rate: product.discount_rate,
             original_price: product.original_price,
@@ -157,8 +208,10 @@ const addProductToStore = async (req, res) => {
         // Kiểm tra và xử lý dữ liệu nếu cần (có thể bạn sẽ cần xử lý ảnh hay thông tin trước khi lưu)
         const newProduct = await Product.create(productData);
 
+        await addNotification(productData.current_seller.store_id, productData.name);
+
         res.status(201).json({
-            message: 'Product successfully created',
+            message: 'Add product successfully, wait for admin approve',
             product: newProduct
         });
     } catch (error) {
@@ -224,6 +277,7 @@ const updateProduct = async (req, res) => {
 
 module.exports = {
     getAllProductsByStoreId,
+    getTopSellingProducts,
     getProductById,
     addProductToStore,
     deleteProduct,

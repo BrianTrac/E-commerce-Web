@@ -19,13 +19,15 @@ const ROLES_LIST = require('../../config/roles_list');
 
 router.get('/:storeId', productController.getAllProductsByStoreId);
 
+router.get('/:storeId/top-selling', productController.getTopSellingProducts);
+
 router.get('/detail/:productId', productController.getProductById);
 
 router.post('/add', productController.addProductToStore);
 
 router.delete('/remove/:productId', productController.deleteProduct);
 
-router.put('/update/:productId', productController.updateProduct);
+router.patch('/update/:productId', productController.updateProduct);
 
 
 

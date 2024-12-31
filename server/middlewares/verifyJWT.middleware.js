@@ -1,15 +1,16 @@
 const jwt = require('jsonwebtoken');
 
 const verifyJWT = (req, res, next) => {
-    // routes don't need authentication
-    const skipRoutes = ['/api/seller/product'];
-    // console.log("Current route:", req.path);  // In ra route hiện tại
+    // // routes don't need authentication
+    // const skipRoutes = ['/api/seller/product'];
+    // // console.log("Current route:", req.path);  // In ra route hiện tại
 
-    if (skipRoutes.some(route => new RegExp(route.replace(/:\w+/g, '\\w+')).test(req.path))) {
-        console.log("Skipping authentication for route:", req.path);  // In ra nếu route này bỏ qua xác thực
-        return next(); 
-    }
+    // if (skipRoutes.some(route => new RegExp(route.replace(/:\w+/g, '\\w+')).test(req.path))) {
+    //     console.log("Skipping authentication for route:", req.path);  // In ra nếu route này bỏ qua xác thực
+    //     return next(); 
+    // }
 
+    next();
 
 
 

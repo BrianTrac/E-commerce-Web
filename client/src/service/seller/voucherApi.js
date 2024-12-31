@@ -3,12 +3,14 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:5000/api';
 
-export const getVoucher = async (storeId) => {
+export const getVoucher = async (page = 1, limit = 10) => {
     try {
-        const response = await axios.get(`${BASE_URL}/seller/voucher/${storeId}`);
+        const response = await axios.get(`${BASE_URL}/seller/voucher`, {
+            params: { page, limit },
+        });
         return response.data;
     } catch (error) {
-        throw new Error(error.response?.data?.message || 'Failed to fetch voucher');
+        console.error('Error fetching vouchers:', error);
     }
 };
 
@@ -29,3 +31,4 @@ export const deleteVoucher = async (voucherId) => {
         throw new Error(error.response?.data?.message || 'Failed to delete voucher');
     }
 }
+

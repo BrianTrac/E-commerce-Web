@@ -1,6 +1,5 @@
 const Voucher = require('../../models/Voucher');
 const Sequelize = require('sequelize');
-const { Op } = Sequelize;
 
 // Create and Save a new Voucher
 // POST /api/seller/voucher/add
@@ -11,6 +10,8 @@ let createVoucher = async (req, res) => {
                 message: "Content can not be empty!"
             });
         }
+        const storeId = req.user?.store_id || 11;
+        req.body.store_id = storeId;
         const voucherData = req.body;
         const newVoucher = await Voucher.create(voucherData);
 

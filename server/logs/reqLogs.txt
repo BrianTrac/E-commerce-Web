@@ -13520,3 +13520,50 @@
 2024-12-31 15:31:46 	 543e981b-1e24-4591-b3b9-f156c4c9ba29 	  GET 	 /api/seller/products/top-selling/40395?page=1&limit=3 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
 2024-12-31 15:31:46 	 04b7cd2f-bb4b-4c6f-a5d0-e6dec899b513 	  GET 	 /api/seller/products/total/40395 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
 2024-12-31 15:31:46 	 f327bb1d-d99d-45e3-9da2-9785a1412a38 	  GET 	 /api/seller/revenue/total/40395 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:45:57 	 ee43738c-e0aa-45d4-9949-d62fc67be748 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:45:57 	 9ca1fc4e-52c7-4445-9f45-5025eefe209f 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:45:57 	 4363ed44-dfa4-4d67-bc03-0972aa681e09 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:45:58 	 31dec1fb-3de9-4476-85f7-6eb05f3d7370 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:45:58 	 36a3db50-8117-4814-a90a-e387b0bb6e38 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:45:58 	 8ad8a152-18f2-4e86-a719-feea7b25a629 	  GET 	 /api/categories?include=children&parent_id=0 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:02 	 9dac296a-e85a-49b4-9619-7bf4bc395da3 	  GET 	 /api/seller/products/top-selling/40395?page=1&limit=3 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:02 	 b0b32030-e1c0-4c3b-944d-3c53c2d987c5 	  GET 	 /api/seller/revenue/total/40395 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:02 	 05269432-1506-42ba-98e8-8f1573438019 	  GET 	 /api/seller/products/total/40395 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:02 	 ff04a823-93ba-4055-833b-8fe1006e7b59 	  GET 	 /api/seller/followers/total/40395 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:02 	 5438af3f-1b2b-43b8-baa6-a3768cb30331 	  GET 	 /api/seller/reviews/total/40395 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:02 	 776258eb-fc03-4484-938b-d8dccd24da8d 	  GET 	 /api/seller/followers/total/40395 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:02 	 627b76b1-e9ee-49ad-ad8c-b162349080ab 	  GET 	 /api/seller/reviews/total/40395 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:02 	 0473b3d1-ea29-4b63-9e3e-ff3002056860 	  GET 	 /api/seller/products/top-selling/40395?page=1&limit=3 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:02 	 43f57cae-9622-4591-9941-2f22debfed63 	  GET 	 /api/seller/products/total/40395 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:02 	 9d863005-ccc0-43d2-a5e6-063f9972dd6e 	  GET 	 /api/seller/revenue/total/40395 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:10 	 31653c5d-d17c-4a40-9e2f-64f8370a8133 	  GET 	 /api/seller/products/40395?status=&page=1&limit=10&search= 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:10 	 774e8a29-3fd3-47e8-a462-1ec94d6cd081 	  GET 	 /api/seller/products/40395?status=&page=1&limit=10&search= 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:13 	 d95edf3b-eec3-4024-a79e-bb18213d4e41 	  GET 	 /api/categories?include=ancestor&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:13 	 529810e8-61cd-4029-9a09-5f5204bd972f 	  GET 	 /api/categories?include=children&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:13 	 736093bd-0f25-4b17-9c4c-be110955da4c 	  GET 	 /api/categories?include=ancestor&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 20:47:13 	 87cf5835-6d91-4815-a03d-2f8d675d8d2d 	  GET 	 /api/categories?include=children&parent_id=NaN 	 ::1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-31 21:57:05 	 5dc5dc38-1cbe-4827-b33f-dd657eeac682 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 21:58:42 	 3f9ab8d7-5849-4f35-9262-2ceac823f87c 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 21:59:05 	 a6f1c4fc-72cc-4ed3-8474-58b5498ab3c9 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 21:59:40 	 86d037ee-8f8e-4b24-8cee-a6df4b3b4303 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:00:24 	 806e9509-71cf-464c-b7e7-639788305ede 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:01:11 	 bd5e7fa2-f068-47c9-a8a1-4426bac87f7c 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:02:37 	 566bd0ee-fb6f-4bf1-a563-7bcfe0619d55 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:07:36 	 5488c567-5fb6-4821-b3f5-4ae374c37ed7 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:07:58 	 9c2cea40-5f6c-4459-a374-d8e455a85905 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:08:56 	 e367ce00-f7b0-46c5-a5d4-2c91d86dd8d5 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:09:19 	 75779164-28c1-4d6e-bcb7-90c5cca2d770 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:09:59 	 054c312d-77cd-483d-98ef-f285ed3be20e 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:12:43 	 96e057e5-d1fb-4090-9823-0d2839595a8e 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:14:30 	 26e3ef43-e586-4147-920c-7638e8411729 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:15:03 	 d9526995-ccb3-4355-ab9a-4a33260245b1 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:18:03 	 f9197d9a-203e-449a-a9f0-e420edc53297 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:19:39 	 25b78314-3659-434d-81f6-5ed725d04115 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:20:32 	 660491e6-2a48-49f4-a433-971b9ca206d8 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:20:53 	 b6214b8a-3741-44e6-8955-8a0954ca0883 	  POST 	 /api/seller/vouchers/add 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:21:25 	 0ba396a9-5975-4cce-9063-dff15053d633 	  GET 	 /api/seller/vouchers 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:22:01 	 c4b7dffc-55f9-4ab6-8936-cd9231cb54ae 	  GET 	 /api/seller/vouchers 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:24:25 	 f2ca7456-2329-4bf7-850b-b2d4561eabe5 	  GET 	 /api/seller/vouchers/1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:24:41 	 38292f98-0ee8-49ed-be6d-f49b6acc99a7 	  GET 	 /api/seller/vouchers/1 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:25:25 	 46172599-c0a4-46e1-93b6-31afe1bee6ea 	  GET 	 /api/seller/vouchers/update/2 	 ::1 	 PostmanRuntime/7.43.0
+2024-12-31 22:26:07 	 e8662f4f-b462-4a90-891d-7a0616bb0b07 	  PUT 	 /api/seller/vouchers/update/2 	 ::1 	 PostmanRuntime/7.43.0

@@ -11,6 +11,9 @@ const sellerRoutes = (app) => {
     //app.use(verifyJWT); // All routes below this line will require JWT  
     // Routes for seller
     app.use('/api/seller', require('./seller.route')); // have not authenticated seller yet (i.e. no JWT)
+
+    // Routes for vouchers
+    app.use('/api/seller/vouchers', require('./voucher.route')); // have not authenticated vouchers yet (i.e. no JWT)
 }
 
 module.exports = sellerRoutes;

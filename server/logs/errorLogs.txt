@@ -33,3 +33,7 @@
 2024-12-21 21:50:17 	 14050b40-ecb3-4b7a-82c8-865b785d46f3 	  TypeError: req.user.role.map is not a function
 2024-12-22 15:16:30 	 b247778c-914c-4b8e-9144-0bdeaa5ea6c3 	  TypeError: Cannot read properties of undefined (reading 'role')
 2024-12-22 15:28:25 	 ead57a1a-868f-4099-99c7-a8a51ff61e68 	  TypeError: Cannot read properties of undefined (reading 'role')
+2024-12-26 16:00:53 	 5e9aff24-e49e-43ae-a7a8-6a276520e77b 	  TypeError: Cannot read properties of undefined (reading 'role')
+2024-12-26 16:00:53 	 f90ceeeb-a31e-497e-b9c2-789bd6ffff70 	  TypeError: Cannot read properties of undefined (reading 'role')
+2024-12-30 16:37:15 	 09d39196-9c07-4d6e-95b5-96470804137b 	  TypeError: Cannot read properties of undefined (reading 'role')
+2024-12-30 16:37:59 	 c421687d-10b9-4d65-85e2-b55794a6ffc4 	  TypeError: Cannot read properties of undefined (reading 'role')

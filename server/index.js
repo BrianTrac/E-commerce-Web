@@ -59,7 +59,7 @@ sequelize.sync({ force: false })
 
         // Admin routes
 
-        // Shop routes
+        // Seller routes
         require('./routes/seller/index.route')(app);
         
         app.all('*', (req, res) => {

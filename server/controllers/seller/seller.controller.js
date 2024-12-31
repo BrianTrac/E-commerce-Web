@@ -1,8 +1,10 @@
 const Seller = require('../../models/Seller');
 const Product = require('../../models/Product');
+const { get } = require('http');
+
 
 // Get seller details by ID
-// GET /api/seller/:storeId
+// GET /api/seller/:id
 let getSellerById = async (req, res) => {
     try {
         let storeId = req.params.id;

@@ -53,7 +53,7 @@ const Product = sequelize.define('Product', {
         type: DataTypes.TEXT,
         allowNull: false,
         validate: {
-            isIn: [['available', 'non-available']]
+            isIn: [['available', 'pending', 'suspend']],
         }
     },
     thumbnail_url: {
@@ -75,7 +75,7 @@ const Product = sequelize.define('Product', {
         defaultValue: 0,
     },
     specifications: {
-        type: DataTypes.TEXT,
+        type: DataTypes.JSONB,
         allowNull: true,
     },
     current_seller: {

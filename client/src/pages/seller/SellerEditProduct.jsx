@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Select from 'react-select';
 import useCategories from '../../hooks/useCategories'; // Import useCategories hook
 import { uploadImages } from '../../helpers/upload'; // Import uploadImages helper
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 // Xác thực dữ liệu bằng Yup
 const schema = yup.object().shape({
@@ -42,6 +43,8 @@ const SellerEditProduct = () => {
 
   const navigate = useNavigate();
 
+  const axiosPrivate = useAxiosPrivate();
+
   // Sử dụng hook để lấy danh mục
   const { categories, loading, error, loadCategories } = useCategories(searchTerm, 1, 50);
 
@@ -49,7 +52,7 @@ const SellerEditProduct = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const productResponse = await getProductById(productId);
+        const productResponse = await getProductById(axiosPrivate, productId);
         const product = productResponse.data;
 
         // Load product details
@@ -123,7 +126,7 @@ const SellerEditProduct = () => {
 
       console.log('Updated product data:', updatedData);
 
-      const response = await updateProduct(productId, updatedData);
+      const response = await updateProduct(axiosPrivate, productId, updatedData);
       alert(`${response.message}`);
       window.location.reload();
     } catch (error) {

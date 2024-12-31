@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from 'antd';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import { BarChart, Bar, ResponsiveContainer  } from 'recharts';
-import { getTopSellingProducts, getTotalFollowers, getTotalProducts, getTotalRevenue, getTotalReviews } from '../../service/seller/productApi';
+import { BarChart, Bar, ResponsiveContainer } from 'recharts';
+import { getTopSellingProductInDashboard, getTopSellingProducts, getTotalFollowers, getTotalProducts, getTotalRevenue, getTotalReviews } from '../../service/seller/productApi';
 import {
     DollarSign,
     Users,
@@ -13,6 +13,7 @@ import {
     Settings,
     Package,
 } from 'lucide-react';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const SellerDashboard = () => {
     const lineChartData = [
@@ -42,6 +43,7 @@ const SellerDashboard = () => {
     const [totalProducts, setTotalProducts] = useState(0);
     const [totalFollowers, setTotalFollowers] = useState(0);
     const [totalReviews, setTotalReviews] = useState(0);
+    const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
         loadTopSellingProducts();
@@ -56,9 +58,8 @@ const SellerDashboard = () => {
 
     const loadTotalRevenue = async () => {
         try {
-            const response = await getTotalRevenue('40395');
+            const response = await getTotalRevenue(axiosPrivate);
             setTotalRevenue(response.totalRevenue);
-            console.log(response.totalRevenue);
         } catch (err) {
             console.error(err);
         }
@@ -66,7 +67,7 @@ const SellerDashboard = () => {
 
     const loadTotalProducts = async () => {
         try {
-            const response = await getTotalProducts('40395');
+            const response = await getTotalProducts(axiosPrivate);
             setTotalProducts(response.totalProducts);
         } catch (err) {
             console.error(err);
@@ -75,7 +76,7 @@ const SellerDashboard = () => {
 
     const loadTotalFollowers = async () => {
         try {
-            const response = await getTotalFollowers('40395');
+            const response = await getTotalFollowers(axiosPrivate);
             setTotalFollowers(response.totalFollowers);
         } catch (err) {
             console.error(err);
@@ -84,7 +85,7 @@ const SellerDashboard = () => {
 
     const loadTotalReviews = async () => {
         try {
-            const response = await getTotalReviews('40395');
+            const response = await getTotalReviews(axiosPrivate);
             setTotalReviews(response.totalReviews);
         } catch (err) {
             console.error(err);
@@ -94,8 +95,7 @@ const SellerDashboard = () => {
     const loadTopSellingProducts = async () => {
         setLoading(true);
         try {
-            // Hardcoded store ID for now
-            const response = await getTopSellingProducts('40395', pagination.current, pagination.pageSize);
+            const response = await getTopSellingProductInDashboard(axiosPrivate, pagination.current, pagination.pageSize);
             setTopSellingProducts(response.products);
             setPagination({ ...pagination, total: response.totalItems });
         } catch (err) {
@@ -122,16 +122,19 @@ const SellerDashboard = () => {
     const columns = [
         { title: 'Name', dataIndex: 'name', key: 'name' },
         { title: 'Sold', dataIndex: 'quantity_sold', key: 'quantity_sold' },
-        { title: 'Price', dataIndex: 'price', key: 'price', 
+        {
+            title: 'Price', dataIndex: 'price', key: 'price',
             render: (price) =>
                 price
-                ? `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(price))}`
-                : 'N/A', },
-        { title: 'Earnings', dataIndex: 'earnings', key: 'earnings',
+                    ? `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(price))}`
+                    : 'N/A',
+        },
+        {
+            title: 'Earnings', dataIndex: 'earnings', key: 'earnings',
             render: (price) =>
                 price
-                  ? `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(price))}`
-                  : 'N/A',
+                    ? `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(price))}`
+                    : 'N/A',
         },
     ];
 
@@ -139,20 +142,6 @@ const SellerDashboard = () => {
         <div className="flex min-h-screen bg-gray-100">
             {/* Main Content */}
             <div className="flex-1 p-8">
-                {/* Header */}
-                <div className="flex justify-between items-center mb-8">
-                    <h2 className="text-xl font-semibold">Dashboards</h2>
-                    <div className="flex items-center space-x-4">
-                        <Settings className="w-6 h-6 text-gray-500" />
-                        <Bell className="w-6 h-6 text-gray-500" />
-                        <div className="flex items-center space-x-2">
-                            <img src="/api/placeholder/32/32" alt="User" className="w-8 h-8 rounded-full" />
-                            <span>John admin</span>
-                            <ChevronDown className="w-4 h-4" />
-                        </div>
-                    </div>
-                </div>
-
                 {/* Stats Grid */}
                 <div className="grid grid-cols-4 gap-6 mb-8">
                     {/* Total Revenue */}
@@ -166,10 +155,10 @@ const SellerDashboard = () => {
                                 <DollarSign className="w-6 h-6 text-purple-600" />
                             </div>
                             <h3 className="text-2xl font-bold mb-1 ml-4">
-                            {formatCurrency(totalRevenue)}
+                                {formatCurrency(totalRevenue)}
                             </h3>
                         </div>
-                        
+
                         <p className="text-sm text-gray-500">Compared to Jan 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
@@ -190,7 +179,7 @@ const SellerDashboard = () => {
                             </div>
                             <h3 className="text-2xl font-bold mb-1 ml-4">{totalProducts}</h3>
                         </div>
-                        
+
                         <p className="text-sm text-gray-500">Compared to Aug 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
@@ -207,15 +196,15 @@ const SellerDashboard = () => {
                         </div>
                         <div className="flex items-center justify-start mb-4">
                             <div className="p-2 bg-orange-100 rounded-full">
-                                <Users className="w-6 h-6 text-orange-600" />    
+                                <Users className="w-6 h-6 text-orange-600" />
                             </div>
                             <h3 className="text-2xl font-bold mb-1 ml-4">{totalFollowers}</h3>
                         </div>
-                        
+
                         <p className="text-sm text-gray-500">Compared to May 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
-                            <Line type="monotone" dataKey="value" stroke="#f97316" strokeWidth={2} dot={false} />
+                                <Line type="monotone" dataKey="value" stroke="#f97316" strokeWidth={2} dot={false} />
                             </LineChart>
                         </div>
                     </div>
@@ -228,15 +217,15 @@ const SellerDashboard = () => {
                         </div>
                         <div className="flex items-center justify-start mb-4">
                             <div className="p-2 bg-pink-100 rounded-full">
-                                <CreditCard className="w-6 h-6 text-pink-600" />    
+                                <CreditCard className="w-6 h-6 text-pink-600" />
                             </div>
                             <h3 className="text-2xl font-bold mb-1 ml-4">{totalReviews}</h3>
                         </div>
-                        
+
                         <p className="text-sm text-gray-500">Compared to July 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
-                            <Line type="monotone" dataKey="value" stroke="#ec4899" strokeWidth={2} dot={false} />
+                                <Line type="monotone" dataKey="value" stroke="#ec4899" strokeWidth={2} dot={false} />
                             </LineChart>
                         </div>
                     </div>

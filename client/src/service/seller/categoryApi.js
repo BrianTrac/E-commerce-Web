@@ -3,10 +3,10 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:5000/api';
 
-export const getAllCategories = async ({ page = 1, limit = 10, search = '' }) => {
+export const getAllCategories = async ({axiosPrivate,  page = 1, limit = 10, search = '' }) => {
     try {
         // Gửi yêu cầu với các tham số: page, limit, và search
-        const response = await axios.get(`${BASE_URL}/seller/categories`, {
+        const response = await axiosPrivate.get(`/api/seller/categories`, {
             params: { page, limit, search },
         });
 

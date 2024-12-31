@@ -1,39 +1,50 @@
 // services/productApi.js
-import axios from 'axios';
+import axios from '../../config/axios';
 
 const BASE_URL = 'http://localhost:5000/api';
 
-export const getProductById = async (id) => {
+export const getProductById = async (axiosPrivate, id) => {
     try {
-        const response = await axios.get(`${BASE_URL}/seller/products/detail/${id}`);
+        const response = await axiosPrivate.get(`/api/seller/products/detail/${id}`);
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to fetch product detail');
     }
 };
 
-export const getTopSellingProducts = async (storeId) => {
+export const getTopSellingProducts = async (axiosPrivate, storeId) => {
     try {
-        const response = await axios.get(`${BASE_URL}/seller/products/${storeId}/top-selling`);
+        const response = await axiosPrivate.get(`/api/seller/products/${storeId}/top-selling`);
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to fetch top-selling products');
     }
 };
 
-export const addProduct = async (productData) => {
+export const getTopSellingProductInDashboard = async (axiosPrivate, currentPage, pageSize) => {
+    try {
+        const response = await axiosPrivate.get(`/api/seller/products/top-selling/`, {
+            params: { currentPage, pageSize },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch top-selling products');
+    }
+};
+
+export const addProduct = async (axiosPrivate, productData) => {
     try {
         console.log(productData);
-        const response = await axios.post(`${BASE_URL}/seller/products/add`, productData);
+        const response = await axiosPrivate.post(`/api/seller/products/add`, productData);
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to add product');
     }
 };
 
-export const deleteProductById = async (id) => {
+export const deleteProductById = async (axiosPrivate, id) => {
     try {
-        const response = await axios.delete(`${BASE_URL}/seller/products/remove/${id}`);
+        const response = await axiosPrivate.delete(`/api/seller/products/remove/${id}`);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -41,18 +52,18 @@ export const deleteProductById = async (id) => {
     }
 };
 
-export const updateProduct = async (id, productData) => {
+export const updateProduct = async (axiosPrivate, id, productData) => {
     try {
-        const response = await axios.patch(`${BASE_URL}/seller/products/update/${id}`, productData);
+        const response = await axiosPrivate.patch(`/api/seller/products/update/${id}`, productData);
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to update product');
     }
 };
 
-export const getProductsByStatus = async (storeId, status, page = 1, limit = 10, search = '') => {
+export const getProductsByStatus = async (axiosPrivate, status, page = 1, limit = 10, search = '') => {
     try {
-        const response = await axios.get(`${BASE_URL}/seller/products/${storeId}`, {
+        const response = await axiosPrivate.get(`${BASE_URL}/seller/products`, {
             params: { status, page, limit, search },
         });
         return response.data;
@@ -62,36 +73,36 @@ export const getProductsByStatus = async (storeId, status, page = 1, limit = 10,
 };
 
 
-export const getTotalProducts = async (storeId) => {
+export const getTotalProducts = async (axiosPrivate) => {
     try {
-        const response = await axios.get(`${BASE_URL}/seller/products/total/${storeId}`);
+        const response = await axiosPrivate.get(`/api/seller/products/total`);
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to fetch total products');
     }
 };
 
-export const getTotalFollowers = async (storeId) => {
+export const getTotalFollowers = async (axiosPrivate) => {
     try {
-        const response = await axios.get(`${BASE_URL}/seller/followers/total/${storeId}`);
+        const response = await axiosPrivate.get(`/api/seller/followers/total`);
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to fetch total followers');
     }
 };
 
-export const getTotalReviews = async (storeId) => {
+export const getTotalReviews = async (axiosPrivate) => {
     try {
-        const response = await axios.get(`${BASE_URL}/seller/reviews/total/${storeId}`);
+        const response = await axiosPrivate.get(`/api/seller/reviews/total`);
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to fetch total reviews');
     }
 };
 
-export const getTotalRevenue = async (storeId) => {
+export const getTotalRevenue = async (axiosPrivate) => {
     try {
-        const response = await axios.get(`${BASE_URL}/seller/revenue/total/${storeId}`);
+        const response = await axiosPrivate.get(`/api/seller/revenue/total`);
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to fetch total revenue');

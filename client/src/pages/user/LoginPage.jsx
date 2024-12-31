@@ -40,8 +40,8 @@ const Login = () => {
                 else if (user.role && user.role.includes('User')) {
                     navigate('/', { replace: true });
                 }
-                else if (user.role && user.role.includes('Shop')) {
-                    navigate('/Shop', { replace: true });
+                else if (user.role && user.role.includes('Seller')) {
+                    navigate('/Seller', { replace: true });
                 }
                 else {
                     // navigate('/unauthorized', { replace: true });                    

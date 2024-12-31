@@ -9,6 +9,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import useCategories from '../../hooks/useCategories'; // Import custom hook
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 // Xác thực dữ liệu bằng Yup
 const schema = yup.object().shape({
@@ -46,6 +47,7 @@ const SellerAddProduct = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
 
   // Sử dụng custom hook để tải danh mục với tìm kiếm
   const { categories, loading, error, loadCategories } = useCategories(searchTerm, 1, 50); // Tải danh mục với tìm kiếm từ backend
@@ -95,7 +97,7 @@ const SellerAddProduct = () => {
         inventory_status: 'pending',
       };
 
-      const response = await addProduct(formattedData);
+      const response = await addProduct(axiosPrivate, formattedData);
       alert(`${response.message}`);
       navigate('/seller/product-management');
     } catch (error) {

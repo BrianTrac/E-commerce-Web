@@ -4,6 +4,7 @@ import { FaPhone, FaMapMarkerAlt, FaClock, FaCreditCard, FaRegIdBadge, FaEdit, F
 import { getStore, updateStore } from '../../service/seller/storeApi';
 import { getTopSellingProducts } from '../../service/seller/productApi';
 import TopProducts from '../../components/seller/TopProducts';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const SellerInfo = () => {
   const [sellerInfo, setSellerInfo] = useState(null);
@@ -16,14 +17,16 @@ const SellerInfo = () => {
   const [originalSellerInfo, setOriginalSellerInfo] = useState(null);
   const [originalStoreInfo, setOriginalStoreInfo] = useState(null);
 
+  const axiosPrivate = useAxiosPrivate(); 
+
   useEffect(() => {
     const fetchSellerInfo = async () => {
       try {
-        const info = await getSellerInfo();
+        const info = await getSellerInfo(axiosPrivate);
         setSellerInfo(info);
         setOriginalSellerInfo(info); 
         const storeId = info.store_id;
-        const products = await getTopSellingProducts(storeId);
+        const products = await getTopSellingProducts(axiosPrivate, storeId);
         setTopProducts(products.data);
       } catch (err) {
         setError(err.message || 'Failed to load seller info');
@@ -34,7 +37,7 @@ const SellerInfo = () => {
 
     const fetchStore = async () => {
       try {
-        const store = await getStore();
+        const store = await getStore(axiosPrivate);
         setStore(store);
         setOriginalStoreInfo(store);  
       } catch (err) {
@@ -45,7 +48,7 @@ const SellerInfo = () => {
 
     fetchSellerInfo();
     fetchStore();
-  }, []);
+  }, [axiosPrivate]);
 
   const handleEditSeller = () => {
     setIsEditingSeller(true);
@@ -57,7 +60,7 @@ const SellerInfo = () => {
 
   const handleSaveSeller = async () => {
     try {
-      const response = await updateSellerInfo(sellerInfo);
+      const response = await updateSellerInfo(axiosPrivate, sellerInfo);
       alert(`${response.message}`);
       setIsEditingSeller(false);
     } catch (err) {
@@ -67,7 +70,7 @@ const SellerInfo = () => {
 
   const handleSaveStore = async () => {
     try {
-      const response = await updateStore(store);
+      const response = await updateStore(axiosPrivate,store);
       alert(`${response.message}`);
       setIsEditingStore(false);
     } catch (err) {

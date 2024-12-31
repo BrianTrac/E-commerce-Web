@@ -1,14 +1,23 @@
 // Desc: Product controller
 const Product = require('../../models/Product');
+const Seller = require('../../models/Seller');
+const User = require('../../models/User');
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
 const { addNotification } = require('../../services/adminNotifcation.service');
 
 
 // Get all products by store ID
-// GET /api/seller/product/:storeId
+// GET /api/seller/products/
 const getAllProductsByStoreId = async (req, res) => {
-    const storeId = req.params.storeId;
+    const seller_id = req.user.id;
+
+    const seller = await Seller.findOne({
+        where: { user_id: seller_id },
+        attributes: ['store_id']
+    });
+
+    const storeId = seller.store_id;
 
     if (!storeId) {
         return res.status(400).json({ message: 'storeId is required' });
@@ -93,7 +102,7 @@ const getAllProductsByStoreId = async (req, res) => {
 };
 
 // Get top 10 selling products
-// GET /api/seller/products/top-selling/:storeId
+// GET /api/seller/products/:storeId/top-selling/
 const getTopSellingProducts_v1 = async (req, res) => {
     try {
         const storeId = req.params.storeId;
@@ -277,19 +286,28 @@ const updateProduct = async (req, res) => {
 
 
 // Get top selling products of a store
-// GET /api/seller/product/top-selling/:storeId?limit=55&page=1
+// GET /api/seller/product/top-selling/limit=55&page=1
 let getTopSellingProducts_v2 = async (req, res) => {
     try {
-        const storeId = req.params.storeId;
+        const id = req.user.id;
+
+        const seller = await Seller.findOne({
+            where: {
+                user_id: id
+            }
+        });
+
+        const storeId = seller.store_id;
 
         if (!storeId) {
             return res.status(400).json({ message: "Missing storeId parameter" });
         }
 
         const limit = parseInt(req.query.limit) || 5;  // Number of products per page 
-        const page = parseInt(req.query.page) || 1;   
-        const offset = (page - 1) * limit;           
+        const page = parseInt(req.query.page) || 1;    // Default to page 1
+        const offset = (page - 1) * limit;            // Calculate offset for pagination
 
+        // Correct way to cast the JSON store_id to integer and compare
         const topSellingProducts = await Product.findAll({
             attributes: [
                 'id',
@@ -298,20 +316,21 @@ let getTopSellingProducts_v2 = async (req, res) => {
                 'quantity_sold',
                 [Sequelize.literal('price * quantity_sold'), 'earnings']
             ],
-            where: Sequelize.json('current_seller.store_id', storeId),
+            where: Sequelize.where(
+                Sequelize.cast(Sequelize.json('current_seller.store_id'), 'INTEGER'),
+                storeId
+            ),
             order: [['quantity_sold', 'DESC']],
-            limit, 
-            offset 
+            limit,
+            offset
         });
 
-        const totalItems = await Product.count({
-            where: Sequelize.json('current_seller.store_id', storeId)
-        });
+        const totalItems = limit;
 
         res.status(200).json({
-            message: "Top selling products",
-            currentPage: page,       
-            limit: limit, 
+            message: "Top selling products fetched successfully",
+            currentPage: page,
+            pageSize: limit,
             totalItems: totalItems,
             products: topSellingProducts
         });
@@ -322,12 +341,11 @@ let getTopSellingProducts_v2 = async (req, res) => {
 };
 
 
-
 // Get flash sale products of a store
 // GET /api/seller/product/flash-sale/:storeId?limit=36&page=1
 const getFlashSaleProducts = async (req, res) => {
     try {
-        const { storeId } = req.params; 
+        const { storeId } = req.params;
         if (!storeId) {
             return res.status(400).json({ message: "Missing storeId parameter" });
         }
@@ -335,7 +353,7 @@ const getFlashSaleProducts = async (req, res) => {
         const limit = parseInt(req.query.limit, 10) || 36; // Items per page
         const MAX_PRODUCTS = 400; // Restrict to 400 products across all pages
 
-        const requestedPage = parseInt(req.query.page, 10) || 1; 
+        const requestedPage = parseInt(req.query.page, 10) || 1;
         const offset = (requestedPage - 1) * limit;
 
         // Get total count of products matching the criteria

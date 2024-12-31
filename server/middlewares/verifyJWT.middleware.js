@@ -10,34 +10,29 @@ const verifyJWT = (req, res, next) => {
     //     return next(); 
     // }
 
-    next();
+    const authHeader = req.headers.authorization;
+    if (!authHeader?.startsWith('Bearer ')) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
 
+    const token = authHeader.split(' ')[1];
 
+    jwt.verify(
+        token,
+        process.env.ACCESS_TOKEN_SECRET,
+        (err, decoded) => {
+            if (err) {
+                console.error('JWT Verification Error:', err.message);
+                return res.status(403).json({ message: 'Forbidden' });
+            }
 
-    // const authHeader = req.headers.authorization;
-    // if (!authHeader?.startsWith('Bearer ')) {
-    //     return res.status(401).json({ message: 'Unauthorized' });
-    // }
-
-    // const token = authHeader.split(' ')[1];
-
-    // jwt.verify(
-    //     token,
-    //     process.env.ACCESS_TOKEN_SECRET,
-    //     (err, decoded) => {
-    //         if (err) {
-    //             console.error('JWT Verification Error:', err.message);
-    //             return res.status(403).json({ message: 'Forbidden' });
-    //         }
-
-    //         console.log('Decoded token:', decoded);  // Xem payload của token
-
-    //         req.user = {
-    //             id: decoded.id,
-    //             role: decoded.role,
-    //         }
-    //         next();
-    // });
+            req.user = {
+                id: decoded.id,
+                role: decoded.role,
+            }
+            console.log('req.user:', req.user);  // In ra thông tin user
+            next();
+    });
 };
 
 module.exports = verifyJWT;

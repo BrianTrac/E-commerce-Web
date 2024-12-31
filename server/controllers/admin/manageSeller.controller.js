@@ -367,9 +367,6 @@ const suspendSellerProduct = async (req, res) => {
     }
 };
 
-// TESTNOTIFICATION
-const { addNotification } = require('../../services/adminNotification.service');
-
 // [PATCH] /api/admin/seller/:id/products/:productId/unsuspend
 const unsuspendProduct = async (req, res) => {
     try {
@@ -390,7 +387,6 @@ const unsuspendProduct = async (req, res) => {
         // Update product status to available
         product.inventory_status = 'available';
         await product.save();
-        await addNotification(seller.id, product.name);
         return res.status(200).json({ message: 'Product unsuspended successfully' });
     } catch (error) {
         console.error('Error unsuspending product:', error);

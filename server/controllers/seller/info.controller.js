@@ -65,8 +65,31 @@ const createSellerInfo = async (req, res) => {
     }
 }
 
+const updateSellerInfo = async (req, res) => {
+    try {
+        const id = req.user?.id || 11;
+
+        const sellerInfo = await SellerInfo.findOne({
+            where: {
+                user_id: id
+            }
+        });
+
+        if (!sellerInfo) {
+            return res.status(404).json({ message: 'Seller info not found' });
+        }
+
+        await sellerInfo.update(req.body);
+
+        res.status(200).json({ message: 'Seller info updated' });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 
 module.exports = {
     getSellerInfo,
-    createSellerInfo
+    createSellerInfo, 
+    updateSellerInfo
 };

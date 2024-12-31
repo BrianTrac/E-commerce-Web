@@ -1,7 +1,5 @@
 const Seller = require('../../models/Seller');
 const Product = require('../../models/Product');
-const { get } = require('http');
-
 
 // Get seller details by ID
 // GET /api/seller/:id

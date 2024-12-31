@@ -77,7 +77,7 @@ const getAllProductsByStoreId = async (req, res) => {
         });
 
         // Trả về kết quả
-        res.status(200).json({
+        return res.status(200).json({
             data: formattedProducts,
             total: totalCount,
             page: page,
@@ -85,7 +85,7 @@ const getAllProductsByStoreId = async (req, res) => {
         });
     } catch (error) {
         console.error('Error in getAllProductsByStoreId:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Server error',
             error: error.message
         });
@@ -94,7 +94,7 @@ const getAllProductsByStoreId = async (req, res) => {
 
 // Get top 10 selling products
 // GET /api/seller/products/top-selling/:storeId
-const getTopSellingProducts = async (req, res) => {
+const getTopSellingProducts_v1 = async (req, res) => {
     try {
         const storeId = req.params.storeId;
 
@@ -278,7 +278,7 @@ const updateProduct = async (req, res) => {
 
 // Get top selling products of a store
 // GET /api/seller/product/top-selling/:storeId?limit=55&page=1
-let getTopSellingProducts = async (req, res) => {
+let getTopSellingProducts_v2 = async (req, res) => {
     try {
         const storeId = req.params.storeId;
 
@@ -391,11 +391,11 @@ const getFlashSaleProducts = async (req, res) => {
 
 module.exports = {
     getAllProductsByStoreId,
-    getTopSellingProducts,
+    getTopSellingProducts_v1,
     getProductById,
     addProductToStore,
     deleteProduct,
     updateProduct,
-    getTopSellingProducts,
+    getTopSellingProducts_v2,
     getFlashSaleProducts,
 };

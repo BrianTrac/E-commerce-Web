@@ -1,7 +1,5 @@
 const Seller = require('../../models/Seller');
 const Product = require('../../models/Product');
-const { get } = require('http');
-
 
 // Get seller details by ID
 // GET /api/seller/:id
@@ -42,9 +40,17 @@ let getAllSellers = async (req, res) => {
 
 
 // Get total revenue of a store
-// GET /api/seller/revenue/total/:storeId
+// GET /api/seller/revenue/total
 let getTotalRevenue = async (req, res) => {
-    const storeId = req.params.storeId;
+    const id = req.user.id;
+
+    const seller = await Seller.findOne({
+        where: {
+            user_id: id
+        }
+    });
+
+    const storeId = seller.store_id;
 
     if (!storeId) {
         return res.status(400).json({ message: 'Store ID is required' });
@@ -76,9 +82,17 @@ let getTotalRevenue = async (req, res) => {
 
 
 // Get total products of a store
-// GET /api/seller/products/total/:storeId
+// GET /api/seller/products/total
 let getTotalProducts = async (req, res) => {
-    const storeId = req.params.storeId;
+    const id = req.user.id;
+
+    const seller = await Seller.findOne({
+        where: {
+            user_id: id
+        }
+    });
+
+    const storeId = seller.store_id;
 
     if (!storeId) {
         return res.status(400).json({ message: 'Store ID is required' });
@@ -105,9 +119,17 @@ let getTotalProducts = async (req, res) => {
 }
 
 // Get total followers of a store
-// GET /api/seller/followers/total/:storeId
+// GET /api/seller/followers/total
 let getTotalFollowers = async (req, res) => {
-    const storeId = req.params.storeId;
+    const id = req.user.id;
+
+    const seller = await Seller.findOne({
+        where: {
+            user_id: id
+        }
+    });
+
+    const storeId = seller.store_id;
 
     if (!storeId) {
         return res.status(400).json({ message: 'Store ID is required' });
@@ -140,7 +162,15 @@ let getTotalFollowers = async (req, res) => {
 // Get total reviews of a store
 // GET /api/seller/reviews/total/:storeId
 let getTotalReviews = async (req, res) => {
-    const storeId = req.params.storeId;
+    const id = req.user.id;
+
+    const seller = await Seller.findOne({
+        where: {
+            user_id: id
+        }
+    });
+
+    const storeId = seller.store_id;
 
     if (!storeId) {
         return res.status(400).json({ message: 'Store ID is required' });

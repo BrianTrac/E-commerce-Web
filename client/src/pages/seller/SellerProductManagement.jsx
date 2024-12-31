@@ -3,6 +3,7 @@ import { Table, Card, Space, Input, Tooltip, Button, Typography, Modal, message 
 import { EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { deleteProductById, getProductsByStatus } from '../../service/seller/productApi';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const { confirm } = Modal;
 const { Text } = Typography;
@@ -15,15 +16,17 @@ const SellerProductManagement = () => {
   const [searchText, setSearchText] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
 
+  const axiosPrivate = useAxiosPrivate();
+
   useEffect(() => {
-    loadProducts();
+    loadProducts(axiosPrivate);
   }, [pagination.current, statusFilter]);
 
   const loadProducts = async () => {
     setLoading(true);
     try {
       const response = await getProductsByStatus(
-        '40395', // Store ID
+        axiosPrivate,
         statusFilter,
         pagination.current,
         pagination.pageSize,
@@ -66,7 +69,7 @@ const SellerProductManagement = () => {
       cancelText: 'No',
       onOk: async () => {
         try {
-          await deleteProductById(productId);
+          await deleteProductById(axiosPrivate, productId);
           message.success('Product deleted successfully');
           loadProducts();
         } catch (error) {

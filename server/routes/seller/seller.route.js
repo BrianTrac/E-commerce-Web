@@ -16,13 +16,13 @@ const sellerController = require('../../controllers/seller/seller.controller');
 
 
 
-router.get('/revenue/total/:storeId', sellerController.getTotalRevenue);
+router.get('/revenue/total', sellerController.getTotalRevenue);
 
-router.get('/products/total/:storeId', sellerController.getTotalProducts);
+router.get('/products/total', sellerController.getTotalProducts);
 
-router.get('/followers/total/:storeId', sellerController.getTotalFollowers);
+router.get('/followers/total', sellerController.getTotalFollowers);
 
-router.get('/reviews/total/:storeId', sellerController.getTotalReviews);
+router.get('/reviews/total', sellerController.getTotalReviews);
 
 
 module.exports = router;

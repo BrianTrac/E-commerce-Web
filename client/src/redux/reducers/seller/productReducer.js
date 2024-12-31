@@ -1,19 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { axiosPrivate } from '../../../config/axios';
 import { toast } from 'react-toastify';
-
-const BASE_URL = 'http://localhost:5000/api';
 
 export const fetchProducts = createAsyncThunk(
     'seller/products/fetchAll',
-    async ({ storeId, page, limit, search }, { rejectWithValue }) => {
+    async ({page, limit, search }, { rejectWithValue }) => {
         try {
-            if(!storeId) {
-              storeId = '40395';
-            }
-            const response = await axios.get(`${BASE_URL}/seller/products/${storeId}`, {
-                params: { page, limit, search }
+            const response = await axiosPrivate.get(`/api/seller/products`, {
+                params: { page, limit, search },
             });
+            console.log(response.data);
             return response.data;
         } catch (error) {
             toast.error(error.response?.data?.message || 'Failed to fetch products');

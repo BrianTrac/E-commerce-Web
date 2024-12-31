@@ -26,6 +26,7 @@ import SellerProductDetail from "./pages/seller/SellerProductDetail.jsx";
 import SellerAddProduct from "./pages/seller/SellerAddProduct.jsx";
 import SellerVoucher from "./pages/seller/SellerVoucher.jsx";
 import SellerEditProduct from "./pages/seller/SellerEditProduct.jsx";
+import SellerInfo from "./pages/seller/SellerInfo.jsx";
 
 const ROLES = {
     User: 'User',
@@ -62,9 +63,7 @@ const App = () => {
                         </Route>
                         
                         <Route path="voucher" element={<SellerVoucher />} />
-                        {/* 
-                        <{ Route path="/info" element={<SellerInfo />}  }/>  
-                        */}
+                        <Route path="info" element={<SellerInfo />} />
                     </Route>
                 </Route>
             </Route>

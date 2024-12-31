@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Select from 'react-select';
 import useCategories from '../../hooks/useCategories'; // Import useCategories hook
 import { uploadImages } from '../../helpers/upload'; // Import uploadImages helper
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 // Xác thực dữ liệu bằng Yup
 const schema = yup.object().shape({
@@ -21,14 +22,6 @@ const schema = yup.object().shape({
     .number()
     .required('Giá gốc là bắt buộc')
     .positive('Giá gốc phải lớn hơn 0'),
-  short_description: yup.string().required('Miêu tả ngắn là bắt buộc'),
-  description: yup.string().required('Miêu tả chi tiết là bắt buộc'),
-  specifications: yup.string().required('Thông số là bắt buộc'),
-  qty: yup
-    .number()
-    .required('Số lượng là bắt buộc')
-    .positive('Số lượng phải lớn hơn 0')
-    .integer('Số lượng phải là số nguyên'),
 });
 
 const SellerEditProduct = () => {
@@ -50,6 +43,8 @@ const SellerEditProduct = () => {
 
   const navigate = useNavigate();
 
+  const axiosPrivate = useAxiosPrivate();
+
   // Sử dụng hook để lấy danh mục
   const { categories, loading, error, loadCategories } = useCategories(searchTerm, 1, 50);
 
@@ -57,7 +52,7 @@ const SellerEditProduct = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const productResponse = await getProductById(productId);
+        const productResponse = await getProductById(axiosPrivate, productId);
         const product = productResponse.data;
 
         // Load product details
@@ -129,9 +124,11 @@ const SellerEditProduct = () => {
         url_key: slugify(data.name, { lower: true, strict: true }),
       };
 
-      await updateProduct(productId, updatedData);
-      alert('Cập nhật sản phẩm thành công!');
-      navigate('/seller/product-management');
+      console.log('Updated product data:', updatedData);
+
+      const response = await updateProduct(axiosPrivate, productId, updatedData);
+      alert(`${response.message}`);
+      window.location.reload();
     } catch (error) {
       console.error('Failed to update product:', error);
       alert('Có lỗi xảy ra khi cập nhật sản phẩm!');
@@ -186,7 +183,6 @@ const SellerEditProduct = () => {
             {errors.category && <p className="text-red-500 text-sm">{errors.category.message}</p>}
           </div>
 
-          {/* Upload ảnh */}
           <div>
             <label className="block font-medium mb-1">Ảnh sản phẩm</label>
             <div className="mt-2">
@@ -217,10 +213,10 @@ const SellerEditProduct = () => {
             )}
             <input
               type="file"
-              onChange={handleImageChange}
               accept="image/*"
               multiple
-              className="w-full p-2 border rounded mt-4"
+              className="mt-2"
+              onChange={handleImageChange}
             />
           </div>
 
@@ -271,10 +267,11 @@ const SellerEditProduct = () => {
             {errors.specifications && <p className="text-red-500 text-sm">{errors.specifications.message}</p>}
           </div>
 
+
           <button
             type="submit"
             className="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600"
-          >
+          > 
             Lưu thay đổi
           </button>
         </form>

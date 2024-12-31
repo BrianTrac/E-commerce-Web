@@ -7,10 +7,12 @@ export const login = createAsyncThunk(
     async ({ username, password }, { rejectWithValue }) => {
         try {
             const response = await authServices.login({ username, password });
+            console.log('response: ', response);
 
             const accessToken = response?.accessToken;
             if (accessToken) {
                 const decodedToken = jwtDecode(accessToken);
+                console.log('decodedToken: ', decodedToken);
                 const role = decodedToken?.role;
                 const email = decodedToken?.email;
                 return { username, email, accessToken, role };

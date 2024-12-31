@@ -17,7 +17,11 @@ const ROLES_LIST = require('../../config/roles_list');
 //     .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Shop, ROLES_LIST.Seller), productController.deleteProduct)
 
 
-router.get('/:storeId', productController.getAllProductsByStoreId);
+router.get('/', productController.getAllProductsByStoreId);
+
+router.get('/:storeId/top-selling', productController.getTopSellingProducts_v1);
+
+router.get('/top-selling', productController.getTopSellingProducts_v2);
 
 router.get('/detail/:productId', productController.getProductById);
 
@@ -25,13 +29,13 @@ router.post('/add', productController.addProductToStore);
 
 router.delete('/remove/:productId', productController.deleteProduct);
 
-router.put('/update/:productId', productController.updateProduct);
+router.patch('/update/:productId', productController.updateProduct);
 
 
 
 // router.get('/:storeId/paging', productController.getProductsByStoreId);
 
-router.get('/top-selling/:storeId', productController.getTopSellingProducts);
+router.get('/top-selling/:storeId', productController.getTopSellingProducts_v2);
 
 // router.route('/top-selling/:storeId')
 //     .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Shop, ROLES_LIST.User), productController.getTopSellingProducts)

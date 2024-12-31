@@ -4,6 +4,7 @@ import { getProductById } from '../../service/seller/productApi';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css'; // Import default Swiper styles
 import { FaChevronLeft, FaChevronRight, FaArrowLeft } from 'react-icons/fa'; // Import mũi tên từ react-icons
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const SellerProductDetail = () => {
   const { productId } = useParams();
@@ -15,11 +16,12 @@ const SellerProductDetail = () => {
   const descriptionRef = useRef(null); // Ref to measure the description height
   const swiperRef = useRef(null);  // Reference to Swiper instance
   const navigate = useNavigate();  // Hook for navigating programmatically
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const result = await getProductById(productId);
+        const result = await getProductById(axiosPrivate, productId);
         setProduct(result.data);
       } catch (err) {
         setError(err.message);

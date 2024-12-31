@@ -37,3 +37,39 @@
 2024-12-26 16:00:53 	 f90ceeeb-a31e-497e-b9c2-789bd6ffff70 	  TypeError: Cannot read properties of undefined (reading 'role')
 2024-12-30 16:37:15 	 09d39196-9c07-4d6e-95b5-96470804137b 	  TypeError: Cannot read properties of undefined (reading 'role')
 2024-12-30 16:37:59 	 c421687d-10b9-4d65-85e2-b55794a6ffc4 	  TypeError: Cannot read properties of undefined (reading 'role')
+2024-12-31 16:28:56 	 bd6e2056-07cd-421d-bc0f-e75369f4a0f5 	  ReferenceError: authHeader is not defined
+2024-12-31 16:28:56 	 9e07d544-8684-427d-b198-7beefbae887d 	  ReferenceError: authHeader is not defined
+2024-12-31 16:28:56 	 8cb6807a-e812-4189-8449-5d18c4b1aa31 	  ReferenceError: authHeader is not defined
+2024-12-31 16:28:56 	 c3742b3e-a2b0-4081-a227-db83e0f3288d 	  ReferenceError: authHeader is not defined
+2024-12-31 16:29:12 	 8b3f7add-4a46-4b42-ba0a-005de85e3d90 	  ReferenceError: authHeader is not defined
+2024-12-31 16:29:12 	 bb2992ec-86f9-4d85-8444-b33b0cf312c1 	  ReferenceError: authHeader is not defined
+2024-12-31 16:29:12 	 a3ec9941-9fd3-4071-b7a3-a48e1ce8e964 	  ReferenceError: authHeader is not defined
+2024-12-31 16:29:12 	 94e34cfb-e158-4d1c-94b9-a5eb2accbda0 	  ReferenceError: authHeader is not defined
+2024-12-31 16:30:43 	 38d0d978-c8bc-4624-8122-f507525470cf 	  ReferenceError: authHeader is not defined
+2024-12-31 16:30:43 	 ee418bd3-dec8-4da6-a7bc-5d40eed90c62 	  ReferenceError: authHeader is not defined
+2024-12-31 16:30:43 	 902e3983-b546-4e36-8641-50487b178e69 	  ReferenceError: authHeader is not defined
+2024-12-31 16:30:43 	 c1ff4136-c917-405b-b14b-b55e53547552 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 8e31e08e-7f77-4e06-b748-ea3266d4989c 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 539faedd-8cde-4451-8e34-b2848bc28f12 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 e3bea9d7-b66f-4aff-bb04-674034bae611 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 1d3fe1f3-d864-49e4-b16f-3230070f2dac 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 ecea4710-efbc-4761-9b36-4a4a9374a3d8 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 6ad60bd7-27fa-459a-9bfa-87b1bfd95fae 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 61491586-3fd3-4d1b-af15-0bad028c731c 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 2a265f9e-b22b-4fa2-b6fb-121f7766581f 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 325952e1-8c8a-49bc-8cd0-24112a0f4454 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 e04222e5-eda0-46b2-9855-a32211293229 	  ReferenceError: authHeader is not defined
+2024-12-31 16:40:18 	 6cb5488f-8f0d-4b7c-8ca2-58095108cbb0 	  ReferenceError: authHeader is not defined
+2024-12-31 16:40:18 	 a5b07c2f-2e5e-4747-9c93-1e7829cdaefe 	  ReferenceError: authHeader is not defined
+2024-12-31 16:41:42 	 a33f734f-0fb6-4266-8c68-ff68dcad387c 	  ReferenceError: authHeader is not defined
+2024-12-31 16:41:42 	 37582c5a-ffa9-4d37-905f-9e426177a164 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 f1b637f9-01cb-48de-a63b-d2048f425125 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 6d0b5a25-58e2-46d1-bde1-e167a5cb55de 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 8e4f3eb5-50a2-4319-853b-e3c0b6cbbb2f 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 0bd40e56-4c26-45bc-ac4a-7657e22cb3e7 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 2abaa997-0694-4a8c-b810-101d7cf9167f 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 ea70b88c-0a15-4132-90fc-11a94b9d7529 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 a442da08-5636-4897-bbe4-3cab0dba867b 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 30dbe087-2ed0-43a7-985a-ca7bdd53df10 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 4d07ab66-d32b-4987-b569-499803ff80f4 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 e39edd1f-3ce1-4f61-aebd-b69e1f73ddb9 	  ReferenceError: authHeader is not defined

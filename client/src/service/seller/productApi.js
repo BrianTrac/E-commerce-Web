@@ -12,6 +12,15 @@ export const getProductById = async (id) => {
     }
 };
 
+export const getTopSellingProducts = async (storeId) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/seller/products/${storeId}/top-selling`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch top-selling products');
+    }
+};
+
 export const addProduct = async (productData) => {
     try {
         console.log(productData);
@@ -34,7 +43,7 @@ export const deleteProductById = async (id) => {
 
 export const updateProduct = async (id, productData) => {
     try {
-        const response = await axios.put(`${BASE_URL}/seller/products/update/${id}`, productData);
+        const response = await axios.patch(`${BASE_URL}/seller/products/update/${id}`, productData);
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to update product');

@@ -95,8 +95,8 @@ const SellerAddProduct = () => {
         inventory_status: 'pending',
       };
 
-      await addProduct(formattedData);
-      alert('Thêm sản phẩm thành công, đang chờ duyệt!');
+      const response = await addProduct(formattedData);
+      alert(`${response.message}`);
       navigate('/seller/product-management');
     } catch (error) {
       console.error('Failed to add product:', error);

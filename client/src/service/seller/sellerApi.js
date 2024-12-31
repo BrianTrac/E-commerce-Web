@@ -14,7 +14,7 @@ export const getSellerInfo = async (id) => {
 
 export const updateSellerInfo = async (sellerInfo) => {
     try {
-        const response = await axios.patch(`${BASE_URL}/seller/info`, sellerInfo);
+        const response = await axios.patch(`${BASE_URL}/seller/info/update`, sellerInfo);
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to update seller info');

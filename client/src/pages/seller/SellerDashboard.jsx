@@ -158,7 +158,7 @@ const SellerDashboard = () => {
                     {/* Total Revenue */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-2xl text-gray-500 font-bold text-xl">Total Revenue</h3>
+                            <h3 className="text-2xl text-gray-500 font-bold">Total Revenue</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
                         <div className="flex items-center justify-start mb-4">
@@ -181,7 +181,7 @@ const SellerDashboard = () => {
                     {/* Total products */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-2xl text-gray-500 font-bold text-xl">Total Products</h3>
+                            <h3 className="text-2xl text-gray-500 font-bold ">Total Products</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
                         <div className="flex items-center justify-start mb-4">
@@ -202,7 +202,7 @@ const SellerDashboard = () => {
                     {/* Total Followers */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-2xl text-gray-500 font-bold text-xl">Total Followers</h3>
+                            <h3 className="text-2xl text-gray-500 font-bold ">Total Followers</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
                         <div className="flex items-center justify-start mb-4">
@@ -223,7 +223,7 @@ const SellerDashboard = () => {
                     {/* Total Reviews */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-2xl text-gray-500 font-bold text-xl">Total Reviews</h3>
+                            <h3 className="text-2xl text-gray-500 font-bold ">Total Reviews</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
                         <div className="flex items-center justify-start mb-4">

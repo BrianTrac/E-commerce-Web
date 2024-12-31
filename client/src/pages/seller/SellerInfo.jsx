@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getSellerInfo, updateSellerInfo } from '../../service/seller/sellerApi';
 import { FaPhone, FaMapMarkerAlt, FaClock, FaCreditCard, FaRegIdBadge, FaEdit, FaStar } from 'react-icons/fa';
-import { getStore } from '../../service/seller/storeApi';
+import { getStore, updateStore } from '../../service/seller/storeApi';
 import { getTopSellingProducts } from '../../service/seller/productApi';
 import TopProducts from '../../components/seller/TopProducts';
 
@@ -21,10 +21,9 @@ const SellerInfo = () => {
       try {
         const info = await getSellerInfo();
         setSellerInfo(info);
-        setOriginalSellerInfo(info);  // Save the original data
+        setOriginalSellerInfo(info); 
         const storeId = info.store_id;
         const products = await getTopSellingProducts(storeId);
-        console.log(products.data);
         setTopProducts(products.data);
       } catch (err) {
         setError(err.message || 'Failed to load seller info');
@@ -37,7 +36,7 @@ const SellerInfo = () => {
       try {
         const store = await getStore();
         setStore(store);
-        setOriginalStoreInfo(store);  // Save the original data
+        setOriginalStoreInfo(store);  
       } catch (err) {
         setError(err.message || 'Failed to load store info');
       }
@@ -58,7 +57,8 @@ const SellerInfo = () => {
 
   const handleSaveSeller = async () => {
     try {
-      await updateSellerInfo(sellerInfo);
+      const response = await updateSellerInfo(sellerInfo);
+      alert(`${response.message}`);
       setIsEditingSeller(false);
     } catch (err) {
       setError('Failed to save seller info');
@@ -67,7 +67,8 @@ const SellerInfo = () => {
 
   const handleSaveStore = async () => {
     try {
-      await updateStoreInfo(store);
+      const response = await updateStore(store);
+      alert(`${response.message}`);
       setIsEditingStore(false);
     } catch (err) {
       setError('Failed to save store info');

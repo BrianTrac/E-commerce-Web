@@ -61,17 +61,6 @@ export const getProductsByStatus = async (storeId, status, page = 1, limit = 10,
     }
 };
 
-export const getTopSellingProducts = async (storeId, page = 1, limit = 5) => {
-    try {
-        const response = await axios.get(`${BASE_URL}/seller/products/top-selling/${storeId}`, {
-            params: { page, limit },
-        });
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response?.data?.message || 'Failed to fetch top selling products');
-    }
-}
-
 
 export const getTotalProducts = async (storeId) => {
     try {

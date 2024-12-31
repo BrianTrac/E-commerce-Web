@@ -1,6 +1,6 @@
-// const express = require('express');
-// const router = express.Router();
-// const sellerController = require('../../controllers/seller/seller.controller');
+const express = require('express');
+const router = express.Router();
+const sellerController = require('../../controllers/seller/seller.controller');
 // const ROLES_LIST = require('../../config/roles_list');
 // const verifyRoles = require('../../middlewares/verifyRoles.middleware');
 
@@ -15,11 +15,14 @@
 //     .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.User, ROLES_LIST.Seller), sellerController.getSellerById);
 
 
-// // Get statistics of a store - allow Admin and Shop roles
-// router.route('/statistic/:storeId')
-//     .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Seller), sellerController.getSummaryStatistic);
 
-// // router.route('/statistic/:storeId')
-// //     .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.User), sellerController.getSummaryStatistic);
+router.get('/revenue/total/:storeId', sellerController.getTotalRevenue);
 
-// module.exports = router;
+router.get('/products/total/:storeId', sellerController.getTotalProducts);
+
+router.get('/followers/total/:storeId', sellerController.getTotalFollowers);
+
+router.get('/reviews/total/:storeId', sellerController.getTotalReviews);
+
+
+module.exports = router;

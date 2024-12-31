@@ -1,20 +1,18 @@
-import React, { use } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { Table } from 'antd';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import { BarChart, Bar } from 'recharts';
-import { getTopSellingProducts } from '../../service/seller/productApi';
+import { BarChart, Bar, ResponsiveContainer  } from 'recharts';
+import { getTopSellingProducts, getTotalFollowers, getTotalProducts, getTotalRevenue, getTotalReviews } from '../../service/seller/productApi';
 import {
-    ShoppingCart,
     DollarSign,
-    Calendar,
     Users,
     CreditCard,
     ChevronDown,
     MoreVertical,
     Bell,
     Settings,
+    Package,
 } from 'lucide-react';
-import { get } from "react-hook-form";
 
 const SellerDashboard = () => {
     const lineChartData = [
@@ -37,40 +35,104 @@ const SellerDashboard = () => {
         { month: 'Aug', min: 320, max: 580 },
     ];
 
-    const [topSellingProducts, setTopSellingProducts] = useState(null);
+    const [topSellingProducts, setTopSellingProducts] = useState([]);
+    const [pagination, setPagination] = useState({ current: 1, pageSize: 3, total: 0 });
     const [loading, setLoading] = useState(true);
-      const [error, setError] = useState(null);
+    const [totalRevenue, setTotalRevenue] = useState(0);
+    const [totalProducts, setTotalProducts] = useState(0);
+    const [totalFollowers, setTotalFollowers] = useState(0);
+    const [totalReviews, setTotalReviews] = useState(0);
 
     useEffect(() => {
-        // Fetch data from API
-        const fetchData = async () => {
-            // Fetch data here
-            try {
-                // Hardcoded store ID for now
-                const result = await getTopSellingProducts(40395);
-                setTopSellingProducts(result.data);
+        loadTopSellingProducts();
+    }, [pagination.current]);
 
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        }
+    useEffect(() => {
+        loadTotalRevenue();
+        loadTotalProducts();
+        loadTotalFollowers();
+        loadTotalReviews();
     }, []);
+
+    const loadTotalRevenue = async () => {
+        try {
+            const response = await getTotalRevenue('40395');
+            setTotalRevenue(response.totalRevenue);
+            console.log(response.totalRevenue);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const loadTotalProducts = async () => {
+        try {
+            const response = await getTotalProducts('40395');
+            setTotalProducts(response.totalProducts);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const loadTotalFollowers = async () => {
+        try {
+            const response = await getTotalFollowers('40395');
+            setTotalFollowers(response.totalFollowers);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const loadTotalReviews = async () => {
+        try {
+            const response = await getTotalReviews('40395');
+            setTotalReviews(response.totalReviews);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const loadTopSellingProducts = async () => {
+        setLoading(true);
+        try {
+            // Hardcoded store ID for now
+            const response = await getTopSellingProducts('40395', pagination.current, pagination.pageSize);
+            setTopSellingProducts(response.products);
+            setPagination({ ...pagination, total: response.totalItems });
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     if (loading) {
         return <div className="text-center text-xl">Loading...</div>;
-      }
-    
-      if (error) {
-        return <div className="text-center text-xl text-red-500">Error: {error}</div>;
-      }
+    }
+
+    const formatCurrency = (value) => {
+        if (value >= 1_000_000_000) {
+            return `${(value / 1_000_000_000).toFixed(1)} Tỷ`;
+        } else if (value >= 1_000_000) {
+            return `${(value / 1_000_000).toFixed(1)} Triệu`;
+        } else {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+        }
+    };
 
     const columns = [
         { title: 'Name', dataIndex: 'name', key: 'name' },
-        { title: 'Sold', dataIndex: 'sold', key: 'sold' },
-        { title: 'Price', dataIndex: 'price', key: 'price' },
-        { title: 'Earnings', dataIndex: 'earnings', key: 'earnings' },
+        { title: 'Sold', dataIndex: 'quantity_sold', key: 'quantity_sold' },
+        { title: 'Price', dataIndex: 'price', key: 'price', 
+            render: (price) =>
+                price
+                ? `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(price))}`
+                : 'N/A', },
+        { title: 'Earnings', dataIndex: 'earnings', key: 'earnings',
+            render: (price) =>
+                price
+                  ? `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(price))}`
+                  : 'N/A',
+        },
     ];
 
     return (
@@ -103,7 +165,9 @@ const SellerDashboard = () => {
                             <div className="p-2 bg-purple-100 rounded-full">
                                 <DollarSign className="w-6 h-6 text-purple-600" />
                             </div>
-                            <h3 className="text-2xl font-bold mb-1 ml-4">12,463</h3>
+                            <h3 className="text-2xl font-bold mb-1 ml-4">
+                            {formatCurrency(totalRevenue)}
+                            </h3>
                         </div>
                         
                         <p className="text-sm text-gray-500">Compared to Jan 2024</p>
@@ -114,17 +178,17 @@ const SellerDashboard = () => {
                         </div>
                     </div>
 
-                    {/* Total orders */}
+                    {/* Total products */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-2xl text-gray-500 font-bold text-xl">Total Orders</h3>
+                            <h3 className="text-2xl text-gray-500 font-bold text-xl">Total Products</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
                         <div className="flex items-center justify-start mb-4">
                             <div className="p-2 bg-blue-100 rounded-full">
-                                <ShoppingCart className="w-6 h-6 text-blue-600" />
+                                <Package className="w-6 h-6 text-blue-600" />
                             </div>
-                            <h3 className="text-2xl font-bold mb-1 ml-4" >78,596</h3>
+                            <h3 className="text-2xl font-bold mb-1 ml-4">{totalProducts}</h3>
                         </div>
                         
                         <p className="text-sm text-gray-500">Compared to Aug 2024</p>
@@ -145,7 +209,7 @@ const SellerDashboard = () => {
                             <div className="p-2 bg-orange-100 rounded-full">
                                 <Users className="w-6 h-6 text-orange-600" />    
                             </div>
-                            <h3 className="text-2xl font-bold mb-1 ml-4" >78,596</h3>
+                            <h3 className="text-2xl font-bold mb-1 ml-4">{totalFollowers}</h3>
                         </div>
                         
                         <p className="text-sm text-gray-500">Compared to May 2024</p>
@@ -166,7 +230,7 @@ const SellerDashboard = () => {
                             <div className="p-2 bg-pink-100 rounded-full">
                                 <CreditCard className="w-6 h-6 text-pink-600" />    
                             </div>
-                            <h3 className="text-2xl font-bold mb-1 ml-4">41,954</h3>
+                            <h3 className="text-2xl font-bold mb-1 ml-4">{totalReviews}</h3>
                         </div>
                         
                         <p className="text-sm text-gray-500">Compared to July 2024</p>
@@ -186,34 +250,19 @@ const SellerDashboard = () => {
                             <h3 className="text-lg font-semibold">Top selling products</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead>
-                                    <tr className="text-left">
-                                        <th className="pb-4">Name</th>
-                                        <th className="pb-4">Sold</th>
-                                        <th className="pb-4">Price</th>
-                                        <th className="pb-4">Earnings</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td className="py-2">
-                                            <div className="flex items-center space-x-2">
-                                                <img src="/api/placeholder/40/40" alt="Product" className="w-10 h-10 rounded" />
-                                                <span>Decorative Plants</span>
-                                            </div>
-                                        </td>
-                                        <td className="py-2">20 Sep - 03:00AM</td>
-                                        <td className="py-2">$657.30</td>
-                                        <td className="py-2">
-                                            <span className="px-2 py-1 bg-green-100 text-green-600 rounded">Succeed</span>
-                                        </td>
-                                    </tr>
-                                    {/* Add more rows as needed */}
-                                </tbody>
-                            </table>
-                        </div>
+                        <Table
+                            columns={columns}
+                            dataSource={topSellingProducts}
+                            loading={loading}
+                            rowKey="id"
+                            pagination={{
+                                ...pagination,
+                                position: ['bottomCenter'],
+                                showSizeChanger: false,
+                                showQuickJumper: false,
+                            }}
+                            onChange={(pag) => setPagination({ ...pagination, current: pag.current, pageSize: pag.pageSize })}
+                        />
                     </div>
 
                     {/* Sales Overview */}
@@ -222,14 +271,18 @@ const SellerDashboard = () => {
                             <h3 className="text-lg font-semibold">Sales Overview</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
-                        <BarChart width={460} height={300} data={salesData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="month" />
-                            <YAxis />
-                            <Tooltip />
-                            <Bar dataKey="max" fill="#3b82f6" />
-                            <Bar dataKey="min" fill="#93c5fd" />
-                        </BarChart>
+                        <div className='flex justify-betwwen' style={{ width: '100%', height: '80%' }}>
+                            <ResponsiveContainer>
+                                <BarChart data={salesData}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="month" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Bar dataKey="max" fill="#3b82f6" />
+                                    <Bar dataKey="min" fill="#93c5fd" />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
                     </div>
                 </div>
 

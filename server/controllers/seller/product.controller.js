@@ -224,14 +224,18 @@ const updateProduct = async (req, res) => {
 
 
 // Get top selling products of a store
-// GET /api/seller/product/top-selling/:storeId
+// GET /api/seller/product/top-selling/:storeId?limit=55&page=1
 let getTopSellingProducts = async (req, res) => {
     try {
-        const storeId = req.params.storeId; 
+        const storeId = req.params.storeId;
 
         if (!storeId) {
             return res.status(400).json({ message: "Missing storeId parameter" });
         }
+
+        const limit = parseInt(req.query.limit) || 5;  // Number of products per page 
+        const page = parseInt(req.query.page) || 1;   
+        const offset = (page - 1) * limit;           
 
         const topSellingProducts = await Product.findAll({
             attributes: [
@@ -239,15 +243,23 @@ let getTopSellingProducts = async (req, res) => {
                 'name',
                 'price',
                 'quantity_sold',
-                [Sequelize.literal('price * quantity_sold'), 'earning']
+                [Sequelize.literal('price * quantity_sold'), 'earnings']
             ],
-            where: Sequelize.json('current_seller.store_id', storeId), 
-            order: [['quantity_sold', 'DESC']], 
-            limit: 20
+            where: Sequelize.json('current_seller.store_id', storeId),
+            order: [['quantity_sold', 'DESC']],
+            limit, 
+            offset 
+        });
+
+        const totalItems = await Product.count({
+            where: Sequelize.json('current_seller.store_id', storeId)
         });
 
         res.status(200).json({
             message: "Top selling products",
+            currentPage: page,       
+            limit: limit, 
+            totalItems: totalItems,
             products: topSellingProducts
         });
     } catch (error) {
@@ -255,6 +267,7 @@ let getTopSellingProducts = async (req, res) => {
         res.status(500).json({ message: "Error fetching top selling products" });
     }
 };
+
 
 
 // Get flash sale products of a store

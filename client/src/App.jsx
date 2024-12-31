@@ -52,6 +52,7 @@ const App = () => {
                 {/* SELLER ROUTE */}
                 <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
                     <Route path="/seller" element={<SellerLayout/>}>
+                        <Route index element={<Navigate to="dashboard" replace />} />
                         <Route index path="dashboard" element={<SellerDashboard />} />
                         <Route path="product-management">
                             <Route index element={<SellerProductManagement />} />

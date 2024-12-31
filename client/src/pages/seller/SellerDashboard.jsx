@@ -1,16 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { Table } from 'antd';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import { BarChart, Bar } from 'recharts';
+import { BarChart, Bar, ResponsiveContainer  } from 'recharts';
+import { getTopSellingProducts, getTotalFollowers, getTotalProducts, getTotalRevenue, getTotalReviews } from '../../service/seller/productApi';
 import {
-    ShoppingCart,
     DollarSign,
-    Calendar,
+    Users,
     CreditCard,
     ChevronDown,
     MoreVertical,
     Bell,
     Settings,
+    Package,
 } from 'lucide-react';
 
 const SellerDashboard = () => {
@@ -34,6 +35,106 @@ const SellerDashboard = () => {
         { month: 'Aug', min: 320, max: 580 },
     ];
 
+    const [topSellingProducts, setTopSellingProducts] = useState([]);
+    const [pagination, setPagination] = useState({ current: 1, pageSize: 3, total: 0 });
+    const [loading, setLoading] = useState(true);
+    const [totalRevenue, setTotalRevenue] = useState(0);
+    const [totalProducts, setTotalProducts] = useState(0);
+    const [totalFollowers, setTotalFollowers] = useState(0);
+    const [totalReviews, setTotalReviews] = useState(0);
+
+    useEffect(() => {
+        loadTopSellingProducts();
+    }, [pagination.current]);
+
+    useEffect(() => {
+        loadTotalRevenue();
+        loadTotalProducts();
+        loadTotalFollowers();
+        loadTotalReviews();
+    }, []);
+
+    const loadTotalRevenue = async () => {
+        try {
+            const response = await getTotalRevenue('40395');
+            setTotalRevenue(response.totalRevenue);
+            console.log(response.totalRevenue);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const loadTotalProducts = async () => {
+        try {
+            const response = await getTotalProducts('40395');
+            setTotalProducts(response.totalProducts);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const loadTotalFollowers = async () => {
+        try {
+            const response = await getTotalFollowers('40395');
+            setTotalFollowers(response.totalFollowers);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const loadTotalReviews = async () => {
+        try {
+            const response = await getTotalReviews('40395');
+            setTotalReviews(response.totalReviews);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const loadTopSellingProducts = async () => {
+        setLoading(true);
+        try {
+            // Hardcoded store ID for now
+            const response = await getTopSellingProducts('40395', pagination.current, pagination.pageSize);
+            setTopSellingProducts(response.products);
+            setPagination({ ...pagination, total: response.totalItems });
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    if (loading) {
+        return <div className="text-center text-xl">Loading...</div>;
+    }
+
+    const formatCurrency = (value) => {
+        if (value >= 1_000_000_000) {
+            return `${(value / 1_000_000_000).toFixed(1)} Tỷ`;
+        } else if (value >= 1_000_000) {
+            return `${(value / 1_000_000).toFixed(1)} Triệu`;
+        } else {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+        }
+    };
+
+    const columns = [
+        { title: 'Name', dataIndex: 'name', key: 'name' },
+        { title: 'Sold', dataIndex: 'quantity_sold', key: 'quantity_sold' },
+        { title: 'Price', dataIndex: 'price', key: 'price', 
+            render: (price) =>
+                price
+                ? `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(price))}`
+                : 'N/A', },
+        { title: 'Earnings', dataIndex: 'earnings', key: 'earnings',
+            render: (price) =>
+                price
+                  ? `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(price))}`
+                  : 'N/A',
+        },
+    ];
+
     return (
         <div className="flex min-h-screen bg-gray-100">
             {/* Main Content */}
@@ -54,14 +155,21 @@ const SellerDashboard = () => {
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-4 gap-6 mb-8">
+                    {/* Total Revenue */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-2xl text-gray-500 font-bold text-xl">Total Revenue</h3>
+                            <MoreVertical className="w-4 h-4 text-gray-400" />
+                        </div>
+                        <div className="flex items-center justify-start mb-4">
                             <div className="p-2 bg-purple-100 rounded-full">
                                 <DollarSign className="w-6 h-6 text-purple-600" />
                             </div>
-                            <MoreVertical className="w-4 h-4 text-gray-400" />
+                            <h3 className="text-2xl font-bold mb-1 ml-4">
+                            {formatCurrency(totalRevenue)}
+                            </h3>
                         </div>
-                        <h3 className="text-2xl font-bold mb-1">12,463</h3>
+                        
                         <p className="text-sm text-gray-500">Compared to Jan 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
@@ -70,14 +178,19 @@ const SellerDashboard = () => {
                         </div>
                     </div>
 
+                    {/* Total products */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="p-2 bg-blue-100 rounded-full">
-                                <ShoppingCart className="w-6 h-6 text-blue-600" />
-                            </div>
+                            <h3 className="text-2xl text-gray-500 font-bold text-xl">Total Products</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
-                        <h3 className="text-2xl font-bold mb-1">78,596</h3>
+                        <div className="flex items-center justify-start mb-4">
+                            <div className="p-2 bg-blue-100 rounded-full">
+                                <Package className="w-6 h-6 text-blue-600" />
+                            </div>
+                            <h3 className="text-2xl font-bold mb-1 ml-4">{totalProducts}</h3>
+                        </div>
+                        
                         <p className="text-sm text-gray-500">Compared to Aug 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
@@ -86,75 +199,70 @@ const SellerDashboard = () => {
                         </div>
                     </div>
 
+                    {/* Total Followers */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="p-2 bg-orange-100 rounded-full">
-                                <Calendar className="w-6 h-6 text-orange-600" />
-                            </div>
+                            <h3 className="text-2xl text-gray-500 font-bold text-xl">Total Followers</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
-                        <h3 className="text-2xl font-bold mb-1">95,789</h3>
+                        <div className="flex items-center justify-start mb-4">
+                            <div className="p-2 bg-orange-100 rounded-full">
+                                <Users className="w-6 h-6 text-orange-600" />    
+                            </div>
+                            <h3 className="text-2xl font-bold mb-1 ml-4">{totalFollowers}</h3>
+                        </div>
+                        
                         <p className="text-sm text-gray-500">Compared to May 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
-                                <Line type="monotone" dataKey="value" stroke="#f97316" strokeWidth={2} dot={false} />
+                            <Line type="monotone" dataKey="value" stroke="#f97316" strokeWidth={2} dot={false} />
                             </LineChart>
                         </div>
                     </div>
 
+                    {/* Total Reviews */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="p-2 bg-pink-100 rounded-full">
-                                <CreditCard className="w-6 h-6 text-pink-600" />
-                            </div>
+                            <h3 className="text-2xl text-gray-500 font-bold text-xl">Total Reviews</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
-                        <h3 className="text-2xl font-bold mb-1">41,954</h3>
+                        <div className="flex items-center justify-start mb-4">
+                            <div className="p-2 bg-pink-100 rounded-full">
+                                <CreditCard className="w-6 h-6 text-pink-600" />    
+                            </div>
+                            <h3 className="text-2xl font-bold mb-1 ml-4">{totalReviews}</h3>
+                        </div>
+                        
                         <p className="text-sm text-gray-500">Compared to July 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
-                                <Line type="monotone" dataKey="value" stroke="#ec4899" strokeWidth={2} dot={false} />
+                            <Line type="monotone" dataKey="value" stroke="#ec4899" strokeWidth={2} dot={false} />
                             </LineChart>
                         </div>
                     </div>
                 </div>
 
-                {/* Recent Orders and Sales Overview */}
+                {/* Top Selling Products and Sales Overview */}
                 <div className="grid grid-cols-2 gap-6 mb-8">
-                    {/* Recent Orders */}
+                    {/* Top Selling Products */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-semibold">Recent Orders</h3>
+                            <h3 className="text-lg font-semibold">Top selling products</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead>
-                                    <tr className="text-left">
-                                        <th className="pb-4">Recent Orders</th>
-                                        <th className="pb-4">Order Date</th>
-                                        <th className="pb-4">Price</th>
-                                        <th className="pb-4">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td className="py-2">
-                                            <div className="flex items-center space-x-2">
-                                                <img src="/api/placeholder/40/40" alt="Product" className="w-10 h-10 rounded" />
-                                                <span>Decorative Plants</span>
-                                            </div>
-                                        </td>
-                                        <td className="py-2">20 Sep - 03:00AM</td>
-                                        <td className="py-2">$657.30</td>
-                                        <td className="py-2">
-                                            <span className="px-2 py-1 bg-green-100 text-green-600 rounded">Succeed</span>
-                                        </td>
-                                    </tr>
-                                    {/* Add more rows as needed */}
-                                </tbody>
-                            </table>
-                        </div>
+                        <Table
+                            columns={columns}
+                            dataSource={topSellingProducts}
+                            loading={loading}
+                            rowKey="id"
+                            pagination={{
+                                ...pagination,
+                                position: ['bottomCenter'],
+                                showSizeChanger: false,
+                                showQuickJumper: false,
+                            }}
+                            onChange={(pag) => setPagination({ ...pagination, current: pag.current, pageSize: pag.pageSize })}
+                        />
                     </div>
 
                     {/* Sales Overview */}
@@ -163,27 +271,32 @@ const SellerDashboard = () => {
                             <h3 className="text-lg font-semibold">Sales Overview</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
-                        <BarChart width={500} height={300} data={salesData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="month" />
-                            <YAxis />
-                            <Tooltip />
-                            <Bar dataKey="max" fill="#3b82f6" />
-                            <Bar dataKey="min" fill="#93c5fd" />
-                        </BarChart>
+                        <div className='flex justify-betwwen' style={{ width: '100%', height: '80%' }}>
+                            <ResponsiveContainer>
+                                <BarChart data={salesData}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="month" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Bar dataKey="max" fill="#3b82f6" />
+                                    <Bar dataKey="min" fill="#93c5fd" />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
                     </div>
                 </div>
 
-                {/* Recent Customers and Top Sellers */}
-                <div className="grid grid-cols-2 gap-6">
-                    {/* Recent Customers */}
+                {/*
+                {/* Recent Customers and Top Sellers 
+                <div className="grid grid-cols-2 gap-6"> 
+                    {/* Recent Customers 
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-lg font-semibold">Recent Customers</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
                         <div className="space-y-4">
-                            {/* Customer items */}
+                            {/* Customer items 
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-3">
                                     <img src="/api/placeholder/40/40" alt="Customer" className="w-10 h-10 rounded-full" />
@@ -194,11 +307,11 @@ const SellerDashboard = () => {
                                 </div>
                                 <span className="px-2 py-1 bg-green-100 text-green-600 rounded">Paid</span>
                             </div>
-                            {/* Add more customer items */}
+                            {/* Add more customer items *
                         </div>
                     </div>
 
-                    {/* Top Sellers */}
+                    {/* Top Sellers 
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-lg font-semibold">Top Seller Of The Month</h3>
@@ -227,11 +340,12 @@ const SellerDashboard = () => {
                                     <td className="py-2">$37.50</td>
                                     <td className="py-2">$24,375</td>
                                 </tr>
-                                {/* Add more rows as needed */}
+                                {/* Add more rows as needed *
                             </tbody>
                         </table>
                     </div>
                 </div>
+                */}
             </div>
         </div>
     );

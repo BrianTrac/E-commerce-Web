@@ -33,4 +33,12 @@ router.patch('/update/:productId', productController.updateProduct);
 
 // router.get('/:storeId/paging', productController.getProductsByStoreId);
 
+router.get('/top-selling/:storeId', productController.getTopSellingProducts);
+
+// router.route('/top-selling/:storeId')
+//     .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Shop, ROLES_LIST.User), productController.getTopSellingProducts)
+
+// router.route('/flash-sale/:storeId')
+//     .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Shop, ROLES_LIST.User), productController.getFlashSaleProducts)
+
 module.exports = router;

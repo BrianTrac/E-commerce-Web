@@ -60,3 +60,51 @@ export const getProductsByStatus = async (storeId, status, page = 1, limit = 10,
         throw new Error(error.response?.data?.message || 'Failed to fetch products by status');
     }
 };
+
+export const getTopSellingProducts = async (storeId, page = 1, limit = 5) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/seller/products/top-selling/${storeId}`, {
+            params: { page, limit },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch top selling products');
+    }
+}
+
+
+export const getTotalProducts = async (storeId) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/seller/products/total/${storeId}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch total products');
+    }
+};
+
+export const getTotalFollowers = async (storeId) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/seller/followers/total/${storeId}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch total followers');
+    }
+};
+
+export const getTotalReviews = async (storeId) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/seller/reviews/total/${storeId}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch total reviews');
+    }
+};
+
+export const getTotalRevenue = async (storeId) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/seller/revenue/total/${storeId}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch total revenue');
+    }
+};

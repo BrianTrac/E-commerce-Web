@@ -24,6 +24,7 @@ import SellerDashboard from "./pages/seller/SellerDashboard.jsx";
 import SellerProductManagement from "./pages/seller/SellerProductManagement.jsx";
 import SellerProductDetail from "./pages/seller/SellerProductDetail.jsx";
 import SellerAddProduct from "./pages/seller/SellerAddProduct.jsx";
+import SellerVoucher from "./pages/seller/SellerVoucher.jsx";
 import SellerEditProduct from "./pages/seller/SellerEditProduct.jsx";
 import SellerInfo from "./pages/seller/SellerInfo.jsx";
 
@@ -52,6 +53,7 @@ const App = () => {
                 {/* SELLER ROUTE */}
                 <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
                     <Route path="/seller" element={<SellerLayout/>}>
+                        <Route index element={<Navigate to="dashboard" replace />} />
                         <Route index path="dashboard" element={<SellerDashboard />} />
                         <Route path="product-management">
                             <Route index element={<SellerProductManagement />} />
@@ -59,6 +61,8 @@ const App = () => {
                             <Route path="add" element={<SellerAddProduct />} />
                             <Route path="edit/:productId" element={<SellerEditProduct />} />
                         </Route>
+                        
+                        <Route path="voucher" element={<SellerVoucher />} />
                         <Route path="info" element={<SellerInfo />} />
                     </Route>
                 </Route>

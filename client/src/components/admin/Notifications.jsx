@@ -1,9 +1,11 @@
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Bell, CloudCog } from 'lucide-react';
-import { ref, onValue } from 'firebase/database';
+import { Bell } from 'lucide-react';
+import { ref, onValue, set } from 'firebase/database';
 import { database } from '../../utils/firebase';
 
 export const Notifications = () => {
+    const navigate = useNavigate();
     const [notifications, setNotifications] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
 
@@ -13,9 +15,23 @@ export const Notifications = () => {
             notificationsRef,
             (snapshot) => {
                 const data = snapshot.val();
-                let loadedNotifications = data ? Object.values(data) : [];
-                loadedNotifications = loadedNotifications.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-                setNotifications(loadedNotifications);
+                if (!data) {
+                    setNotifications([]);
+                    return;
+                }
+
+                // Convert to array while preserving keys as id
+                const loadedNotifications = Object.entries(data).map(([key, value]) => ({
+                    ...value,
+                    id: key
+                }));
+
+                // Filter unread notifications and sort by timestamp
+                const filteredNotifications = loadedNotifications
+                    .filter(notif => !notif.isRead)
+                    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+                setNotifications(filteredNotifications);
             },
             (error) => {
                 console.error("Failed to load notifications:", error);
@@ -24,6 +40,25 @@ export const Notifications = () => {
 
         return () => unsubscribe();
     }, []);
+
+    const handleNotificationClick = (notif) => async () => {
+        try {
+            const storeId = notif.storeId;
+
+            // Update in Firebase
+            const notifRef = ref(database, `notifications/${notif.id}`);
+            await set(notifRef, {
+                ...notif,
+                isRead: true
+            });
+
+            // Navigate after successful update
+            navigate(`/admin/seller-management/${storeId}/products`);
+
+        } catch (error) {
+            console.error("Error marking notification as read:", error);
+        }
+    };
 
     return (
         <div className="relative">
@@ -42,8 +77,8 @@ export const Notifications = () => {
                         className="divide-y divide-gray-200 max-h-60 overflow-y-auto"
                         style={{ maxHeight: '240px' }}
                     >
-                        {notifications.sort((a, b) => b.timestamp - a.timestamp).map((notif, index) => (
-                            <li key={index} className="p-2 hover:bg-gray-100">
+                        {notifications.map((notif, index) => (
+                            <li key={notif.id} className="p-2 hover:bg-gray-100 cursor-pointer" onClick={handleNotificationClick(notif)}>
                                 <p className="text-sm text-gray-700">{notif.message}</p>
                                 <p className="text-xs text-gray-500">
                                     {new Date(notif.timestamp).toLocaleString()}

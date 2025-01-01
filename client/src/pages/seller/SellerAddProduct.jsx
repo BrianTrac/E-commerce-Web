@@ -22,9 +22,6 @@ const schema = yup.object().shape({
     .number()
     .required('Giá gốc là bắt buộc')
     .positive('Giá gốc phải lớn hơn 0'),
-  short_description: yup.string().required('Miêu tả ngắn là bắt buộc'),
-  description: yup.string().required('Miêu tả chi tiết là bắt buộc'),
-  specifications: yup.string().required('Thông số là bắt buộc'),
   qty: yup
     .number()
     .required('Số lượng là bắt buộc')
@@ -46,6 +43,7 @@ const SellerAddProduct = () => {
   const [imageUploads, setImageUploads] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [specifications, setSpecifications] = useState([]);
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
 
@@ -81,21 +79,36 @@ const SellerAddProduct = () => {
 
   // Gửi dữ liệu lên backend khi form được submit
   const onSubmit = async (data) => {
+    console.log("Form data:", data); // Kiểm tra dữ liệu gửi
     try {
+      // Định dạng lại specifications trước khi gửi
+      const formattedSpecifications = specifications
+        .filter((spec) => spec.name.trim() !== "") // Loại bỏ nhóm không có tên
+        .map((spec) => ({
+          ...spec,
+          attributes: spec.attributes.filter(
+            (attr) => attr.name.trim() !== "" && attr.value.trim() !== "" // Loại bỏ thuộc tính không hợp lệ
+          ),
+        }))
+        .filter((spec) => spec.attributes.length > 0); // Loại bỏ nhóm không có thuộc tính
+
       const imageUrls = await uploadImages(imageUploads);
 
       const formattedData = {
         ...data,
-        category_id: selectedCategory ? selectedCategory.value : 0, // Lấy id từ danh mục đã chọn
-        category_name: selectedCategory ? selectedCategory.label : '', // Lấy name từ danh mục đã chọn
+        specifications: formattedSpecifications,
+        category_id: selectedCategory ? selectedCategory.value : 0,
+        category_name: selectedCategory ? selectedCategory.label : '',
         images: imageUrls,
         thumbnail_url: imageUrls[0]?.thumbnail_url || '',
-        current_seller: { store_id: '40395' },
+        current_seller: { id: '', store_id: '' },
         price: data.original_price * (1 - data.discount_rate / 100),
         url_key: slugify(data.name, { lower: true, strict: true }) || '',
         rating_average: 0.0,
         inventory_status: 'pending',
       };
+
+      console.log("Formatted Data:", formattedData); // Kiểm tra dữ liệu định dạng trước khi gửi
 
       const response = await addProduct(axiosPrivate, formattedData);
       alert(`${response.message}`);
@@ -110,6 +123,58 @@ const SellerAddProduct = () => {
   const handleSearchChange = (inputValue) => {
     setSearchTerm(inputValue);
     loadCategories(inputValue, 1); // Gọi lại API để tìm kiếm và lấy trang 1
+  };
+
+  // Thêm một nhóm mới
+  const handleAddSpec = () => {
+    setSpecifications((prev) => [
+      ...prev,
+      { name: '', attributes: [{ code: '', name: '', value: '' }] },
+    ]);
+  };
+
+  // Xóa một nhóm
+  const handleRemoveSpec = (index) => {
+    setSpecifications((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Thêm một dòng thuộc tính trong nhóm
+  const handleAddRow = (specIndex) => {
+    setSpecifications((prev) => {
+      const updated = [...prev];
+      updated[specIndex].attributes.push({ code: '', name: '', value: '' });
+      return updated;
+    });
+  };
+
+  // Xóa một dòng thuộc tính trong nhóm
+  const handleRemoveRow = (specIndex, attrIndex) => {
+    setSpecifications((prev) => {
+      const updated = [...prev];
+      updated[specIndex].attributes.splice(attrIndex, 1);
+      if (updated[specIndex].attributes.length === 0) {
+        updated.splice(specIndex, 1); // Nếu không còn thuộc tính, xóa nhóm
+      }
+      return updated;
+    });
+  };
+
+  // Cập nhật giá trị thuộc tính
+  const handleChange = (specIndex, attrIndex, field, value) => {
+    setSpecifications((prev) => {
+      const updated = [...prev];
+      updated[specIndex].attributes[attrIndex][field] = value;
+      return updated;
+    });
+  };
+
+  // Cập nhật tên nhóm
+  const handleSpecNameChange = (specIndex, value) => {
+    setSpecifications((prev) => {
+      const updated = [...prev];
+      updated[specIndex].name = value;
+      return updated;
+    });
   };
 
   return (
@@ -232,16 +297,90 @@ const SellerAddProduct = () => {
             )}
           </div>
 
-          {/* Thông số */}
           <div>
             <label className="block font-medium mb-1">Thông số</label>
-            <textarea
-              {...register('specifications')}
-              className={`w-full p-2 border rounded ${errors.specifications ? 'border-red-500' : 'border-gray-300'}`}
-            />
-            {errors.specifications && (
-              <p className="text-red-500 text-sm">{errors.specifications.message}</p>
-            )}
+            {specifications.map((spec, specIndex) => (
+              <div key={specIndex} className="mb-4 border rounded p-2">
+                {/* Tên nhóm */}
+                <h3 className="text-lg font-semibold mb-2">{spec.name || 'Tên nhóm chưa có'}</h3>
+                <input
+                  type="text"
+                  placeholder="Tên nhóm"
+                  value={spec.name}
+                  onChange={(e) => handleSpecNameChange(specIndex, e.target.value)}
+                  className="w-full p-2 mb-2 border rounded"
+                />
+
+                {/* Bảng thuộc tính */}
+                <table className="w-full">
+                  <thead>
+                    <tr>
+                      <th>Thuộc tính</th>
+                      <th>Giá trị</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {spec.attributes.map((attr, attrIndex) => (
+                      <tr key={attrIndex}>
+                        <td>
+                          <input
+                            type="text"
+                            value={attr.name}
+                            onChange={(e) => handleChange(specIndex, attrIndex, 'name', e.target.value)}
+                            className="w-full p-2 border rounded"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="text"
+                            value={attr.value}
+                            onChange={(e) => handleChange(specIndex, attrIndex, 'value', e.target.value)}
+                            className="w-full p-2 border rounded"
+                          />
+                        </td>
+                        <td>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveRow(specIndex, attrIndex)}
+                            className="text-red-500"
+                          >
+                            Xóa
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                {/* Nút thêm dòng */}
+                <button
+                  type="button"
+                  onClick={() => handleAddRow(specIndex)}
+                  className="text-blue-500 mt-2"
+                >
+                  Thêm dòng
+                </button>
+
+                {/* Nút xóa nhóm */}
+                <button
+                  type="button"
+                  onClick={() => handleRemoveSpec(specIndex)}
+                  className="text-red-500 mt-2 ml-4"
+                >
+                  Xóa nhóm
+                </button>
+              </div>
+            ))}
+
+            {/* Nút thêm nhóm */}
+            <button
+              type="button"
+              onClick={handleAddSpec}
+              className="text-blue-500 mt-4"
+            >
+              Thêm nhóm
+            </button>
           </div>
 
           {/* Số lượng */}

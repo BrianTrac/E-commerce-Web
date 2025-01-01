@@ -115,6 +115,18 @@ export const refreshToken = createAsyncThunk(
     }
 );
 
+export const logout = createAsyncThunk(
+    'auth/logout',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await authServices.logout();
+            return response.message;
+        } catch (err) {
+            return rejectWithValue(err?.response?.data?.message);
+        }
+    }
+);
+
 
 
 

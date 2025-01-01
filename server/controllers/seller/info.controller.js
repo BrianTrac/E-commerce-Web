@@ -7,14 +7,17 @@ const getSellerInfo = async (req, res) => {
     try {
         const seller_id = req.user?.id || 11;
 
-        const sellerInfo = await SellerInfo.findOne({
+        let sellerInfo = await SellerInfo.findOne({
             where: {
                 user_id: seller_id
             }
         });
 
         if (!sellerInfo) {
-            return res.status(404).json({ message: 'Seller info not found' });
+            // Mếu k có thì bắt đầu tạo mới
+            sellerInfo = await SellerInfo.create({
+                user_id: seller_id,
+            });
         }
 
         const sellerAuth = await User.findByPk(seller_id);

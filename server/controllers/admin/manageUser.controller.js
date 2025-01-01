@@ -3,6 +3,7 @@ const Product = require('../../models/Product');
 const Order = require('../../models/Order');
 const OrderItem = require('../../models/OrderItem');
 const moment = require('moment');
+const sequelize = require('../../config/db');
 const { Op } = require('sequelize');
 
 // [GET] /api/admin/user/
@@ -313,23 +314,27 @@ const getUserTotalSpent = async (req, res) => {
         }
 
         // Query total spent by the user
-        const result = await Order.findAll({
+        const result = await Order.findOne({
             where: { user_id: userId },
             attributes: [
-                'user_id',
-                [sequelize.fn('SUM', sequelize.col('total_price')), 'total_spent']
+                [sequelize.fn('SUM', sequelize.col('total_price')), 'total_spent'],
+                [sequelize.fn('COUNT', sequelize.col('id')), 'order_count'],
             ],
-            group: ['user_id']
         });
 
-        if (result.length === 0) {
+        // Check if any orders exist
+        if (!result || !result.dataValues.total_spent) {
             return res.status(404).json({
                 message: 'No orders found for this user',
             });
         }
 
         return res.status(200).json({
-            data: result[0]
+            data: {
+                user_id: userId,
+                total_spent: result.dataValues.total_spent,
+                order_count: result.dataValues.order_count,
+            },
         });
     } catch (error) {
         console.error('Error in getUserTotalSpent:', error);

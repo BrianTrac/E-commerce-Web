@@ -69,12 +69,14 @@ const userSlice = createSlice({
             })
             .addCase(fetchUserTotalSpent.fulfilled, (state, action) => {
                 state.totalSpent = action.payload.total_spent;
+                state.orderCount = action.payload.order_count;
                 state.loading = false;
             })
             .addCase(fetchUserTotalSpent.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload?.message || 'An error occurred';
                 state.totalSpent = null;
+                state.orderCount = null;
             })
             // Fetch User Order List
             .addCase(fetchUserOrderList.pending, (state, action) => {

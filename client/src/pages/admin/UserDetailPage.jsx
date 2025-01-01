@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchOneUser } from '../../redux/actions/admin/userManagementAction';
+import { fetchOneUser, fetchUserTotalSpent } from '../../redux/actions/admin/userManagementAction';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { Card, Row, Col, Typography, Statistic, Button, Tag, Divider, Spin, Space } from 'antd';
 import {
@@ -19,16 +19,16 @@ const UserDetailPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const axiosPrivate = useAxiosPrivate();
-    const { currentUser, loading } = useSelector(state => state.admin.users);
+    const { currentUser, totalSpent, orderCount, loading } = useSelector(state => state.admin.users);
 
     useEffect(() => {
         if (id) {
             // Assuming you'll create this action
             dispatch(fetchOneUser({ id, axiosInstance: axiosPrivate }));
-            //dispatch(fetchUserTotalSpent({ id, axiosInstance: axiosPrivate }));
+            dispatch(fetchUserTotalSpent({ id, axiosInstance: axiosPrivate }));
         }
     }, [id, dispatch]);
-    console.log(currentUser);
+    console.log('Total spent:', totalSpent);
 
     return (
         <div className="p-6">
@@ -92,16 +92,16 @@ const UserDetailPage = () => {
                         <Col span={8}>
                             <Card className="text-center bg-green-50">
                                 <Statistic
-                                    title={<span className="flex items-center justify-center gap-2"><UserOutlined /> Order quantity </span>}
-                                    // value={`₫${Number(totalSpent).toLocaleString()}`}
+                                    title={<span className="flex items-center justify-center gap-2"><UserOutlined /> Total purchase amount </span>}
+                                    value={`₫${Number(totalSpent).toLocaleString()}`}
                                 />
                             </Card>
                         </Col>
                         <Col span={8}>
                             <Card className="text-center bg-purple-50">
                                 <Statistic
-                                    title="Create at"
-                                    value={new Date(currentUser.user.created_at).toLocaleDateString()}
+                                    title="Number of orders"
+                                    value={orderCount}
                                     className="text-purple-600"
                                 />
                             </Card>

@@ -121,7 +121,7 @@ export const fetchUserTotalSpent = createAsyncThunk(
     'admin/users/fetchUserTotalSpent',
     async ({ id, axiosInstance }, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.get(`/api/admin/user/${id}/total-spent`);
+            const response = await axiosInstance.put(`/api/admin/user/${id}/total-spent`);
             return response.data.data;
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Failed to fetch total spent';

@@ -5,6 +5,7 @@ import { getStore, updateStore } from '../../service/seller/storeApi';
 import { getTopSellingProducts } from '../../service/seller/productApi';
 import TopProducts from '../../components/seller/TopProducts';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { uploadImages } from '../../helpers/upload';
 
 const SellerInfo = () => {
   const [sellerInfo, setSellerInfo] = useState(null);
@@ -16,15 +17,17 @@ const SellerInfo = () => {
   const [isEditingStore, setIsEditingStore] = useState(false);
   const [originalSellerInfo, setOriginalSellerInfo] = useState(null);
   const [originalStoreInfo, setOriginalStoreInfo] = useState(null);
+  const [logoFile, setLogoFile] = useState(null);
+  const [logoPreview, setLogoPreview] = useState(null);
 
-  const axiosPrivate = useAxiosPrivate(); 
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     const fetchSellerInfo = async () => {
       try {
         const info = await getSellerInfo(axiosPrivate);
         setSellerInfo(info);
-        setOriginalSellerInfo(info); 
+        setOriginalSellerInfo(info);
         const storeId = info.store_id;
         const products = await getTopSellingProducts(axiosPrivate, storeId);
         setTopProducts(products.data);
@@ -39,7 +42,7 @@ const SellerInfo = () => {
       try {
         const store = await getStore(axiosPrivate);
         setStore(store);
-        setOriginalStoreInfo(store);  
+        setOriginalStoreInfo(store);
       } catch (err) {
         setError(err.message || 'Failed to load store info');
       }
@@ -58,6 +61,14 @@ const SellerInfo = () => {
     setIsEditingStore(true);
   };
 
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setLogoFile(file);
+      setLogoPreview(URL.createObjectURL(file)); // Show image preview
+    }
+  };
+
   const handleSaveSeller = async () => {
     try {
       const response = await updateSellerInfo(axiosPrivate, sellerInfo);
@@ -68,10 +79,20 @@ const SellerInfo = () => {
     }
   };
 
+
   const handleSaveStore = async () => {
     try {
-      const response = await updateStore(axiosPrivate,store);
+      let updatedStore = store;
+
+      // If a new logo is selected, upload it to Firebase and get the URL
+      if (logoFile) {
+        const uploadedImages = await uploadImages([logoFile], 'sellers'); // Use 'store-logos' folder
+        updatedStore = { ...updatedStore, icon: uploadedImages[0].thumbnail_url };
+      }
+
+      const response = await updateStore(axiosPrivate, updatedStore);
       alert(`${response.message}`);
+      window.location.reload(); // Reload the page to show the updated store info
       setIsEditingStore(false);
     } catch (err) {
       setError('Failed to save store info');
@@ -223,7 +244,30 @@ const SellerInfo = () => {
       <div className="space-y-6">
         <h2 className="text-3xl font-semibold">Store Information</h2>
         <div className="text-center mb-6">
-          <img src={store.icon} alt="Store Logo" className="w-32 h-32 mx-auto rounded-full" />
+          {/* Editable Store Logo */}
+          {isEditingStore ? (
+            <div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleLogoChange}
+                className="mb-4"
+              />
+              {logoPreview && (
+                <img
+                  src={logoPreview}
+                  alt="Logo Preview"
+                  className="w-32 h-32 object-cover mx-auto rounded-full"
+                />
+              )}
+            </div>
+          ) : (
+            <img
+              src={store.icon || '/path/to/default/logo.png'}
+              alt="Store Logo"
+              className="w-32 h-32 mx-auto rounded-full"
+            />
+          )}
 
           {/* Editable Store Name */}
           <div className="mt-4">

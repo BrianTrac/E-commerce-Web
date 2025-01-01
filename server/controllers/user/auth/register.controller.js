@@ -88,7 +88,7 @@ const verifyRegistrationOTP = async(req, res) => {
             username: tempUser.username,
             email: tempUser.email,
             password: tempUser.password,
-            role: 'User'
+            role: 'Seller'
         });
 
         await newUser.save();

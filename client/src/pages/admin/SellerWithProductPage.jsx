@@ -14,6 +14,7 @@ import {
     CheckOutlined,
     UndoOutlined,
 } from '@ant-design/icons';
+import { sortProductByStatus } from '../../helpers/sortProductByStatus';
 
 const { Text } = Typography;
 
@@ -46,22 +47,7 @@ const SellerProductPage = () => {
 
             if (fetchSellerProducts.fulfilled.match(resultAction)) {
                 let { products, totalCount, currentPage, pageSize } = resultAction.payload;
-                products = products.sort((a, b) => {
-                    const statusPriority = {
-                        pending: 1,
-                        suspend: 2,
-                        other: 3,
-                    };
-
-                    const aPriority = statusPriority[a.inventory_status] || statusPriority.other;
-                    const bPriority = statusPriority[b.inventory_status] || statusPriority.other;
-                    if (aPriority !== bPriority) {
-                        return aPriority - bPriority;
-                    }
-
-                    // If inventory status is the same, sort by created_at date
-                    return new Date(b.created_at) - new Date(a.created_at);
-                });
+                products = sortProductByStatus(products);
 
                 setProducts(products);
                 setPagination({
@@ -149,6 +135,7 @@ const SellerProductPage = () => {
                     icon={<EyeOutlined />}
                     onClick={() => handleView(record)}
                     className="text-blue-600 p-0 hover:text-blue-800"
+                    disabled
                 />
             </Tooltip>,
             <Tooltip key="edit" title="Edit">
@@ -157,12 +144,13 @@ const SellerProductPage = () => {
                     icon={<EditOutlined />}
                     onClick={() => handleEdit(record)}
                     className="text-green-600 p-0 hover:text-green-800"
+                    disabled
                 />
             </Tooltip>
         ];
 
         switch (record.inventory_status) {
-            case 'available':
+            case 'available': 
                 buttons.push(
                     <Tooltip key="delete" title="Suspend">
                         <Button

@@ -23,11 +23,10 @@ const SellerDetailPage = () => {
 
     useEffect(() => {
         if (id) {
-            // Assuming you'll create this action
             dispatch(fetchOneSeller({ id, axiosInstance: axiosPrivate }));
         }
     }, [id, dispatch]);
-
+    
     return (
         <div className="p-6">
             <Space className="mb-4">
@@ -69,7 +68,7 @@ const SellerDetailPage = () => {
                         </div>
                         <Space>
                             <Button
-                                onClick={() => navigate(`/admin/seller-management/edit/${id}`)}
+                                        onClick={() => navigate(`/admin/seller-management/${id}/edit`)}
                                 type="default"
                             >
                                 Edit Seller
@@ -123,6 +122,7 @@ const SellerDetailPage = () => {
                     </Row>
 
                     {/* Quick Links */}
+                    <Divider />
                     <div className="space-y-4">
                         <Title level={4}>Management Actions</Title>
                         <Row gutter={[16, 16]}>

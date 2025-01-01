@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { Table, Space, Button, Input, Card, Typography, Tooltip, Modal, message } from 'antd';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { Table, Space, Button, Input, Card, Typography, Tooltip, Modal, message, Select } from 'antd';
 import { fetchSellers, activateSeller, deactivateSeller } from '../../redux/actions/admin/sellerManagementAction';
+import { setSellersPagination } from '../../redux/reducers/admin/sellerReducer';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import {
+    SearchOutlined,
     EyeOutlined,
     EditOutlined,
     StopOutlined,
@@ -14,6 +16,7 @@ import {
 
 const { Text } = Typography;
 const { confirm } = Modal;
+const { Option } = Select;
 
 const SellerManagement = () => {
     const dispatch = useDispatch();
@@ -22,6 +25,7 @@ const SellerManagement = () => {
 
     const { data: sellers, loading, pagination } = useSelector((state) => state.admin.sellers);
     const [searchText, setSearchText] = useState('');
+    const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'active', or 'inactive'
 
     useEffect(() => {
         loadSellers();
@@ -73,11 +77,8 @@ const SellerManagement = () => {
         });
     };
 
-
-
     const handleEdit = (record) => {
-        console.log('Edit seller:', record);
-        // Add your edit logic here
+        navigate(`/admin/seller-management/${record.id}/edit`);
     };
 
     const handleView = (record) => {
@@ -87,6 +88,18 @@ const SellerManagement = () => {
     const getRowClassName = (record) => {
         return !record.is_active ? 'opacity-50 select-none' : '';
     };
+
+    // Filter sellers based on statusFilter
+    const filteredSellers = sellers?.filter(seller => {
+        switch (statusFilter) {
+            case 'active':
+                return seller.is_active;
+            case 'inactive':
+                return !seller.is_active;
+            default:
+                return true;
+        }
+    });
 
     const columns = [
         {
@@ -184,6 +197,7 @@ const SellerManagement = () => {
                             type="link"
                             icon={<EditOutlined />}
                             className="text-green-600 p-0 hover:text-green-800"
+                            onClick={() => handleEdit(record)}
                         />
                     </Tooltip>
                     <Tooltip title={record.is_active ? 'Deactivate' : 'Activate'}>
@@ -201,15 +215,46 @@ const SellerManagement = () => {
 
     return (
         <Card title="Seller Management" className="shadow-md">
-            {/* Search and Refresh buttons remain the same */}
+            <div className="mb-4 flex justify-between items-center">
+                <div className="flex items-center gap-4">
+                    <Input
+                        placeholder="Search sellers..."
+                        prefix={<SearchOutlined />}
+                        value={searchText}
+                        onChange={e => setSearchText(e.target.value)}
+                        onPressEnter={loadSellers}
+                        className="w-64"
+                    />
+                    <Space align="center">
+                        <Text>Status:</Text>
+                        <Select
+                            value={statusFilter}
+                            onChange={setStatusFilter}
+                            className="w-32"
+                        >
+                            <Option value="all">All</Option>
+                            <Option value="active">Active</Option>
+                            <Option value="inactive">Inactive</Option>
+                        </Select>
+                    </Space>
+                </div>
+                <Button
+                    type="primary"
+                    onClick={loadSellers}
+                    icon={<RedoOutlined />}
+                >
+                    Refresh
+                </Button>
+            </div>
             <Table
                 columns={columns}
-                dataSource={sellers}
+                dataSource={filteredSellers}
                 loading={loading}
                 rowKey="id"
                 rowClassName={getRowClassName}
                 pagination={{
                     ...pagination,
+                    total: filteredSellers?.length,
                     showSizeChanger: true,
                     showQuickJumper: true,
                     showTotal: (total) => `Total ${total} sellers`,

@@ -34,7 +34,6 @@ export const getTopSellingProductInDashboard = async (axiosPrivate, currentPage,
 
 export const addProduct = async (axiosPrivate, productData) => {
     try {
-        console.log(productData);
         const response = await axiosPrivate.post(`/api/seller/products/add`, productData);
         return response.data;
     } catch (error) {

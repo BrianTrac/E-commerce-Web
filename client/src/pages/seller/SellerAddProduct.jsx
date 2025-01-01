@@ -81,14 +81,22 @@ const SellerAddProduct = () => {
   const onSubmit = async (data) => {
     console.log("Form data:", data); // Kiểm tra dữ liệu gửi
     try {
-      console.log("Form data:", data); // Kiểm tra dữ liệu gửi
-      console.log("Specifications:", specifications); // Kiểm tra specifications
-  
+      // Định dạng lại specifications trước khi gửi
+      const formattedSpecifications = specifications
+        .filter((spec) => spec.name.trim() !== "") // Loại bỏ nhóm không có tên
+        .map((spec) => ({
+          ...spec,
+          attributes: spec.attributes.filter(
+            (attr) => attr.name.trim() !== "" && attr.value.trim() !== "" // Loại bỏ thuộc tính không hợp lệ
+          ),
+        }))
+        .filter((spec) => spec.attributes.length > 0); // Loại bỏ nhóm không có thuộc tính
+
       const imageUrls = await uploadImages(imageUploads);
-  
+
       const formattedData = {
         ...data,
-        specifications: JSON.stringify(specifications),
+        specifications: formattedSpecifications,
         category_id: selectedCategory ? selectedCategory.value : 0,
         category_name: selectedCategory ? selectedCategory.label : '',
         images: imageUrls,
@@ -99,9 +107,9 @@ const SellerAddProduct = () => {
         rating_average: 0.0,
         inventory_status: 'pending',
       };
-  
+
       console.log("Formatted Data:", formattedData); // Kiểm tra dữ liệu định dạng trước khi gửi
-  
+
       const response = await addProduct(axiosPrivate, formattedData);
       alert(`${response.message}`);
       navigate('/seller/product-management');

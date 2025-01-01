@@ -319,7 +319,7 @@ let getTopSellingProducts_v2 = async (req, res) => {
             return res.status(400).json({ message: "Missing storeId parameter" });
         }
 
-        const limit = parseInt(req.query.limit) || 5;  // Number of products per page 
+        const limit = parseInt(req.query.limit) || 3;  // Number of products per page 
         const page = parseInt(req.query.page) || 1;    // Default to page 1
         const offset = (page - 1) * limit;            // Calculate offset for pagination
 
@@ -341,7 +341,11 @@ let getTopSellingProducts_v2 = async (req, res) => {
             offset
         });
 
-        const totalItems = limit;
+        const totalItems = await Product.count({
+            where: {
+                'current_seller.store_id': storeId
+            }
+        });
 
         res.status(200).json({
             message: "Top selling products fetched successfully",

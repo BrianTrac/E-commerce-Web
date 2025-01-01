@@ -354,7 +354,6 @@ const suspendSellerProduct = async (req, res) => {
 
         product.inventory_status = 'suspend';
         await product.save();
-        addNotification(seller.id, product.name);
         res.status(200).json({
             message: 'Product is temporarily suspended',
         });

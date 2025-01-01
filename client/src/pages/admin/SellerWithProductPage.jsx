@@ -45,7 +45,24 @@ const SellerProductPage = () => {
             );
 
             if (fetchSellerProducts.fulfilled.match(resultAction)) {
-                const { products, totalCount, currentPage, pageSize } = resultAction.payload;
+                let { products, totalCount, currentPage, pageSize } = resultAction.payload;
+                products = products.sort((a, b) => {
+                    const statusPriority = {
+                        pending: 1,
+                        suspend: 2,
+                        other: 3,
+                    };
+
+                    const aPriority = statusPriority[a.inventory_status] || statusPriority.other;
+                    const bPriority = statusPriority[b.inventory_status] || statusPriority.other;
+                    if (aPriority !== bPriority) {
+                        return aPriority - bPriority;
+                    }
+
+                    // If inventory status is the same, sort by created_at date
+                    return new Date(b.created_at) - new Date(a.created_at);
+                });
+
                 setProducts(products);
                 setPagination({
                     current: currentPage,
@@ -214,7 +231,7 @@ const SellerProductPage = () => {
         {
             title: 'Product Name',
             key: 'name',
-            responsive: ['md'],
+            width: '200px',
             render: (_, record) => (
                 <div className="min-w-[150px]">
                     <Text strong className="block text-sm md:text-base">{record.name}</Text>
@@ -227,11 +244,17 @@ const SellerProductPage = () => {
             key: 'qty',
             width: '100px',
             render: (_, record) => (
-                <div>
+                <div className="flex justify-between items-center">
                     <Text>{record.qty}</Text>
                     <Tag
-                        color={record.inventory_status == 'available' ? 'green' : (record.inventory_status == 'pending' ? 'yellow' : 'red')}
-                        className="ml-2"
+                        color={
+                            record.inventory_status === 'available'
+                                ? 'green'
+                                : record.inventory_status === 'pending'
+                                    ? 'yellow'
+                                    : 'red'
+                        }
+                        className="ms-auto"
                     >
                         {record.inventory_status}
                     </Tag>

@@ -197,11 +197,49 @@ let getTotalReviews = async (req, res) => {
 }
 
 
+// Check if a product exists in a store
+// GET /api/seller/products/exist/:id
+let checkProductExist = async (req, res) => {
+    const id = req.params.id;
+
+    const userId = req.user.id;
+    const seller = await Seller.findOne({
+        where: {
+            user_id: userId
+        }
+    });
+
+    const storeId = seller.store_id;
+
+    if (!storeId) {
+        return res.status(400).json({ message: 'Store ID is required' });
+    }
+
+    try {
+        const product = await Product.findOne({
+            where: {
+                id: id,
+                'current_seller.store_id': storeId
+            }
+        });
+
+        if (product) {
+            res.status(200).json({ message: 'Product exists in the store' });
+        } else {
+            res.status(200).json({ message: 'Product does not exist in the store' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+
 module.exports = {
     getSellerById,
     getAllSellers,
     getTotalRevenue,
     getTotalFollowers,
     getTotalProducts,
-    getTotalReviews
+    getTotalReviews,
+    checkProductExist
 };

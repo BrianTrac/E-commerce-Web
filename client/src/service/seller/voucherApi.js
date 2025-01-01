@@ -1,11 +1,8 @@
 // services/voucheApi.js
-import axios from 'axios';
 
-const BASE_URL = 'http://localhost:5000/api';
-
-export const getVoucher = async (page = 1, limit = 10) => {
+export const getVouchers = async (axiosPrivate, page = 1, limit = 10) => {
     try {
-        const response = await axios.get(`${BASE_URL}/seller/voucher`, {
+        const response = await axiosPrivate.get(`/api/seller/voucher`, {
             params: { page, limit },
         });
         return response.data;
@@ -14,21 +11,38 @@ export const getVoucher = async (page = 1, limit = 10) => {
     }
 };
 
-export const addVoucher = async (voucherData) => {
+export const addVoucher = async (axiosPrivate, voucherData) => {
     try {
-        const response = await axios.post(`${BASE_URL}/seller/voucher/add`, voucherData);
+        const response = await axiosPrivate.post(`/api/seller/voucher/add`, voucherData);
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to add voucher');
     }
 }
 
-export const deleteVoucher = async (voucherId) => {
+export const deleteVoucher = async (axiosPrivate, voucherId) => {
     try {
-        const response = await axios.delete(`${BASE_URL}/seller/voucher/delete/${voucherId}`);
+        const response = await axiosPrivate.delete(`/api/seller/voucher/delete/${voucherId}`);
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to delete voucher');
     }
 }
 
+export const updateVoucher = async (axiosPrivate, voucherId, voucherData) => {
+    try {
+        const response = await axiosPrivate.patch(`/api/seller/voucher/update/${voucherId}`, voucherData);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to update voucher');
+    }
+}
+
+export const getVoucherById = async (axiosPrivate, voucherId) => {
+    try {
+        const response = await axiosPrivate.get(`/api/seller/voucher/${voucherId}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch voucher');
+    }
+}

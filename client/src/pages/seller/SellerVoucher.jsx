@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Table, Tooltip, Modal, message } from 'antd';
-import { getVoucher, addVoucher, deleteVoucher } from '../../service/seller/voucherApi';
+import { Card, Button, Table, Tooltip, Modal, message, Input } from 'antd';
+import { getVouchers, addVoucher, deleteVoucher } from '../../service/seller/voucherApi';
+import { checkProductExist, getProductById } from '../../service/seller/productApi';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 const { confirm } = Modal;
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 //  Voucher
 //  id: number;
@@ -14,16 +16,18 @@ const { confirm } = Modal;
 
 const SellerVoucher = () => {
 
-    const [voucherShop, setVoucherShop] = useState({discount: "10", startDate: "", endDate: ""});
-    const [voucherForProduct, setVoucherForProduct] = useState({discount: "10", startDate: "", endDate: ""});
+    const [voucherShop, setVoucherShop] = useState({discount: "10", start_date: "", end_date: ""});
+    const [voucherForProduct, setVoucherForProduct] = useState({discount: "10", start_date: "", end_date: "", product_id: ""});
     const [voucherData, setVoucherData] = useState([]);
     const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
+    const axiosPrivate = useAxiosPrivate();
 
     const columns = [
         { title: 'ID', dataIndex: 'id', key: 'id' },
         { title: 'Discount', dataIndex: 'discount', key: 'discount', render: (discount) => <span>{discount}%</span> },
-        { title: 'Start date', dataIndex: 'start_date', key: 'startDate', render: (date) => <span>{new Date(date).toLocaleString()}</span> },
-        { title: 'End date', dataIndex: 'end_date', key: 'endDate', render: (date) => <span>{new Date(date).toLocaleString()}</span> },
+        { title: 'Start date', dataIndex: 'start_date', key: 'start_date', render: (date) => <span>{new Date(date).toLocaleString()}</span> },
+        { title: 'End date', dataIndex: 'end_date', key: 'end_date', render: (date) => <span>{new Date(date).toLocaleString()}</span> },
+        { title: 'Product ID', dataIndex: 'product_id', key: 'product_id' },
         { title: 'Action', dataIndex: '', key: 'action', render: (_, record) => 
             <Tooltip title="Delete">
                 <Button
@@ -40,9 +44,9 @@ const SellerVoucher = () => {
         loadVouchers();
     }, [pagination.current]);
 
-    const loadVouchers = async () => {
+    const loadVouchers = async() => {
         try {
-            const response = await getVoucher(pagination.current, pagination.pageSize);
+            const response = await getVouchers(axiosPrivate, pagination.current, pagination.pageSize);
             setVoucherData(response.vouchers);
             setPagination({ ...pagination, total: response.totalItems });
         } catch (error) {
@@ -60,12 +64,11 @@ const SellerVoucher = () => {
 
     const handleChangeVoucherForProduct = (e) => {
         const { name, value } = e.target;
-        setVoucherShop(prevState => ({
+        setVoucherForProduct(prevState => ({
             ...prevState,  // Giữ lại các giá trị cũ của voucherShop
             [name]: value  // Chỉ cập nhật giá trị của trường name
         }));
     };
-
 
     const handleAddVoucherShop = async() => {
         // Kiểm tra xem các thông tin bắt buộc có được nhập đầy đủ không
@@ -73,21 +76,21 @@ const SellerVoucher = () => {
             alert("Please choose percentage off for voucher!");
             return;
         }
-        if (!voucherShop.startDate) {
+        if (!voucherShop.start_date) {
             alert("Please choose start date for voucher!");
             return;
         }
-        if (!voucherShop.endDate) {
+        if (!voucherShop.end_date) {
             alert("Please choose end date voucher!");
             return;
         }
 
-        if (new Date(voucherShop.startDate) > new Date(voucherShop.endDate)) {
+        if (new Date(voucherShop.start_date) > new Date(voucherShop.end_date)) {
             alert("Start date must be before end date!");
             return;
         }
 
-        const newVoucher = await addVoucher(voucherShop);
+        const newVoucher = await addVoucher(axiosPrivate, voucherShop);
         if (!newVoucher) {
             alert("Add voucher unsuccessfully!");
             return;
@@ -96,39 +99,51 @@ const SellerVoucher = () => {
         setVoucherData([...voucherData, newVoucher.voucher]);
     
         // Reset voucherForProduct 
-        setVoucherShop({ discount: "", startDate: "", endDate: "" });
+        setVoucherShop({ discount: "", start_date: "", end_date: "" });
         alert("Add voucher successfully!");
     };
 
     const handleAddVoucherForProduct = async() => {
-        if (!voucherShop.discount) {
-            alert("Vui lòng nhập phần trăm giảm cho voucher!");
+        console.log(voucherForProduct);
+        if (!voucherForProduct.discount) {
+            alert("Please choose percentage off for voucher!");
             return;
         }
-        if (!voucherShop.startDate) {
-            alert("Vui lòng nhập ngày bắt đầu cho voucher!");
+        if (!voucherForProduct.start_date) {
+            alert("Please choose start date for voucher!");
             return;
         }
-        if (!voucherShop.endDate) {
-            alert("Vui lòng nhập ngày kết thúc cho voucher!");
+        if (!voucherForProduct.end_date) {
+            alert("Please choose end date voucher!");
             return;
         }
 
-        if (new Date(voucherShop.startDate) > new Date(voucherShop.endDate)) {
-            alert("Ngày kết thúc phải sau ngày bắt đầu!");
+        if (new Date(voucherForProduct.start_date) > new Date(voucherForProduct.end_date)) {
+            alert("Start date must be before end date!");
             return;
         }
-    
-        const newVoucher = await addVoucher(voucherForProduct);
+
+        if (!voucherForProduct.product_id) {
+            alert("Please enter product ID!");
+            return; 
+        }
+
+        const response = await checkProductExist(axiosPrivate, voucherForProduct.product_id);
+        if (response.message === "Product does not exist in the store") {
+            alert("Your store does not have products with this ID!");
+            return;
+        }
+
+        const newVoucher = await addVoucher(axiosPrivate, voucherForProduct);
         if (!newVoucher) {
-            alert("Thêm voucher không thành công!");
+            alert("Add voucher unsuccessfully!");
             return;
         }
 
         setVoucherData([...voucherData, newVoucher.voucher]);
     
         // Reset voucherForProduct
-        setVoucherForProduct({ discount: "", startDate: "", endDate: "" });
+        setVoucherForProduct({ discount: "", start_date: "", end_date: "" });
     
         alert("Add voucher successfully!");
     };
@@ -143,7 +158,7 @@ const SellerVoucher = () => {
           cancelText: 'No',
           onOk: async () => {
             try {
-              await deleteVoucher(voucherId);
+              await deleteVoucher(axiosPrivate, voucherId);
               message.success('Voucher deleted successfully');
               loadVouchers();
             } catch (error) {
@@ -176,6 +191,7 @@ const SellerVoucher = () => {
                                 <option value="10">10%</option>
                                 <option value="15">15%</option>
                                 <option value="20">20%</option>
+                                <option value="25">25%</option>
                                 <option value="30">30%</option>
                             </select>
                         </div>
@@ -184,8 +200,8 @@ const SellerVoucher = () => {
                             <p>Start date</p>
                             <input aria-label="Date and time" type="datetime-local" 
                             className="border-dashed border-2 rounded-md p-3 w-full mt-2 mb-4 focus:outline-none" 
-                            name="startDate"
-                            value={voucherShop.startDate}
+                            name="start_date"
+                            value={voucherShop.start_date}
                             onChange={handleChangeVoucherShop}
                             onClick={(e) => e.target.showPicker()}/>
                         </div>
@@ -194,8 +210,8 @@ const SellerVoucher = () => {
                             <p>End date</p>
                             <input aria-label="Date and time" type="datetime-local" 
                                 className="border-dashed border-2 rounded-md p-3 w-full mt-2 mb-4"
-                                name="endDate"
-                                value={voucherShop.endDate}
+                                name="end_date"
+                                value={voucherShop.end_date}
                                 onChange={handleChangeVoucherShop}
                                 onClick={(e) => e.target.showPicker()} 
                             />
@@ -232,7 +248,7 @@ const SellerVoucher = () => {
                                 <option value="10">10%</option>
                                 <option value="15">15%</option>
                                 <option value="20">20%</option>
-                                <option value="25">20%</option>
+                                <option value="25">25%</option>
                                 <option value="30">30%</option>
                             </select>
                         </div>
@@ -241,7 +257,8 @@ const SellerVoucher = () => {
                             <p>Start date</p>
                             <input aria-label="Date and time" type="datetime-local" 
                             className="border-dashed border-2 rounded-md p-3 w-full mt-2 mb-4"
-                            name="startDate"
+                            name="start_date"
+                            value={voucherForProduct.start_date}
                             onChange={handleChangeVoucherForProduct}
                             onClick={(e) => e.target.showPicker()} />
                         </div>
@@ -250,9 +267,19 @@ const SellerVoucher = () => {
                             <p>End date</p>
                             <input aria-label="Date and time" type="datetime-local" 
                             className="border-dashed border-2 rounded-md p-3 w-full mt-2 mb-4"
-                            name="endDate"
+                            name="end_date"
+                            value={voucherForProduct.end_date}
                             onChange={handleChangeVoucherForProduct}
                             onClick={(e) => e.target.showPicker()} />
+                        </div>
+
+                        <div>
+                            <p>Product ID</p>
+                            <Input 
+                                className="border-dashed border-2 rounded-md p-3 w-full mt-2 mb-4"
+                                name="product_id"
+                                onChange={handleChangeVoucherForProduct}
+                                placeholder="Enter product ID"/>
                         </div>
 
                         <div className="flex justify-end">
@@ -283,39 +310,6 @@ const SellerVoucher = () => {
                     }}
                 />
             </div>
-
-            {/* Delete Voucher 
-            <div className="flex-col justify-between mt-6 p-4">
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-semibold">Xóa voucher</h2>
-                </div>
-
-                <div className="flex justify-between w-full">
-                    <select className="border-dashed border-2 rounded-md p-3 w-full mt-2 mb-4" 
-                        value={selectedVoucherId}
-                        onChange={(e) => setSelectedVoucherId(e.target.value)}>
-                        <option value="" disabled hidden>
-                            Chọn voucher cần xóa
-                        </option>
-                        {voucherData.map((voucher) => (
-                            <option key={voucher.id} value={voucher.id}>
-                            {`ID: ${voucher.id} - Giảm ${voucher.discount}%`}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="flex justify-end">
-                    <Button
-                        type="primary"
-                        onClick={() => handleDeleteVoucher()}
-                        style={{ marginLeft: '10px', position: 'right' }}
-                    >
-                        Delete
-                    </Button>
-                </div>
-            </div>
-            */}
         </Card>
     );
 }

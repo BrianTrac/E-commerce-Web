@@ -9,7 +9,7 @@ router.post('/add', voucherController.createVoucher);
 router.delete('/delete/:id', voucherController.deleteVoucher);
 
 // Retrieve all Vouchers
-router.get('/', voucherController.findAllVouchers);
+router.get('/', voucherController.getAllVouchers);
 
 // Retrieve a single Voucher by id
 router.get('/:id', voucherController.getVoucherById);

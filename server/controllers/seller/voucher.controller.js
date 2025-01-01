@@ -1,4 +1,5 @@
 const Voucher = require('../../models/Voucher');
+const Seller = require('../../models/Seller');
 const Sequelize = require('sequelize');
 
 // Create and Save a new Voucher
@@ -10,9 +11,35 @@ let createVoucher = async (req, res) => {
                 message: "Content can not be empty!"
             });
         }
-        const storeId = req.user?.store_id || 11;
+        const id = req.user.id;
+        const seller = await Seller.findOne({
+            where: {
+                user_id: id
+            },
+            attributes: ['store_id']
+        });
+
+        const storeId = seller.store_id;
         req.body.store_id = storeId;
+
+        // // Check if product is not belong to the store
+        // if (!req.body.product_id) {
+        //     const result = await Product.findOne({
+        //         where: {
+        //             id: req.body.product_id,
+        //             store_id: storeId
+        //         }
+        //     });
+
+        //     if (!result) {
+        //         return res.status(404).json({
+        //             message: `Cannot create Voucher. Product with id=${req.body.product_id} was not found in your store!`
+        //         });
+        //     }
+        // }
+        
         const voucherData = req.body;
+        console.log(voucherData);
         const newVoucher = await Voucher.create(voucherData);
 
         res.status(201).json({
@@ -33,6 +60,27 @@ let createVoucher = async (req, res) => {
 let deleteVoucher = async (req, res) => {
     try {
         const id = req.params.id;
+
+        const userId = req.user.id;
+        const seller = await Seller.findOne({
+            where: {
+                user_id: userId
+            }
+        });
+        const storeId = seller.store_id;
+        const result = await Voucher.findOne({
+            where: {
+                id: id,
+                store_id: storeId
+            }
+        });
+
+        if (!result) {
+            return res.status(404).json({
+                message: `Cannot delete Voucher with id=${id}. Maybe Voucher was not found!`
+            });
+        }
+
         const voucher = await Voucher.destroy({
             where: { id: id }
         });
@@ -55,9 +103,16 @@ let deleteVoucher = async (req, res) => {
 
 // Retrieve all Vouchers from the database.
 // GET /api/seller/vouchers
-let findAllVouchers = async (req, res) => {
+let getAllVouchers = async (req, res) => {
     try {
-        const storeId = req.user?.store_id || 11;
+        const id = req.user.id;
+        const seller = await Seller.findOne({
+            where: {
+                user_id: id
+            }
+        });
+        const storeId = seller.store_id;
+
         const limit = req.query.limit || 10;
         const page = req.query.page || 1;
         const offset = (page - 1) * limit;
@@ -68,7 +123,6 @@ let findAllVouchers = async (req, res) => {
             },
             limit: limit,
             offset: offset,
-            order: [['createdAt', 'DESC']]
         });
 
         const totalVouchers = await Voucher.count({
@@ -119,6 +173,28 @@ let getVoucherById = async (req, res) => {
 let updateVoucher = async (req, res) => {
     try {
         const id = req.params.id;
+        const userId = req.user.id;
+
+        const seller = await Seller.findOne({
+            where: {
+                user_id: userId
+            }
+        });
+        const storeId = seller.store_id;
+
+        const result = await Voucher.findOne({
+            where: {
+                id: id,
+                store_id: storeId
+            }
+        });
+
+        if (!result) {
+            return res.status(404).json({
+                message: `Cannot update Voucher with id=${id}. Maybe Voucher was not found!`
+            });
+        }
+
         const voucherData = req.body;
         const voucher = await Voucher.update(voucherData, {
             where: { id: id }
@@ -143,7 +219,7 @@ let updateVoucher = async (req, res) => {
 module.exports = {
     createVoucher,
     deleteVoucher,
-    findAllVouchers,
+    getAllVouchers,
     getVoucherById,
     updateVoucher
 }

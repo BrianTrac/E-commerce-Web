@@ -7,10 +7,7 @@ import {
     DollarSign,
     Users,
     CreditCard,
-    ChevronDown,
     MoreVertical,
-    Bell,
-    Settings,
     Package,
 } from 'lucide-react';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';

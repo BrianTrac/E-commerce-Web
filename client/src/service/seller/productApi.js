@@ -108,3 +108,12 @@ export const getTotalRevenue = async (axiosPrivate) => {
         throw new Error(error.response?.data?.message || 'Failed to fetch total revenue');
     }
 };
+
+export const checkProductExist = async (axiosPrivate, id) => {
+    try {
+        const response = await axiosPrivate.get(`/api/seller/products/exist/${id}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to check product existence');
+    }
+}

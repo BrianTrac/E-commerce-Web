@@ -24,5 +24,7 @@ router.get('/followers/total', sellerController.getTotalFollowers);
 
 router.get('/reviews/total', sellerController.getTotalReviews);
 
+router.get('/products/exist/:id', sellerController.checkProductExist);
+
 
 module.exports = router;

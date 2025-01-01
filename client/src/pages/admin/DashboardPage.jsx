@@ -14,6 +14,37 @@ import {
 } from 'lucide-react';
 
 const Admin = () => {
+
+    const recentOrders = [
+        {
+            image: 'https://via.placeholder.com/40',
+            name: 'Decorative Plants',
+            date: '20 Sep - 03:00AM',
+            price: '$657.30',
+            status: 'Succeed'
+        }
+    ]
+
+    const recentCustomers = [
+        {
+            image: 'https://via.placeholder.com/40',
+            name: 'Junsung Park',
+            id: '#32449',
+            status: 'Paid'
+        }
+    ]
+
+    const topSellers = [
+        {
+            image: 'https://via.placeholder.com/40',
+            name: 'Gary Waters',
+            product: 'Clothes',
+            sold: 650,
+            price: '$37.50',
+            earnings: '$24,375'
+        }
+    ]
+
     // Sample data for charts
     const lineChartData = [
         { name: 'Jan', value: 100 },
@@ -42,15 +73,6 @@ const Admin = () => {
                 {/* Header */}
                 <div className="flex justify-between items-center mb-8">
                     <h2 className="text-xl font-semibold">Dashboards</h2>
-                    <div className="flex items-center space-x-4">
-                        <Settings className="w-6 h-6 text-gray-500" />
-                        <Bell className="w-6 h-6 text-gray-500" />
-                        <div className="flex items-center space-x-2">
-                            <img src="/api/placeholder/32/32" alt="User" className="w-8 h-8 rounded-full" />
-                            <span>John admin</span>
-                            <ChevronDown className="w-4 h-4" />
-                        </div>
-                    </div>
                 </div>
 
                 {/* Stats Grid */}
@@ -139,20 +161,21 @@ const Admin = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td className="py-2">
-                                            <div className="flex items-center space-x-2">
-                                                <img src="/api/placeholder/40/40" alt="Product" className="w-10 h-10 rounded" />
-                                                <span>Decorative Plants</span>
-                                            </div>
-                                        </td>
-                                        <td className="py-2">20 Sep - 03:00AM</td>
-                                        <td className="py-2">$657.30</td>
-                                        <td className="py-2">
-                                            <span className="px-2 py-1 bg-green-100 text-green-600 rounded">Succeed</span>
-                                        </td>
-                                    </tr>
-                                    {/* Add more rows as needed */}
+                                    {recentOrders.map((order, index) => (
+                                        <tr key={index}>
+                                            <td className="py-2">
+                                                <div className="flex items-center space-x-2">
+                                                    <img src={order.image} alt="Product" className="w-10 h-10 rounded" />
+                                                    <span>{order.name}</span>
+                                                </div>
+                                            </td>
+                                            <td className="py-2">{order.date}</td>
+                                            <td className="py-2">{order.price}</td>
+                                            <td className="py-2">
+                                                <span className="px-2 py-1 bg-green-100 text-green-600 rounded">{order.status}</span>
+                                            </td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
@@ -184,18 +207,18 @@ const Admin = () => {
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
                         <div className="space-y-4">
-                            {/* Customer items */}
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-3">
-                                    <img src="/api/placeholder/40/40" alt="Customer" className="w-10 h-10 rounded-full" />
-                                    <div>
-                                        <p className="font-medium">Junsung Park</p>
-                                        <p className="text-sm text-gray-500">ID #32449</p>
+                            {recentCustomers.map((customer, index) => (
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-3">
+                                        <img src={customer.image} alt="Customer" className="w-10 h-10 rounded-full" />
+                                        <div>
+                                            <p className="font-medium">{customer.name}</p>
+                                            <p className="text-sm text-gray-500">ID {customer.id}</p>
+                                        </div>
                                     </div>
+                                    <span className="px-2 py-1 bg-green-100 text-green-600 rounded">{customer.status}</span>
                                 </div>
-                                <span className="px-2 py-1 bg-green-100 text-green-600 rounded">Paid</span>
-                            </div>
-                            {/* Add more customer items */}
+                            ))}
                         </div>
                     </div>
 
@@ -216,19 +239,21 @@ const Admin = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td className="py-2">
-                                        <div className="flex items-center space-x-2">
-                                            <img src="/api/placeholder/32/32" alt="Seller" className="w-8 h-8 rounded-full" />
-                                            <span>Gary Waters</span>
-                                        </div>
-                                    </td>
-                                    <td className="py-2">Clothes</td>
-                                    <td className="py-2">650</td>
-                                    <td className="py-2">$37.50</td>
-                                    <td className="py-2">$24,375</td>
-                                </tr>
-                                {/* Add more rows as needed */}
+                                {topSellers.map((seller, index) => (
+                                    <tr>
+                                        <td className="py-2">
+                                            <div className="flex items-center space-x-2">
+                                                <img src={seller.image} alt="Seller" className="w-8 h-8 rounded-full" />
+                                                <span>Gary Waters</span>
+                                            </div>
+                                        </td>
+                                        <td className="py-2">{seller.product}</td>
+                                        <td className="py-2">{seller.sold}</td>
+                                        <td className="py-2">{seller.price}</td>
+                                        <td className="py-2">{seller.earnings}</td>
+                                    </tr>
+                                ))}
+
                             </tbody>
                         </table>
                     </div>

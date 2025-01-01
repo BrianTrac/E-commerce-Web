@@ -154,7 +154,11 @@ const SellerProductDetail = () => {
                     <ul className="list-disc pl-5 space-y-2 mt-2">
                       {spec.attributes.map((attribute, idx) => (
                         <li key={idx} className="text-gray-600">
-                          <strong>{attribute.name}:</strong> {attribute.value}
+                          <strong>{attribute.name}:</strong>{" "}
+                          {/* Render HTML từ giá trị */}
+                          <span
+                            dangerouslySetInnerHTML={{ __html: attribute.value }}
+                          ></span>
                         </li>
                       ))}
                     </ul>
@@ -162,9 +166,10 @@ const SellerProductDetail = () => {
                 ))
               ) : (
                 // Nếu specifications là chuỗi
-                <p className="text-lg font-medium text-gray-600">
-                  <strong>{product.specifications}</strong>
-                </p>
+                <p
+                  className="text-lg font-medium text-gray-600"
+                  dangerouslySetInnerHTML={{ __html: product.specifications }}
+                ></p>
               )}
             </div>
           </div>

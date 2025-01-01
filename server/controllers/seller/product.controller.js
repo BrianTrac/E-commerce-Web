@@ -170,7 +170,8 @@ const getProductById = async (req, res) => {
                 'specifications', // Giả sử đây là kiểu dữ liệu JSON
                 'rating_average',
                 'price',
-                'inventory_status'
+                'inventory_status',
+                'qty',
             ]
         });
 
@@ -198,7 +199,8 @@ const getProductById = async (req, res) => {
             specifications: product.specifications, // JSON specifications
             rating_average: product.rating_average,
             price: product.price,
-            inventory_status: product.inventory_status
+            inventory_status: product.inventory_status,
+            qty: product.qty,
         };
 
         res.status(200).json({ data: productDetail });
@@ -213,6 +215,20 @@ const getProductById = async (req, res) => {
 const addProductToStore = async (req, res) => {
     try {
         const productData = req.body;
+
+        // Lấy store_id
+        const seller = await Seller.findOne({
+            where: {
+                user_id: req.user.id
+            }
+        });
+
+        if(!seller) {
+            return res.status(400).json({ message: 'Seller not found' });
+        }
+
+        productData.current_seller.id = seller.id;
+        productData.current_seller.store_id = seller.store_id;
 
         // Kiểm tra và xử lý dữ liệu nếu cần (có thể bạn sẽ cần xử lý ảnh hay thông tin trước khi lưu)
         const newProduct = await Product.create(productData);

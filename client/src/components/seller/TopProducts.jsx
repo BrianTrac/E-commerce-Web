@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
 
 const TopProducts = ({ products }) => {
+  const navigate = useNavigate();
   const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
@@ -9,12 +11,20 @@ const TopProducts = ({ products }) => {
     }).format(price);
   };
 
+  const handleProductClick = (productId) => {
+    navigate(`/seller/product-management/detail/${productId}`);
+  };
+
   return (
     <div className="mt-8">
       <h2 className="text-3xl font-semibold mb-6">Top Selling Products</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div
+            key={product.id}
+            className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer"
+            onClick={() => handleProductClick(product.id)}
+          >
             <div className="relative h-64">
               <img
                 src={product.thumbnails[0]}

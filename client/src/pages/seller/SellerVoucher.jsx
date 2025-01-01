@@ -1,34 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Table, Tooltip, Modal, message, Input } from 'antd';
+import { Card, Button, Table, Tooltip, Modal, message, Typography } from 'antd';
 import { getVouchers, addVoucher, deleteVoucher } from '../../service/seller/voucherApi';
-import { checkProductExist, getProductById } from '../../service/seller/productApi';
+import { checkProductExist } from '../../service/seller/productApi';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 const { confirm } = Modal;
+const { Text } = Typography;
+import Select from 'react-select';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useProducts from '../../hooks/useProducts'; // Import custom hook
 
-//  Voucher
-//  id: number;
-//  discount: number;
-//  startDate: Date;
-//  endDate: Date;
-//  products: product_id;
-//  storeId: StoreId;
 
 const SellerVoucher = () => {
 
     const [voucherShop, setVoucherShop] = useState({discount: "10", start_date: "", end_date: ""});
     const [voucherForProduct, setVoucherForProduct] = useState({discount: "10", start_date: "", end_date: "", product_id: ""});
     const [voucherData, setVoucherData] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null);
     const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
+    const [searchTerm, setSearchTerm] = useState('');
+    const { products, loading, error, loadProducts } = useProducts(searchTerm, 1, 50);
     const axiosPrivate = useAxiosPrivate();
 
     const columns = [
-        { title: 'ID', dataIndex: 'id', key: 'id' },
-        { title: 'Discount', dataIndex: 'discount', key: 'discount', render: (discount) => <span>{discount}%</span> },
-        { title: 'Start date', dataIndex: 'start_date', key: 'start_date', render: (date) => <span>{new Date(date).toLocaleString()}</span> },
-        { title: 'End date', dataIndex: 'end_date', key: 'end_date', render: (date) => <span>{new Date(date).toLocaleString()}</span> },
-        { title: 'Product ID', dataIndex: 'product_id', key: 'product_id' },
-        { title: 'Action', dataIndex: '', key: 'action', render: (_, record) => 
+        { 
+            title: 'No.', key: 'index', width: '60px',
+            render: (_, __, index) => <Text>{(pagination.current - 1) * pagination.pageSize + index + 1}</Text>, 
+        },
+        { title: 'Phần trăm giảm', dataIndex: 'discount', key: 'discount', render: (discount) => <span>{discount}%</span> },
+        { title: 'Ngày bắt đầu', dataIndex: 'start_date', key: 'start_date', render: (date) => <span>{new Date(date).toLocaleString()}</span> },
+        { title: 'Ngày kết thúc', dataIndex: 'end_date', key: 'end_date', render: (date) => <span>{new Date(date).toLocaleString()}</span> },
+        { title: 'Sản phẩm', dataIndex: 'product_id', key: 'product_id',
+            render: (product_id) => {
+                const product = products.find((product) => product.id === product_id);
+                return product ? product.name : 'All products';
+            }
+         },
+        { title: 'Xóa', dataIndex: '', key: 'action', render: (_, record) => 
             <Tooltip title="Delete">
                 <Button
                 type="link"
@@ -53,6 +60,11 @@ const SellerVoucher = () => {
             console.error(error);
         }
     }
+
+    const handleSearchChange = (inputValue) => {
+        setSearchTerm(inputValue);
+        loadProducts(inputValue, 1); 
+      };
 
     const handleChangeVoucherShop = (e) => {
         const { name, value } = e.target;
@@ -90,6 +102,11 @@ const SellerVoucher = () => {
             return;
         }
 
+        if (new Date(voucherForProduct.end_date) < new Date()) {
+            alert("End date must be after current date!");
+            return;
+        }
+        
         const newVoucher = await addVoucher(axiosPrivate, voucherShop);
         if (!newVoucher) {
             alert("Add voucher unsuccessfully!");
@@ -104,7 +121,6 @@ const SellerVoucher = () => {
     };
 
     const handleAddVoucherForProduct = async() => {
-        console.log(voucherForProduct);
         if (!voucherForProduct.discount) {
             alert("Please choose percentage off for voucher!");
             return;
@@ -123,10 +139,16 @@ const SellerVoucher = () => {
             return;
         }
 
-        if (!voucherForProduct.product_id) {
-            alert("Please enter product ID!");
-            return; 
+        if (new Date(voucherForProduct.end_date) < new Date()) {
+            alert("End date must be after current date!");
+            return;
         }
+
+        if (!selectedProduct) {
+            alert("Please choose product for voucher!");
+            return;
+        }
+        voucherForProduct.product_id = selectedProduct.value;
 
         const response = await checkProductExist(axiosPrivate, voucherForProduct.product_id);
         if (response.message === "Product does not exist in the store") {
@@ -175,7 +197,7 @@ const SellerVoucher = () => {
                 <div className="flex-1 p-4">
                     {/* Header */}
                     <div className="flex justify-between items-center mb-8">
-                        <h2 className="text-xl font-semibold">Set voucher shop</h2>
+                        <h2 className="text-xl font-semibold">Đặt voucher cho cửa hàng</h2>
                     </div>
                     {/* Content for voucher shop */}
                     <div>
@@ -197,7 +219,7 @@ const SellerVoucher = () => {
                         </div>
 
                         <div>
-                            <p>Start date</p>
+                            <p>Ngày bắt đầu</p>
                             <input aria-label="Date and time" type="datetime-local" 
                             className="border-dashed border-2 rounded-md p-3 w-full mt-2 mb-4 focus:outline-none" 
                             name="start_date"
@@ -207,7 +229,7 @@ const SellerVoucher = () => {
                         </div>
 
                         <div>
-                            <p>End date</p>
+                            <p>Ngày kết thúc</p>
                             <input aria-label="Date and time" type="datetime-local" 
                                 className="border-dashed border-2 rounded-md p-3 w-full mt-2 mb-4"
                                 name="end_date"
@@ -223,7 +245,7 @@ const SellerVoucher = () => {
                                 onClick={handleAddVoucherShop}
                                 style={{ marginLeft: '10px', position: 'right' }}
                             >
-                                Save
+                                Thêm
                             </Button>
                         </div>
                     </div>
@@ -233,12 +255,12 @@ const SellerVoucher = () => {
                 <div className="flex-1 p-4">
                     {/* Header */}
                     <div className="flex justify-between items-center mb-8">
-                        <h2 className="text-xl font-semibold">Set voucher for specific product</h2>
+                        <h2 className="text-xl font-semibold">Đặt voucher cho sản phẩm cụ thể</h2>
                     </div>
                     {/* Content for specific product vouchers */}
                     <div>
                         <div>
-                            <p>Percentage off</p>
+                            <p>Phần trăm giảm</p>
                             <select className="border-dashed border-2 rounded-md p-3 w-full mt-2 mb-4" 
                             value={voucherForProduct.discount}
                             name="discount" 
@@ -254,7 +276,7 @@ const SellerVoucher = () => {
                         </div>
 
                         <div>
-                            <p>Start date</p>
+                            <p>Ngày bắt đầu</p>
                             <input aria-label="Date and time" type="datetime-local" 
                             className="border-dashed border-2 rounded-md p-3 w-full mt-2 mb-4"
                             name="start_date"
@@ -264,7 +286,7 @@ const SellerVoucher = () => {
                         </div>
 
                         <div>
-                            <p>End date</p>
+                            <p>Ngày kết thúc</p>
                             <input aria-label="Date and time" type="datetime-local" 
                             className="border-dashed border-2 rounded-md p-3 w-full mt-2 mb-4"
                             name="end_date"
@@ -274,21 +296,27 @@ const SellerVoucher = () => {
                         </div>
 
                         <div>
-                            <p>Product ID</p>
-                            <Input 
-                                className="border-dashed border-2 rounded-md p-3 w-full mt-2 mb-4"
-                                name="product_id"
-                                onChange={handleChangeVoucherForProduct}
-                                placeholder="Enter product ID"/>
+                            <p>Sản phẩm</p>
+                            <Select
+                                value={selectedProduct}
+                                onChange={setSelectedProduct}
+                                onInputChange={handleSearchChange} // Cập nhật từ khóa tìm kiếm khi người dùng gõ
+                                options={products.map((product) => ({
+                                    value: product.id,
+                                    label: product.name,
+                                }))}
+                                placeholder="Chọn sản phẩm"
+                                isClearable
+                                />
                         </div>
 
-                        <div className="flex justify-end">
+                        <div className="flex justify-end mt-4">
                             <Button
                                 type="primary"
                                 onClick={handleAddVoucherForProduct}
                                 style={{ marginLeft: '10px', position: 'right' }}
                             >
-                                Save
+                                Thêm
                             </Button>
                         </div>
                     </div>

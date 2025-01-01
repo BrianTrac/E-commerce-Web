@@ -49,7 +49,6 @@ let getTotalRevenue = async (req, res) => {
             user_id: id
         }
     });
-
     const storeId = seller?.store_id;
 
     if (!storeId) {

@@ -26,7 +26,6 @@ const Product = sequelize.define('Product', {
     category_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-
     },
     category_name: {
         type: DataTypes.TEXT,

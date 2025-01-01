@@ -93,14 +93,21 @@ const SellerDashboard = () => {
         setLoading(true);
         try {
             const response = await getTopSellingProductInDashboard(axiosPrivate, pagination.current, pagination.pageSize);
+
+            // Giới hạn số lượng sản phẩm hiển thị tối đa
+            const maxTotal = Math.min(response.totalItems, 9); // Giới hạn tối đa 10 sản phẩm
+
             setTopSellingProducts(response.products);
-            setPagination({ ...pagination, total: response.totalItems });
+            setPagination({
+                ...pagination,
+                total: maxTotal, // Cập nhật tổng số sản phẩm hiển thị
+            });
         } catch (err) {
             console.error(err);
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     if (loading) {
         return <div className="text-center text-xl">Loading...</div>;
@@ -242,12 +249,14 @@ const SellerDashboard = () => {
                             loading={loading}
                             rowKey="id"
                             pagination={{
-                                ...pagination,
+                                current: pagination.current,
+                                pageSize: pagination.pageSize,
+                                total: pagination.total, // Tổng số sản phẩm sau khi giới hạn
                                 position: ['bottomCenter'],
                                 showSizeChanger: false,
                                 showQuickJumper: false,
+                                onChange: (page) => setPagination({ ...pagination, current: page }),
                             }}
-                            onChange={(pag) => setPagination({ ...pagination, current: pag.current, pageSize: pag.pageSize })}
                         />
                     </div>
 

@@ -73,6 +73,7 @@ const SellerInfo = () => {
     try {
       const response = await updateSellerInfo(axiosPrivate, sellerInfo);
       alert(`${response.message}`);
+      setOriginalSellerInfo(sellerInfo); // Đồng bộ thông tin gốc
       setIsEditingSeller(false);
     } catch (err) {
       setError('Failed to save seller info');
@@ -83,16 +84,18 @@ const SellerInfo = () => {
   const handleSaveStore = async () => {
     try {
       let updatedStore = store;
-
-      // If a new logo is selected, upload it to Firebase and get the URL
+  
+      // Upload logo nếu có thay đổi
       if (logoFile) {
-        const uploadedImages = await uploadImages([logoFile], 'sellers'); // Use 'store-logos' folder
+        const uploadedImages = await uploadImages([logoFile], 'sellers'); // Sử dụng thư mục 'sellers'
         updatedStore = { ...updatedStore, icon: uploadedImages[0].thumbnail_url };
       }
-
+  
       const response = await updateStore(axiosPrivate, updatedStore);
       alert(`${response.message}`);
-      window.location.reload(); // Reload the page to show the updated store info
+      setOriginalStoreInfo(updatedStore); // Đồng bộ thông tin gốc
+      setLogoFile(null); // Reset file logo
+      setLogoPreview(null); // Reset preview logo
       setIsEditingStore(false);
     } catch (err) {
       setError('Failed to save store info');

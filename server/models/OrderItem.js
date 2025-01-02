@@ -2,7 +2,7 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/db'); // Đường dẫn đến file cấu hình Sequelize
 
-class OrderItem extends Model {}
+class OrderItem extends Model { }
 
 OrderItem.init(
     {
@@ -27,11 +27,20 @@ OrderItem.init(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        created_at: {
+            type: DataTypes.DATE,
+            defaultValue: new Date(),
+        },
+        updated_at: {
+            type: DataTypes.DATE,
+            defaultValue: new Date(),
+        },
     },
     {
         tableName: 'order_items',
-        sequelize,
         modelName: 'OrderItem',
+        sequelize,
+        timestamps: false,
     }
 );
 

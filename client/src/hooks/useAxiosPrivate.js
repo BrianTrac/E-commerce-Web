@@ -11,7 +11,7 @@ const useAxiosPrivate = () => {
     //  const { auth } = useAuth();
 
     useEffect(() => {
-        debugger;
+        // debugger;
         const requestInterceptor = axiosPrivate.interceptors.request.use(
             async config => {
                 if (!config.headers['Authorization']) {

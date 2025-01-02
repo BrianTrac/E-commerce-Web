@@ -48,11 +48,11 @@ Product.belongsTo(Category, {
 // Product.hasMany(OrderItem, { foreignKey: 'id' });
 
 // Define associations User - Order (one-to-many)
-User.hasMany(Order, { foreignKey: 'id' });
-Order.belongsTo(User, { foreignKey: 'id' });
+User.hasMany(Order, { foreignKey: 'user_id' });
+Order.belongsTo(User, { foreignKey: 'user_id' });
 
 Order.hasMany(OrderItem, { foreignKey: 'order_id'});
-OrderItem.belongsTo(Order, { foreignKey: 'id'});
+OrderItem.belongsTo(Order, { foreignKey: 'order_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 
 // OrderItem.belongsTo(Product, { foreignKey: 'id' });
 // Product.hasMany(OrderItem, { foreignKey: 'id'});

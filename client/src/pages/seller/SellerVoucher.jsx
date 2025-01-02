@@ -84,32 +84,32 @@ const SellerVoucher = () => {
 
     const handleAddVoucherShop = async() => {
         // Kiểm tra xem các thông tin bắt buộc có được nhập đầy đủ không
-        if (!voucherShop.discount) {
-            alert("Please choose percentage off for voucher!");
+        if (!voucherForProduct.discount) {
+            message.error('Please choose percentage off for voucher!');
             return;
         }
-        if (!voucherShop.start_date) {
-            alert("Please choose start date for voucher!");
+        if (!voucherForProduct.start_date) {
+            message.error('Please choose start date voucher!');
             return;
         }
-        if (!voucherShop.end_date) {
-            alert("Please choose end date voucher!");
+        if (!voucherForProduct.end_date) {
+            message.error('Please choose end date voucher!');
             return;
         }
 
-        if (new Date(voucherShop.start_date) > new Date(voucherShop.end_date)) {
-            alert("Start date must be before end date!");
+        if (new Date(voucherForProduct.start_date) > new Date(voucherForProduct.end_date)) {
+            message.error('Start date must be before end date!');
             return;
         }
 
         if (new Date(voucherForProduct.end_date) < new Date()) {
-            alert("End date must be after current date!");
+            message.error('End date must be after current date!');
             return;
         }
         
         const newVoucher = await addVoucher(axiosPrivate, voucherShop);
         if (!newVoucher) {
-            alert("Add voucher unsuccessfully!");
+            message.error('Add voucher unsuccessfully!');
             return;
         }
     
@@ -117,48 +117,48 @@ const SellerVoucher = () => {
     
         // Reset voucherForProduct 
         setVoucherShop({ discount: "", start_date: "", end_date: "" });
-        alert("Add voucher successfully!");
+        message.success('Voucher deleted successfully');
     };
 
     const handleAddVoucherForProduct = async() => {
         if (!voucherForProduct.discount) {
-            alert("Please choose percentage off for voucher!");
+            message.error('Please choose percentage off for voucher!');
             return;
         }
         if (!voucherForProduct.start_date) {
-            alert("Please choose start date for voucher!");
+            message.error('Please choose start date voucher!');
             return;
         }
         if (!voucherForProduct.end_date) {
-            alert("Please choose end date voucher!");
+            message.error('Please choose end date voucher!');
             return;
         }
 
         if (new Date(voucherForProduct.start_date) > new Date(voucherForProduct.end_date)) {
-            alert("Start date must be before end date!");
+            message.error('Start date must be before end date!');
             return;
         }
 
         if (new Date(voucherForProduct.end_date) < new Date()) {
-            alert("End date must be after current date!");
+            message.error('End date must be after current date!');
             return;
         }
 
         if (!selectedProduct) {
-            alert("Please choose product for voucher!");
+            message.error('Please choose product for voucher!');
             return;
         }
         voucherForProduct.product_id = selectedProduct.value;
 
         const response = await checkProductExist(axiosPrivate, voucherForProduct.product_id);
         if (response.message === "Product does not exist in the store") {
-            alert("Your store does not have products with this ID!");
+            message.error('Your store does not have products with this ID!');
             return;
         }
 
         const newVoucher = await addVoucher(axiosPrivate, voucherForProduct);
         if (!newVoucher) {
-            alert("Add voucher unsuccessfully!");
+            message.error(error.message || 'Failed to add voucher');
             return;
         }
 
@@ -167,7 +167,7 @@ const SellerVoucher = () => {
         // Reset voucherForProduct
         setVoucherForProduct({ discount: "", start_date: "", end_date: "" });
     
-        alert("Add voucher successfully!");
+        message.success('Voucher deleted successfully');
     };
 
     const handleDelete = (voucherId) => {

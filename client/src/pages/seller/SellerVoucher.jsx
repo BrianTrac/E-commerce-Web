@@ -72,6 +72,7 @@ const SellerVoucher = () => {
             ...prevState,  // Giữ lại các giá trị cũ của voucherShop
             [name]: value  // Chỉ cập nhật giá trị của trường name
         }));
+        console.log(voucherShop);
     };
 
     const handleChangeVoucherForProduct = (e) => {
@@ -84,32 +85,32 @@ const SellerVoucher = () => {
 
     const handleAddVoucherShop = async() => {
         // Kiểm tra xem các thông tin bắt buộc có được nhập đầy đủ không
-        if (!voucherForProduct.discount) {
+        if (!voucherShop.discount) {
             message.error('Please choose percentage off for voucher!');
             return;
         }
-        if (!voucherForProduct.start_date) {
+        if (!voucherShop.start_date) {
             message.error('Please choose start date voucher!');
             return;
         }
-        if (!voucherForProduct.end_date) {
+        if (!voucherShop.end_date) {
             message.error('Please choose end date voucher!');
             return;
         }
 
-        if (new Date(voucherForProduct.start_date) > new Date(voucherForProduct.end_date)) {
+        if (new Date(voucherShop.start_date) > new Date(voucherShop.end_date)) {
             message.error('Start date must be before end date!');
             return;
         }
 
-        if (new Date(voucherForProduct.end_date) < new Date()) {
+        if (new Date(voucherShop.end_date) < new Date()) {
             message.error('End date must be after current date!');
             return;
         }
         
         const newVoucher = await addVoucher(axiosPrivate, voucherShop);
         if (!newVoucher) {
-            message.error('Add voucher unsuccessfully!');
+            message.error('Failed to add voucher!');
             return;
         }
     
@@ -117,7 +118,7 @@ const SellerVoucher = () => {
     
         // Reset voucherForProduct 
         setVoucherShop({ discount: "", start_date: "", end_date: "" });
-        message.success('Voucher deleted successfully');
+        message.success('Voucher added successfully');
     };
 
     const handleAddVoucherForProduct = async() => {
@@ -158,16 +159,16 @@ const SellerVoucher = () => {
 
         const newVoucher = await addVoucher(axiosPrivate, voucherForProduct);
         if (!newVoucher) {
-            message.error(error.message || 'Failed to add voucher');
+            message.error('Failed to add voucher');
             return;
         }
 
         setVoucherData([...voucherData, newVoucher.voucher]);
     
         // Reset voucherForProduct
-        setVoucherForProduct({ discount: "", start_date: "", end_date: "" });
+        setVoucherForProduct({ discount: "", start_date: "", end_date: "", product_id: "" });
     
-        message.success('Voucher deleted successfully');
+        message.success('Voucher added successfully');
     };
 
     const handleDelete = (voucherId) => {

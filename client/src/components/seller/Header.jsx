@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuth } from "../../redux/reducers/user/authReducer"; // Importing the selector for user auth
 import { logout } from "../../redux/actions/user/authAction";
+import {
+    User,
+} from 'lucide-react';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -58,6 +61,12 @@ const Header = () => {
                 <div className="flex items-center space-x-2 relative" ref={userMenuRef}>
                     {isAuthenticated ? (
                         <>
+                            <span 
+                                className="p-2 bg-gray-100 rounded-full cursor-pointer" 
+                                onClick={toggleDropdown} 
+                            >
+                                <User className="w-6 h-6 text-gray-600" />
+                            </span>
                             <span 
                                 onClick={toggleDropdown} 
                                 className="cursor-pointer flex items-center space-x-2"

@@ -140,6 +140,9 @@ const SellerProductDetail = () => {
             <p className="text-lg font-semibold text-gray-700">
               <strong>Đã bán:</strong> {product.quantity_sold}
             </p>
+            <p className="text-lg font-semibold text-gray-700">
+              <strong>Số lượng còn:</strong> {product.qty}
+            </p>
             <p className="text-lg font-semibold text-gray-700 mt-4">
               <strong>Đánh giá:</strong> {rating.toFixed(1)} ⭐
             </p>

@@ -26,7 +26,7 @@ const SellerAddProduct = () => {
     const updatedPreviews = fileList.map((file) => ({
       uid: file.uid,
       name: file.name || file.url.split('/').pop(),
-      status: file.status,
+      status: file.status || 'done',
       url: file.url || (file.originFileObj ? URL.createObjectURL(file.originFileObj) : null),
       originFileObj: file.originFileObj,
     }));
@@ -37,6 +37,15 @@ const SellerAddProduct = () => {
   const handleRemoveImage = (file) => {
     setPreviewImages(previewImages.filter((img) => img.uid !== file.uid));
     setImageUploads(imageUploads.filter((upload) => upload.name !== file.name));
+  };
+
+  const validateFileType = (file) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      message.error(`${file.name} không phải là định dạng ảnh hợp lệ!`);
+      return Upload.LIST_IGNORE; // Ngăn file không được upload
+    }
+    return false; // Ngăn Ant Design upload tự động, nhưng vẫn thêm vào danh sách
   };
 
   const onSubmit = async (values) => {
@@ -55,6 +64,7 @@ const SellerAddProduct = () => {
 
       const productData = {
         ...values,
+        qty: values.qty || 1,
         category_id: selectedCategory?.value,
         category_name: selectedCategory?.label,
         specifications: formattedSpecifications,
@@ -111,13 +121,14 @@ const SellerAddProduct = () => {
           </Select>
         </Form.Item>
 
-        <Form.Item label="Ảnh sản phẩm">
+        <Form.Item label="Ảnh sản phẩm" >
           <Upload
             listType="picture-card"
             fileList={previewImages}
             onChange={handleImageChange}
             onRemove={handleRemoveImage}
-            beforeUpload={() => false}
+            beforeUpload={validateFileType}
+            multiple
           >
             {previewImages.length < 8 && (
               <div>
@@ -131,9 +142,21 @@ const SellerAddProduct = () => {
         <Form.Item
           name="discount_rate"
           label="Tỷ lệ giảm giá (%)"
-          rules={[{ type: 'number', min: 0, max: 100, message: 'Tỷ lệ giảm giá từ 0 đến 100' }]}
+          rules={[{ type: 'number', min: 0, max: 100, message: 'Tỷ lệ giảm giá phải từ 0 đến 100' }]}
         >
-          <InputNumber className="w-full" placeholder="Nhập tỷ lệ giảm giá" />
+          <InputNumber
+            className="w-full"
+            placeholder="Nhập tỷ lệ giảm giá"
+            onKeyDown={(event) => {
+              // Các phím được cho phép
+              const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', '-'];
+
+              // Kiểm tra nếu không phải số và không nằm trong danh sách allowedKeys
+              if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
+                event.preventDefault(); // Chặn phím không hợp lệ
+              }
+            }}
+          />
         </Form.Item>
 
         <Form.Item
@@ -141,7 +164,19 @@ const SellerAddProduct = () => {
           label="Giá gốc"
           rules={[{ required: true, message: 'Giá gốc là bắt buộc' }]}
         >
-          <InputNumber className="w-full" placeholder="Nhập giá gốc" />
+          <InputNumber
+            className="w-full"
+            placeholder="Nhập giá gốc"
+            onKeyDown={(event) => {
+              // Các phím được cho phép
+              const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', '-'];
+
+              // Kiểm tra nếu không phải số và không nằm trong danh sách allowedKeys
+              if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
+                event.preventDefault(); // Chặn phím không hợp lệ
+              }
+            }}
+          />
         </Form.Item>
 
         <Form.Item name="short_description" label="Miêu tả ngắn">
@@ -152,8 +187,25 @@ const SellerAddProduct = () => {
           <TextArea rows={5} placeholder="Nhập miêu tả chi tiết" />
         </Form.Item>
 
-        <Form.Item name="qty" label="Số lượng">
-          <InputNumber className="w-full" placeholder="Nhập số lượng" />
+        <Form.Item
+          name="qty"
+          label="Số lượng"
+          rules={[{ type: 'number', min: 1, max: 1000, message: 'Số lượng phải lớn hơn 0, bé hơn 1000' }]}
+
+        >
+          <InputNumber
+            className="w-full"
+            placeholder="Nhập số lượng"
+            onKeyDown={(event) => {
+              // Các phím được cho phép
+              const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete'];
+
+              // Kiểm tra nếu không phải số và không nằm trong danh sách allowedKeys
+              if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
+                event.preventDefault(); // Chặn phím không hợp lệ
+              }
+            }}
+          />
         </Form.Item>
 
         <Typography.Title level={4}>Thông số</Typography.Title>

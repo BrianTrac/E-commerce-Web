@@ -1,37 +1,62 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ChevronDown } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 const Sidebar = () => {
     return (
-        <div className="w-64 bg-[#1a2234] text-white p-4">
-            <div className="mb-8">
-                <h1 className="text-2xl font-bold">Seller Page</h1>
+        <div className="w-64 bg-gradient-to-b from-gray-800 to-gray-900 text-white p-6 fixed top-0 left-0 h-full shadow-lg">
+            <div className="mb-10 text-center">
+                <h1 className="text-3xl font-bold tracking-wider">Seller Panel</h1>
             </div>
 
             <nav>
-                <div className="space-y-2">
-                    <Link to="/seller/dashboard" className="flex items-center space-x-2 p-2 rounded hover:bg-blue-600">
-                        <span>Dashboard</span>
-                        <ChevronDown className="w-4 h-4" />
-                    </Link>
-                    <Link to="/seller/product-management" className="flex items-center space-x-2 p-2 rounded hover:bg-blue-600">
-                        <span>Product Management</span>
-                        <ChevronDown className="w-4 h-4" />
-                    </Link>
-                    <Link to="/seller/order" className="flex items-center space-x-2 p-2 rounded hover:bg-blue-600">
-                        <span>Order</span>
-                        <ChevronDown className="w-4 h-4" />
-                    </Link>
-                    <Link to="/seller/voucher" className="flex items-center space-x-2 p-2 rounded hover:bg-blue-600">
-                        <span>Voucher</span>
-                        <ChevronDown className="w-4 h-4" />
-                    </Link>
-                    <Link to="/seller/info" className="flex items-center space-x-2 p-2 rounded hover:bg-blue-600">
-                        <span>Info</span>
-                        <ChevronDown className="w-4 h-4" />
-                    </Link>
-                </div>
+                <ul className="space-y-4">
+                    <li>
+                        <Link
+                            to="/seller/dashboard"
+                            className="flex items-center p-3 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
+                        >
+                            <span className="flex-grow">Dashboard</span>
+                            <ChevronRight className="w-5 h-5" />
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/seller/product-management"
+                            className="flex items-center p-3 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
+                        >
+                            <span className="flex-grow">Product Management</span>
+                            <ChevronRight className="w-5 h-5" />
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/seller/order"
+                            className="flex items-center p-3 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
+                        >
+                            <span className="flex-grow">Orders</span>
+                            <ChevronRight className="w-5 h-5" />
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/seller/voucher"
+                            className="flex items-center p-3 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
+                        >
+                            <span className="flex-grow">Vouchers</span>
+                            <ChevronRight className="w-5 h-5" />
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/seller/info"
+                            className="flex items-center p-3 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
+                        >
+                            <span className="flex-grow">Account Info</span>
+                            <ChevronRight className="w-5 h-5" />
+                        </Link>
+                    </li>
+                </ul>
             </nav>
         </div>
     );

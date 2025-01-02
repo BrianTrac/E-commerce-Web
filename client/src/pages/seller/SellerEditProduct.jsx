@@ -21,7 +21,7 @@ const SellerEditProduct = () => {
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const { categories, loadCategories } = useCategories(searchTerm, 1, 50);
-
+  console.log('categories:', categories);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,7 +59,7 @@ const SellerEditProduct = () => {
         setSelectedCategory({ value: product.category_id, label: product.category_name });
 
         form.setFieldsValue({
-          category: product.category_id, // Sử dụng ID để khớp với Select
+          category: product.category_id,
         });
       } catch (error) {
         console.error('Error loading product:', error);
@@ -88,19 +88,23 @@ const SellerEditProduct = () => {
   };
 
   const onSubmit = async (values) => {
+    console.log('Form values:', values);
     try {
       const newImageUrls = await uploadImages(imageUploads);
       const existingImageUrls = previewImages
         .filter(img => img.uid.startsWith('existing'))
         .map(img => img.url);
 
-      const allImageUrls = [...existingImageUrls, ...newImageUrls];
+      // Gộp tất cả URL ảnh (cũ và mới)
+      const allImageUrls = [...existingImageUrls, ...newImageUrls.map((img) => img.thumbnail_url)];
+      // Tạo mảng `images` với định dạng [{ thumbnail_url: ... }]
+      const formattedImages = allImageUrls.map((url) => ({ thumbnail_url: url }));
 
       const updatedData = {
         ...values,
         category_id: selectedCategory?.value,
         category_name: selectedCategory?.label,
-        images: allImageUrls.map((url) => ({ thumbnail_url: url })), // For full image list
+        images: formattedImages,
         thumbnail_url: allImageUrls[0] || '', // Ensure a string is passed
         specifications,
       };
@@ -135,13 +139,20 @@ const SellerEditProduct = () => {
             showSearch
             placeholder="Chọn danh mục"
             filterOption={false}
-            onSearch={(value) => setSearchTerm(value)}
-            onChange={(value) => setSelectedCategory(categories.find(category => category.id === value))}
+            onSearch={(value) => setSearchTerm(value)} // Cập nhật khi tìm kiếm
+            onChange={(value) => {
+              const category = categories.find((cat) => cat.id === value); // Tìm category theo id
+              if (category) {
+                setSelectedCategory({ value: category.id, label: category.name }); // Cập nhật state
+                form.setFieldsValue({ category: category.id }); // Cập nhật giá trị trong form
+              }
+            }}
           >
-            {categories.map(category => (
+            {categories.map((category) => (
               <Option key={category.id} value={category.id}>{category.name}</Option>
             ))}
           </Select>
+
         </Form.Item>
 
         <Form.Item label="Ảnh sản phẩm">

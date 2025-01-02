@@ -68,8 +68,6 @@ const SellerOrder = () => {
       render: (user) => (
         <>
           <Text strong>{user.username}</Text>
-          <br />
-          <Text type="secondary">{user.email}</Text>
         </>
       ),
     },
@@ -88,11 +86,29 @@ const SellerOrder = () => {
           status === 'pending'
             ? 'orange'
             : status === 'processing'
-            ? 'green'
-            : status === 'cancelled'
-            ? 'red'
-            : 'blue';
+              ? 'green'
+              : status === 'cancelled'
+                ? 'red'
+                : 'blue';
         return <Tag color={color}>{status.toUpperCase()}</Tag>;
+      },
+    },
+    {
+      title: 'Order Date & Time',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (created_at) => {
+        const date = new Date(created_at);
+        const formattedDate = date.toLocaleDateString('en-GB'); // Format as dd/mm/yyyy
+        const formattedTime = date.toLocaleTimeString('en-GB', {
+          hour: '2-digit',
+          minute: '2-digit',
+        }); // Format as HH:mm
+        return (
+          <Text>
+            {formattedDate} {formattedTime}
+          </Text>
+        );
       },
     },
     {

@@ -67,16 +67,18 @@ const SellerProductDetail = () => {
       <div className="relative">
         {/* Back button */}
         <button
-          onClick={() => navigate(-1)}  // Go back to the previous page
+          onClick={() => navigate(-1)} // Go back to the previous page
           className="absolute top-1 left-1 text-white bg-gray-800 p-2 rounded-full shadow-lg hover:bg-gray-700"
         >
           <FaArrowLeft size={20} />
         </button>
-
       </div>
       <div className="container mx-auto p-6 space-y-6">
         <h1 className="text-3xl font-bold text-center">{product.name}</h1>
 
+        <div>
+          
+        </div>
         <div className="max-w-3xl mx-auto relative">
           {product.thumbnails.length > 1 ? (
             // Hiển thị Swiper nếu có hơn 1 ảnh
@@ -125,26 +127,26 @@ const SellerProductDetail = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div>
+          <div className="space-y-4">
             <p className="text-lg font-semibold text-gray-700">
-              <strong>Discount Rate:</strong> <span className="text-red-500">{product.discount_rate}%</span>
+              <strong>Giảm giá:</strong> <span className="text-red-500">{product.discount_rate}%</span>
             </p>
             <p className="text-lg font-semibold text-gray-700 line-through">
-              <strong>Original Price:</strong> {Number(product.original_price).toLocaleString()} VND
+              <strong>Giá gốc:</strong> {Number(product.original_price).toLocaleString()} VND
             </p>
             <p className="text-lg font-semibold text-gray-700">
-              <strong>Price:</strong> <span className="text-green-500">{Number(product.price).toLocaleString()} VND</span>
+              <strong>Giá giảm:</strong> <span className="text-green-500">{Number(product.price).toLocaleString()} VND</span>
             </p>
             <p className="text-lg font-semibold text-gray-700">
-              <strong>Quantity Sold:</strong> {product.quantity_sold}
+              <strong>Đã bán:</strong> {product.quantity_sold}
             </p>
             <p className="text-lg font-semibold text-gray-700 mt-4">
-              <strong>Rating Average:</strong> {rating.toFixed(1)} ⭐
+              <strong>Đánh giá:</strong> {rating.toFixed(1)} ⭐
             </p>
           </div>
 
           <div>
-            <p className="text-xl font-semibold text-gray-700 mb-4">Specifications:</p>
+            <p className="text-lg font-semibold text-gray-700"><strong>Thông tin</strong></p>
             <div className="space-y-4">
               {Array.isArray(product.specifications) ? (
                 // Nếu specifications là mảng
@@ -178,7 +180,7 @@ const SellerProductDetail = () => {
         {/* Description section */}
         <div className="mt-6">
           <p className="text-lg font-semibold text-gray-700">
-            <strong>Description:</strong>
+            <strong>Mô tả:</strong>
           </p>
           <div
             ref={descriptionRef}

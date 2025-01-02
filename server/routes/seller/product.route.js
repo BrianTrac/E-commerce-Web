@@ -17,6 +17,8 @@ router.post('/add', productController.addProductToStore);
 
 router.delete('/remove/:productId', productController.deleteProduct);
 
+router.post('/remove-multiple', productController.deleteMultipleProducts);
+
 router.patch('/update/:productId', productController.updateProduct);
 
 router.get('/top-selling/:storeId', productController.getTopSellingProducts_v2);

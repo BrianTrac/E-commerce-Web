@@ -275,6 +275,42 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+const deleteMultipleProducts = async (req, res) => {
+    const { ids } = req.body;
+
+    try {
+        console.log(`Attempting to delete multiple products with IDs: ${ids}`); // Debug log
+        
+        // Kiểm tra nếu danh sách IDs trống hoặc không hợp lệ
+        if (!Array.isArray(ids) || ids.length === 0) {
+            console.warn('No valid product IDs provided for deletion');
+            return res.status(400).json({ message: "No valid product IDs provided" });
+        }
+
+        // Thực hiện xóa sản phẩm
+        const result = await Product.destroy({
+            where: {
+                id: ids, // Xóa tất cả các sản phẩm có ID nằm trong danh sách ids
+            },
+        });
+
+        console.log(`Number of products deleted: ${result}`); // Debug log
+
+        // Nếu không xóa được sản phẩm nào
+        if (result === 0) {
+            console.warn(`No products found matching the provided IDs: ${ids}`);
+            return res.status(404).json({ message: "No products found for deletion" });
+        }
+
+        console.log(`Products with IDs ${ids} deleted successfully`);
+        res.status(200).json({ message: `${result} product(s) deleted successfully` });
+    } catch (error) {
+        console.error('Error deleting multiple products:', error);
+        res.status(500).json({ message: "Error deleting multiple products" });
+    }
+};
+
+
 const updateProduct = async (req, res) => {
     const productId = req.params.productId;
     const updateData = req.body;
@@ -452,6 +488,7 @@ module.exports = {
     getProductById,
     addProductToStore,
     deleteProduct,
+    deleteMultipleProducts,
     updateProduct,
     getTopSellingProducts_v2,
     getFlashSaleProducts,

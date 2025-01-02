@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { getSellerInfo, updateSellerInfo } from '../../service/seller/sellerApi';
-import { FaPhone, FaMapMarkerAlt, FaClock, FaCreditCard, FaRegIdBadge, FaEdit, FaStar } from 'react-icons/fa';
 import { getStore, updateStore } from '../../service/seller/storeApi';
 import { getTopSellingProducts } from '../../service/seller/productApi';
 import TopProducts from '../../components/seller/TopProducts';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { uploadImages } from '../../helpers/upload';
+import { Card, Typography, Input, Button, Upload, Space, message, Spin } from 'antd';
+import {
+  PhoneOutlined,
+  EnvironmentOutlined,
+  ClockCircleOutlined,
+  CreditCardOutlined,
+  IdcardOutlined,
+  EditOutlined,
+  StarOutlined,
+  UsergroupAddOutlined,
+} from '@ant-design/icons';
+
+const { Title } = Typography;
 
 const SellerInfo = () => {
   const [sellerInfo, setSellerInfo] = useState(null);
@@ -56,56 +68,57 @@ const SellerInfo = () => {
 
   const handleEditStore = () => {
     setIsEditingStore(true);
+    setLogoPreview(store?.icon || null); // Show the current logo as preview
   };
 
-  const handleLogoChange = (e) => {
-    const file = e.target.files[0];
+  const handleLogoChange = ({ file }) => {
     if (file) {
       setLogoFile(file);
-      setLogoPreview(URL.createObjectURL(file)); // Show image preview
+      setLogoPreview(URL.createObjectURL(file));
     }
   };
 
   const handleSaveSeller = async () => {
     try {
       const response = await updateSellerInfo(axiosPrivate, sellerInfo);
-      alert(`${response.message}`);
-      setOriginalSellerInfo(sellerInfo); // Đồng bộ thông tin gốc
+      message.success(response.message);
+      setOriginalSellerInfo(sellerInfo);
       setIsEditingSeller(false);
     } catch (err) {
-      setError('Failed to save seller info');
+      message.error('Failed to save seller info');
     }
   };
-
 
   const handleSaveStore = async () => {
     try {
       let updatedStore = store;
-  
-      // Upload logo nếu có thay đổi
+
       if (logoFile) {
-        const uploadedImages = await uploadImages([logoFile], 'sellers'); // Sử dụng thư mục 'sellers'
+        const uploadedImages = await uploadImages([logoFile], 'sellers');
         updatedStore = { ...updatedStore, icon: uploadedImages[0].thumbnail_url };
       }
-  
+
       const response = await updateStore(axiosPrivate, updatedStore);
-      alert(`${response.message}`);
-      setOriginalStoreInfo(updatedStore); // Đồng bộ thông tin gốc
-      setLogoFile(null); // Reset file logo
-      setLogoPreview(null); // Reset preview logo
+      message.success(response.message);
+      setStore(updatedStore); // Update store with new logo
+      setOriginalStoreInfo(updatedStore);
+      setLogoFile(null);
+      setLogoPreview(null);
       setIsEditingStore(false);
     } catch (err) {
-      setError('Failed to save store info');
+      message.error('Failed to save store info');
     }
   };
 
   const handleCancelSeller = () => {
-    setSellerInfo(originalSellerInfo);  // Reset to original data
+    setSellerInfo(originalSellerInfo);
     setIsEditingSeller(false);
   };
 
   const handleCancelStore = () => {
-    setStore(originalStoreInfo);  // Reset to original data
+    setStore(originalStoreInfo);
+    setLogoFile(null);
+    setLogoPreview(null);
     setIsEditingStore(false);
   };
 
@@ -120,7 +133,7 @@ const SellerInfo = () => {
   };
 
   if (loading) {
-    return <div className="text-center">Loading...</div>;
+    return <Spin className="flex justify-center items-center h-screen" size="large" />;
   }
 
   if (error) {
@@ -128,205 +141,127 @@ const SellerInfo = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg space-y-8">
-      {/* Seller Info Section */}
-      <div className="space-y-6">
-        <h2 className="text-3xl font-semibold">Seller Information</h2>
-        {/* Display Username and Email */}
-        <div className="flex items-center space-x-3">
-          <span className="font-medium text-gray-700">Username:</span>
-          <input
-            type="text"
-            name="username"
-            value={sellerInfo?.username || ''}
-            className="text-gray-500 w-full border-b border-gray-300"
-            disabled={true}
+    <div className="max-w-6xl mx-auto p-6 space-y-8">
+      <Card className="shadow-lg p-6">
+        <Title level={3}>Seller Information</Title>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <Input
+            addonBefore={<PhoneOutlined />}
+            name="phone"
+            value={sellerInfo.phone || ''}
+            onChange={handleChange}
+            placeholder="Phone Number"
+            disabled={!isEditingSeller}
+          />
+          <Input
+            addonBefore={<EnvironmentOutlined />}
+            name="address"
+            value={sellerInfo.address || ''}
+            onChange={handleChange}
+            placeholder="Address"
+            disabled={!isEditingSeller}
+          />
+          <Input
+            addonBefore={<ClockCircleOutlined />}
+            name="working_time"
+            value={sellerInfo.working_time || ''}
+            onChange={handleChange}
+            placeholder="Working Hours"
+            disabled={!isEditingSeller}
+          />
+          <Input
+            addonBefore={<CreditCardOutlined />}
+            name="payment_info"
+            value={sellerInfo.payment_info || ''}
+            onChange={handleChange}
+            placeholder="Payment Information"
+            disabled={!isEditingSeller}
+          />
+          <Input.TextArea
+            addonBefore={<IdcardOutlined />}
+            name="description"
+            value={sellerInfo.description || ''}
+            onChange={handleChange}
+            placeholder="Description"
+            disabled={!isEditingSeller}
+            rows={3}
           />
         </div>
-        <div className="flex items-center space-x-3">
-          <span className="font-medium text-gray-700">Email:</span>
-          <input
-            type="email"
-            name="email"
-            value={sellerInfo?.email || ''}
-            className="text-gray-500 w-full border-b border-gray-300"
-            disabled={true}
-          />
-        </div>
-
-        {/* Editable Seller Fields */}
-        <div className="space-y-4">
-          <div className="flex items-center space-x-3">
-            <FaPhone className="text-gray-500" />
-            <input
-              type="text"
-              name="phone"
-              value={sellerInfo.phone || ''}
-              onChange={handleChange}
-              className="text-gray-700 w-full border-b border-gray-300"
-              disabled={!isEditingSeller}
-            />
-          </div>
-          <div className="flex items-center space-x-3">
-            <FaMapMarkerAlt className="text-gray-500" />
-            <input
-              type="text"
-              name="address"
-              value={sellerInfo.address || ''}
-              onChange={handleChange}
-              className="text-gray-700 w-full border-b border-gray-300"
-              disabled={!isEditingSeller}
-            />
-          </div>
-          <div className="flex items-center space-x-3">
-            <FaClock className="text-gray-500" />
-            <input
-              type="text"
-              name="working_time"
-              value={sellerInfo.working_time || ''}
-              onChange={handleChange}
-              className="text-gray-700 w-full border-b border-gray-300"
-              disabled={!isEditingSeller}
-            />
-          </div>
-          <div className="flex items-center space-x-3">
-            <FaCreditCard className="text-gray-500" />
-            <input
-              type="text"
-              name="payment_info"
-              value={sellerInfo.payment_info || ''}
-              onChange={handleChange}
-              className="text-gray-700 w-full border-b border-gray-300"
-              disabled={!isEditingSeller}
-            />
-          </div>
-          <div className="flex items-center space-x-3">
-            <FaRegIdBadge className="text-gray-500" />
-            <textarea
-              name="description"
-              value={sellerInfo.description || ''}
-              onChange={handleChange}
-              className="text-gray-700 w-full border-b border-gray-300"
-              disabled={!isEditingSeller}
-            />
-          </div>
-        </div>
-
-        {/* Seller Info Edit Button */}
-        <div className="flex space-x-4 mt-6 justify-center">
+        <Space className="mt-4">
           {!isEditingSeller ? (
-            <button
-              onClick={handleEditSeller}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-            >
-              <FaEdit className="inline mr-2" /> Edit Seller Info
-            </button>
+            <Button type="primary" icon={<EditOutlined />} onClick={handleEditSeller}>
+              Edit Seller Info
+            </Button>
           ) : (
             <>
-              <button
-                onClick={handleCancelSeller}
-                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveSeller}
-                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-              >
-                Save Seller Info
-              </button>
+              <Button onClick={handleCancelSeller}>Cancel</Button>
+              <Button type="primary" onClick={handleSaveSeller}>Save</Button>
             </>
           )}
-        </div>
-      </div>
+        </Space>
+      </Card>
 
-      {/* Store Info Section */}
-      <div className="space-y-6">
-        <h2 className="text-3xl font-semibold">Store Information</h2>
+      <Card className="shadow-lg p-6">
+        <Title level={3}>Store Information</Title>
         <div className="text-center mb-6">
-          {/* Editable Store Logo */}
           {isEditingStore ? (
-            <div>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleLogoChange}
-                className="mb-4"
-              />
-              {logoPreview && (
-                <img
-                  src={logoPreview}
-                  alt="Logo Preview"
-                  className="w-32 h-32 object-cover mx-auto rounded-full"
-                />
-              )}
-            </div>
+            <Upload
+              listType="picture-card"
+              beforeUpload={() => false}
+              maxCount={1} // Only allow one image upload
+              onChange={handleLogoChange}
+              showUploadList={false}
+            >
+              {logoPreview ? <img src={logoPreview} alt="Logo Preview" className="w-32 h-32 object-cover rounded-full" /> : 'Upload Logo'}
+            </Upload>
           ) : (
             <img
-              src={store?.icon || '/path/to/default/logo.png'}
+              src={store?.icon || ''}
               alt="Logo"
               className="w-32 h-32 mx-auto rounded-full"
             />
           )}
+        </div>
 
-          {/* Editable Store Name */}
-          <div className="mt-4">
+        <Input
+          name="name"
+          value={store.name || ''}
+          onChange={handleChangeStore}
+          placeholder="Store Name"
+          disabled={!isEditingStore}
+          className="text-center font-semibold text-lg"
+        />
+
+        <div className="mt-4 flex justify-center gap-8">
+          <div className="flex items-center gap-2">
+            <StarOutlined className="text-yellow-500" />
+            <span className="font-medium">
+              {parseFloat(store.avg_rating_point || 0).toFixed(1)} Stars
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <UsergroupAddOutlined className="text-blue-500" />
+            <span className="font-medium">{store.total_follower || 0} Followers</span>
+          </div>
+        </div>
+
+        <div className="mt-4 flex justify-center items-center gap-4">
+          <Space className="mt-4">
             {!isEditingStore ? (
-              <h3 className="text-xl font-medium">{store.name}</h3>
+              <Button type="primary" icon={<EditOutlined />} onClick={handleEditStore}>
+                Edit Store Info
+              </Button>
             ) : (
-              <input
-                type="text"
-                name="name"
-                value={store.name || ''}
-                onChange={handleChangeStore}
-                className="text-xl font-medium w-full border-b border-gray-300"
-              />
+              <>
+                <Button onClick={handleCancelStore}>Cancel</Button>
+                <Button type="primary" onClick={handleSaveStore}>Save</Button>
+              </>
             )}
-          </div>
-
-          {/* Rating and Followers */}
-          <div className="flex justify-center items-center space-x-4 mt-4">
-            <div className="flex items-center space-x-2">
-              <FaStar className="text-yellow-500" />
-              <span className="font-medium">{store.avg_rating_point}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span className="font-medium">Followers:</span>
-              <span className="text-gray-500">{store.total_follower}</span>
-            </div>
-          </div>
+          </Space>
         </div>
-
-        {/* Store Info Edit Button */}
-        <div className="flex space-x-4 mt-6 justify-center">
-          {!isEditingStore ? (
-            <button
-              onClick={handleEditStore}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-            >
-              <FaEdit className="inline mr-2" /> Edit Store Info
-            </button>
-          ) : (
-            <>
-              <button
-                onClick={handleCancelStore}
-                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveStore}
-                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-              >
-                Save Store Info
-              </button>
-            </>
-          )}
-        </div>
-      </div>
+      </Card>
 
       <TopProducts products={topProducts} />
-
     </div>
   );
 };

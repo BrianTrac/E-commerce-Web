@@ -10,4 +10,6 @@ router.get('/potential-customer', orderController.getPotentialCustomer);
 
 router.get('/recent', orderController.getRecentOrders);
 
+router.get('/monthly-revenue', orderController.getMonthlyRevenue);
+
 module.exports = router;

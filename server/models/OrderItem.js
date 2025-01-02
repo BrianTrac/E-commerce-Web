@@ -32,6 +32,7 @@ OrderItem.init(
         tableName: 'order_items',
         sequelize,
         modelName: 'OrderItem',
+        underscored: true,
     }
 );
 

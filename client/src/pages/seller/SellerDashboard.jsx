@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Tooltip, Typography, Tag } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as TooltipRecharts, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as TooltipRecharts, ResponsiveContainer, Legend } from 'recharts';
 import { getTopSellingProductInDashboard, getTotalFollowers, getTotalProducts, getTotalRevenue, getTotalReviews } from '../../service/seller/productApi';
-import { getPotentialCustomer, getRecentOrders } from '../../service/seller/orderApi';
+import { getPotentialCustomer, getRecentOrders, getMonthlyRevenue } from '../../service/seller/orderApi';
 import {
     DollarSign,
     Users,
@@ -25,20 +25,20 @@ const SellerDashboard = () => {
         { name: 'Jun', value: 130 },
     ];
 
-    const salesData = [
-        { month: 'Jan', min: 150, max: 400 },
-        { month: 'Feb', min: 200, max: 450 },
-        { month: 'Mar', min: 180, max: 420 },
-        { month: 'Apr', min: 220, max: 480 },
-        { month: 'May', min: 250, max: 500 },
-        { month: 'Jun', min: 280, max: 520 },
-        { month: 'Jul', min: 300, max: 550 },
-        { month: 'Aug', min: 320, max: 580 },
-        { month: 'Sep', min: 350, max: 600 },
-        { month: 'Oct', min: 380, max: 620 },
-        { month: 'Nov', min: 400, max: 650 },
-        { month: 'Dec', min: 420, max: 680 },
-    ];
+    // const salesDataSample = [
+    //     { month: "Jan", value: 400000 },
+    //     { month: "Feb", value: 0 },
+    //     { month: "Mar", value: 200000 },
+    //     { month: "Apr", value: 300000 },
+    //     { month: "May", value: 150000 },
+    //     { month: "Jun", value: 0 },
+    //     { month: "Jul", value: 250000 },
+    //     { month: "Aug", value: 100000 },
+    //     { month: "Sep", value: 450000 },
+    //     { month: "Oct", value: 0 },
+    //     { month: "Nov", value: 350000 },
+    //     { month: "Dec", value: 400000 },
+    // ];
 
     const navigate = useNavigate();
     const [topSellingProducts, setTopSellingProducts] = useState([]);
@@ -50,6 +50,7 @@ const SellerDashboard = () => {
     const [totalReviews, setTotalReviews] = useState(0);
     const [potentialCustomers, setPotentialCustomers] = useState([]);
     const [recentOrders, setRecentOrders] = useState([]);
+    const [salesData, setSalesData] = useState([]);
     const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
@@ -63,6 +64,7 @@ const SellerDashboard = () => {
         loadTotalReviews();
         loadPotentialCustomers();
         loadRecentOrders();
+        loadMonthlySales();
     }, []);
 
     const loadTotalRevenue = async () => {
@@ -113,8 +115,16 @@ const SellerDashboard = () => {
     const loadRecentOrders = async () => {
         try {
             const response = await getRecentOrders(axiosPrivate);
-            console.log(response);
             setRecentOrders(response.orders);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const loadMonthlySales = async () => {
+        try {
+            const response = await getMonthlyRevenue(axiosPrivate);
+            setSalesData(response.data);
         } catch (err) {
             console.error(err);
         }
@@ -274,7 +284,6 @@ const SellerDashboard = () => {
                             </h3>
                         </div>
 
-                        <p className="text-sm text-gray-500">Compared to Jan 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
                                 <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} dot={false} />
@@ -295,7 +304,6 @@ const SellerDashboard = () => {
                             <h3 className="text-2xl font-bold mb-1 ml-4">{totalProducts}</h3>
                         </div>
 
-                        <p className="text-sm text-gray-500">Compared to Aug 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
                                 <Line type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={2} dot={false} />
@@ -316,7 +324,6 @@ const SellerDashboard = () => {
                             <h3 className="text-2xl font-bold mb-1 ml-4">{totalFollowers}</h3>
                         </div>
 
-                        <p className="text-sm text-gray-500">Compared to May 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
                                 <Line type="monotone" dataKey="value" stroke="#f97316" strokeWidth={2} dot={false} />
@@ -337,7 +344,6 @@ const SellerDashboard = () => {
                             <h3 className="text-2xl font-bold mb-1 ml-4">{totalReviews}</h3>
                         </div>
 
-                        <p className="text-sm text-gray-500">Compared to July 2024</p>
                         <div className="mt-4">
                             <LineChart width={200} height={60} data={lineChartData}>
                                 <Line type="monotone" dataKey="value" stroke="#ec4899" strokeWidth={2} dot={false} />
@@ -354,20 +360,20 @@ const SellerDashboard = () => {
                     </div>
 
                     <Table
-                            columns={topSellingProductsColumns}
-                            dataSource={topSellingProducts}
-                            loading={loading}
-                            rowKey="id"
-                            pagination={{
-                                current: pagination.current,
-                                pageSize: pagination.pageSize,
-                                total: pagination.total, // Tổng số sản phẩm sau khi giới hạn
-                                position: ['bottomCenter'],
-                                showSizeChanger: false,
-                                showQuickJumper: false,
-                                onChange: (page) => setPagination({ ...pagination, current: page }),
-                            }}
-                        />
+                        columns={topSellingProductsColumns}
+                        dataSource={topSellingProducts}
+                        loading={loading}
+                        rowKey="id"
+                        pagination={{
+                            current: pagination.current,
+                            pageSize: pagination.pageSize,
+                            total: pagination.total, // Tổng số sản phẩm sau khi giới hạn
+                            position: ['bottomCenter'],
+                            showSizeChanger: false,
+                            showQuickJumper: false,
+                            onChange: (page) => setPagination({ ...pagination, current: page }),
+                        }}
+                    />
                 </div>
                 
                 {/* Sales Overview */}
@@ -376,15 +382,23 @@ const SellerDashboard = () => {
                         <h3 className="text-lg font-semibold">Sales Overview</h3>
                         <MoreVertical className="w-4 h-4 text-gray-400" />
                     </div>
-                    <div className='flex justify-betwwen' style={{ width: '100%', height: '100%' }}>
-                        <BarChart width={1000} height={600} data={salesData}>
+                    <div style={{ width: '100%', height: '500px' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart 
+                            width={1000} height={600} data={salesData} 
+                            margin={{ top: 20, right: 20, left: 40, bottom: 20 }} 
+                            barCategoryGap="20%"
+                            >
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="month" />
-                            <YAxis />
+                            <XAxis dataKey="month"/>
+                            <YAxis
+                                tickFormatter={formatCurrency} // Format Y-axis as currency
+                                domain={[0, "dataMax + 100000"]} // Ensure some padding above max value 
+                            />
                             <TooltipRecharts />
-                            <Bar dataKey="max" fill="#3b82f6" />
-                            <Bar dataKey="min" fill="#93c5fd" />
+                            <Bar dataKey="value" fill="#3b82f6" />
                         </BarChart>
+                    </ResponsiveContainer>
                     </div>
                 </div>
 
@@ -403,7 +417,7 @@ const SellerDashboard = () => {
                         />
                     </div>
 
-                    {/*  */}
+                    {/* Recent orders */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-lg font-semibold">Recent Orders</h3>

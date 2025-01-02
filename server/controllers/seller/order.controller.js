@@ -236,10 +236,126 @@ const getRecentOrders = async (req, res) => {
   }
 };
 
+
+const getMonthlyRevenue = async (req, res) => {
+  try {
+    const sellerId = req.user.id;
+
+    const seller = await Seller.findOne({
+      where: { user_id: sellerId },
+      attributes: ['store_id'],
+    });
+
+    if (!seller) {
+      return res.status(404).json({ message: 'Seller not found' });
+    }
+
+    const storeId = seller.store_id;
+
+    const orders = await Order.findAll({
+      attributes: ['id', 'created_at', 'updated_at'],
+      include: [
+        {
+          model: OrderItem,
+          attributes: ['quantity', 'price', 'created_at'],
+          include: [
+            {
+              model: Product,
+              as: 'Product',
+              attributes: [],
+              where: {
+                [Op.and]: [
+                  Sequelize.where(
+                    Sequelize.cast(Sequelize.json('current_seller.store_id'), 'INTEGER'), storeId
+                  )
+                ],
+              },
+              required: true, 
+            },
+          ],
+          required: true, 
+        },
+      ],
+
+    });
+
+    if (!orders.length) {
+      return res.status(404).json({ message: 'No data found for this store' });
+    }
+
+    const result = orders.map((order) => {
+      const spending = order.OrderItems.reduce((total, item) => {
+        const currentYear = new Date().getFullYear();
+        const createdAt = new Date(item.dataValues.created_at);
+
+        if (!isNaN(createdAt) && createdAt.getFullYear() === currentYear) {  // Check if the order is from this year
+          return total + item.price * item.quantity;
+        }
+        return total;
+      }, 0);
+      return {
+        spending,
+        createdAt: order.created_at,
+        updatedAt: order.updated_at,
+      };
+    });
+
+    const getMonthName = (date) => {
+      const monthNames = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+      ];
+      const monthIndex = new Date(date).getMonth();
+      return monthNames[monthIndex];
+    };
+    
+    // Function to transform the data
+    const transformData = (data) => {
+      const monthlyData = {};
+    
+      // Loop through each entry and aggregate spending by month
+      data.forEach((entry) => {
+        const month = getMonthName(entry.createdAt);
+        if (!monthlyData[month]) {
+          monthlyData[month] = 0;
+        }
+        monthlyData[month] += entry.spending;
+      });
+    
+      // Ensure all months are represented, even with zero spending
+      const allMonths = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+      ];
+      
+      return allMonths.map((month) => ({
+        month: month,
+        value: monthlyData[month] || 0
+      }));
+    };
+    
+    // Transform the data
+    const formattedData = transformData(result);
+
+
+    res.status(200).json({
+      message: 'Monthly revenue fetched successfully',
+      data: formattedData,
+    });
+
+  } catch (error) {
+    console.error('Error fetching monthly revenue:', error.message);
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
+};
+
+
 module.exports = {
   getOrders,
   updateOrderStatus,
   getPotentialCustomer,
   getRecentOrders,
+  getMonthlyRevenue,
 };
 

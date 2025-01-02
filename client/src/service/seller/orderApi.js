@@ -33,3 +33,12 @@ export const getRecentOrders = async (axiosPrivate) => {
     throw new Error(error.response?.data?.message || 'Failed to fetch recent orders');
   }
 };
+
+export const getMonthlyRevenue = async (axiosPrivate) => {
+  try {
+    const response = await axiosPrivate.get('/api/seller/orders/monthly-revenue');
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to fetch monthly revenue');
+  }
+}

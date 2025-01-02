@@ -63,49 +63,6 @@ const getAllProducts = async (req, res) => {
     }
 };
 
-// [GET] /api/admin/products/:id
-const getOneProduct1 = async (req, res) => {
-    const productId = req.params.id;
-    try {
-        const product = await Product.findByPk(productId, {
-            attributes: [
-                'id',
-                'name',
-                'category_id',
-                'category_name',
-                'original_price',
-                'price',
-                'rating_average',
-                'discount_rate',
-                'inventory_status',
-                'thumbnail_url',
-                'video_url',
-                'qty',
-                'quantity_sold',
-                'specifications',
-                'current_seller',
-            ]
-        });
-
-        if (!product) {
-            return res.status(404).json({
-                message: 'Product not found'
-            });
-        }
-
-        res.status(200).json({
-            data: product
-        });
-
-    } catch (error) {
-        console.error('Error in getOneProduct:', error);
-        res.status(500).json({
-            message: error.message,
-            error: error
-        });
-    }
-};
-
 const getOneProduct = async (req, res) => {
     try {
         const { id } = req.params;
@@ -168,7 +125,35 @@ const getOneProduct = async (req, res) => {
     }
 };
 
+const suspendProduct = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const product = await Product.findByPk(id);
+        if (!product) {
+            return res.status(404).json({
+                message: 'Product not found',
+            });
+        }
+
+        product.inventory_status = product.inventory_status === 'available' ? 'suspend' : 'available';
+        await product.save();
+
+        return res.status(200).json({
+            message: `Product ${product.inventory_status === 'available' ? 'restored' : 'suspended'} successfully`,
+            data: product,
+        });
+    } catch (error) {
+        console.error('Error in suspendProduct:', error);
+        res.status(500).json({
+            message: error.message,
+            error: error,
+        });
+    }
+};
+
 module.exports = {
     getAllProducts,
     getOneProduct,
+    suspendProduct,
 };

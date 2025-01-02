@@ -39,3 +39,17 @@ export const fetchOneProduct = createAsyncThunk(
         }
     }
 );
+
+export const deleteProduct = createAsyncThunk(
+    'admin/products/delete',
+    async ({ id, axiosInstance }, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.put(`/api/admin/products/${id}/suspend`);
+            return response.data.data;
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || error.message;
+            toast.error(errorMessage);
+            return rejectWithValue({ message: errorMessage });
+        }
+    }
+);

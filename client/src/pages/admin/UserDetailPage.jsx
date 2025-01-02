@@ -19,7 +19,7 @@ const UserDetailPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const axiosPrivate = useAxiosPrivate();
-    const { currentUser, totalSpent, orderCount, loading } = useSelector(state => state.admin.users);
+    const { currentUser, totalSpent, orderCount, loading, error } = useSelector(state => state.admin.users);
 
     useEffect(() => {
         if (id) {
@@ -29,6 +29,7 @@ const UserDetailPage = () => {
         }
     }, [id, dispatch]);
     console.log('Total spent:', totalSpent);
+
 
     return (
         <div className="p-6">
@@ -101,7 +102,7 @@ const UserDetailPage = () => {
                             <Card className="text-center bg-purple-50">
                                 <Statistic
                                     title="Number of orders"
-                                    value={orderCount}
+                                    value={orderCount||0}
                                     className="text-purple-600"
                                 />
                             </Card>
@@ -114,9 +115,9 @@ const UserDetailPage = () => {
                         <Row gutter={[16, 16]}>
                             {[
                                 { label: 'View Order List', action: () => navigate(`/admin/user-management/${id}/products`) },
-                                { label: 'Performance Analytics', action: () => navigate(`/admin/user-management/${id}/analytics`) },
+
                             ].map((item) => (
-                                <Col span={12} key={item.label}>
+                                <Col span={24} key={item.label}>
                                     <Button className="w-full h-12" onClick={item.action}>
                                         {item.label}
                                     </Button>

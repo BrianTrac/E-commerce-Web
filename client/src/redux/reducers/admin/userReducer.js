@@ -13,6 +13,7 @@ const userSlice = createSlice({
     initialState: {
         data: [],
         currentUser: null,
+        analytics: null,
         loading: false,
         error: null,
         pagination: {

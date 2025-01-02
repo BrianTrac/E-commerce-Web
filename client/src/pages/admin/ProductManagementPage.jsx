@@ -96,6 +96,7 @@ const ProductManagement = () => {
             },
         });
     };
+    const handleView = (record) => {}
 
     const columns = [
         {
@@ -156,6 +157,7 @@ const ProductManagement = () => {
                     )}
                 </div>
             ),
+            sorter: (a, b) => (a.price || 0) - (b.price || 0),
         },
         {
             title: 'Stock',
@@ -172,12 +174,14 @@ const ProductManagement = () => {
                     </Tag>
                 </div>
             ),
+            sorter: (a, b) => (a.qty || 0) - (b.qty || 0),
         },
         {
             title: 'Sold',
             key: 'quantity_sold',
             width: '50px',
             render: (_, record) => <Text>{record.quantity_sold}</Text>,
+            sorter: (a, b) => (a.quantity_sold || 0) - (b.quantity_sold || 0),
         },
         {
             title: 'Rating',
@@ -188,6 +192,7 @@ const ProductManagement = () => {
                     {record.rating_average ? `${record.rating_average} ⭐` : 'No rating'}
                 </Text>
             ),
+            sorter: (a, b) => (a.rating_average || 0) - (b.rating_average || 0),
         },
         {
             title: 'Actions',
@@ -200,22 +205,18 @@ const ProductManagement = () => {
                         <Button
                             type="link"
                             icon={<EyeOutlined />}
-                            onClick={() => {
-                                console.log('Navigating to:', `/admin/product-management/${record.id}`);
-                                navigate(`/admin/product-management/${record.id}`);
-                            }}
-                            className="text-blue-600 p-0 hover:text-blue-800"
+                            onClick={() => handleView(record)}
+                            className="text-gray-600 p-0 hover:text-gray-800"
                         />
                     </Tooltip>
                     <Tooltip title="Edit">
                         <Button
                             type="link"
                             icon={<EditOutlined />}
-                            onClick={() => handleEdit(record)}
-                            className="text-green-600 p-0 hover:text-green-800"
+                            onClick={() => handleView(record)}
+                            className="text-gray-600 p-0 hover:text-gray-800"
                         />
                     </Tooltip>
-
                     <Tooltip title={record.inventory_status == 'available' ? 'suspend' : 'available'}>
                         <Button
                             type="link"

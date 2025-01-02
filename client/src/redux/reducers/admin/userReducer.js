@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 import {
     fetchUsers,
     fetchOneUser,
@@ -55,7 +56,7 @@ const userSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchOneUser.fulfilled, (state, action) => {
-                state.currentUser = action.payload;
+                state.currentUser = action.payload.user;
                 state.loading = false;
             })
             .addCase(fetchOneUser.rejected, (state, action) => {

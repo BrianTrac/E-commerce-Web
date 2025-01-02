@@ -21,14 +21,44 @@ const UserDetailPage = () => {
     const axiosPrivate = useAxiosPrivate();
     const { currentUser, totalSpent, orderCount, loading, error } = useSelector(state => state.admin.users);
 
+    // useEffect(() => {
+    //     if (id) {
+    //         // Assuming you'll create this action
+    //         dispatch(fetchOneUser({ id, axiosInstance: axiosPrivate }));
+    //         dispatch(fetchUserTotalSpent({ id, axiosInstance: axiosPrivate }));
+    //     }
+    // }, [id, dispatch]);
     useEffect(() => {
-        if (id) {
-            // Assuming you'll create this action
+        if (id && !currentUser) {
             dispatch(fetchOneUser({ id, axiosInstance: axiosPrivate }));
             dispatch(fetchUserTotalSpent({ id, axiosInstance: axiosPrivate }));
         }
-    }, [id, dispatch]);
-    console.log('Total spent:', totalSpent);
+    }, [id, dispatch, axiosPrivate, currentUser]);
+    console.log(currentUser);
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <Spin size="large" />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <Text type="danger">{error}</Text>
+            </div>
+        );
+    }
+
+    if (!currentUser) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <Text type="secondary">User not found</Text>
+            </div>
+        );
+    }
+
 
 
     return (
@@ -59,14 +89,14 @@ const UserDetailPage = () => {
                         />
                         <div className="flex-grow">
                             <div className="flex items-center gap-3">
-                                <Title level={3} className="mb-0">{currentUser.user.username}</Title>
+                                <Title level={3} className="mb-0">{currentUser.username}</Title>
                                 {currentUser.is_official === "true" && (
                                     <Tag color="blue" icon={<CheckCircleFilled />} className="mt-1">
                                         Official Store
                                     </Tag>
                                 )}
                             </div>
-                            <Text className="text-gray-500">Email: {currentUser.user.email}</Text>
+                            <Text className="text-gray-500">Email: {currentUser.email}</Text>
                         </div>
                         <Space>
                             <Button
@@ -85,7 +115,7 @@ const UserDetailPage = () => {
                             <Card className="text-center bg-blue-50">
                                 <Statistic
                                     title={<span className="flex items-center justify-center gap-2"><StarFilled className="text-yellow-500" /> Status </span>}
-                                    value={(currentUser.user.is_active)? "Active" : "Inactive"}
+                                    value={(currentUser.is_active)? "Active" : "Inactive"}
                                     precision={1}
                                 />
                             </Card>

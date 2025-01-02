@@ -12,8 +12,8 @@ import useProducts from '../../hooks/useProducts'; // Import custom hook
 
 const SellerVoucher = () => {
 
-    const [voucherShop, setVoucherShop] = useState({discount: "10", start_date: "", end_date: ""});
-    const [voucherForProduct, setVoucherForProduct] = useState({discount: "10", start_date: "", end_date: "", product_id: ""});
+    const [voucherShop, setVoucherShop] = useState({discount: "", start_date: "", end_date: ""});
+    const [voucherForProduct, setVoucherForProduct] = useState({discount: "", start_date: "", end_date: "", product_id: ""});
     const [voucherData, setVoucherData] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });

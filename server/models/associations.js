@@ -3,6 +3,8 @@ const OTP = require('./OTP'); // Import OTP model
 
 const Product = require('./Product'); // Import Product model
 const Category = require('./Category'); // Import Category model
+const Order = require('./Order');
+const OrderItem = require('./OrderItem');
 
 // Define associations User - OTP (one-to-many)
 User.hasMany(OTP, {
@@ -35,3 +37,21 @@ Product.belongsTo(Category, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
+
+
+// Define associations User - Order (one-to-many)
+User.hasMany(Order, { foreignKey: 'id' });
+Order.belongsTo(User, { foreignKey: 'id' });
+
+Order.hasMany(OrderItem, { foreignKey: 'order_id'});
+OrderItem.belongsTo(Order, { foreignKey: 'id'});
+
+// OrderItem.belongsTo(Product, { foreignKey: 'id' });
+// Product.hasMany(OrderItem, { foreignKey: 'id'});
+
+
+// Định nghĩa quan hệ trong OrderItem.js
+OrderItem.belongsTo(Product, { foreignKey: 'product_id', as: 'Product' });
+
+// Định nghĩa quan hệ trong Product.js (nếu cần)
+Product.hasMany(OrderItem, { foreignKey: 'product_id', as: 'OrderItems' });

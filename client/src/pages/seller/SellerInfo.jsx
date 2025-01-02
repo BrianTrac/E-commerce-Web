@@ -23,34 +23,31 @@ const SellerInfo = () => {
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    const fetchSellerInfo = async () => {
+    const fetchData = async () => {
       try {
-        const info = await getSellerInfo(axiosPrivate);
-        setSellerInfo(info);
-        setOriginalSellerInfo(info);
-        const storeId = info.store_id;
-        const products = await getTopSellingProducts(axiosPrivate, storeId);
-        setTopProducts(products.data);
+        const [sellerResponse, storeResponse] = await Promise.all([
+          getSellerInfo(axiosPrivate),
+          getStore(axiosPrivate),
+        ]);
+
+        setSellerInfo(sellerResponse);
+        setOriginalSellerInfo(sellerResponse);
+
+        setStore(storeResponse);
+        setOriginalStoreInfo(storeResponse);
+
+        if (sellerResponse?.store_id) {
+          const productsResponse = await getTopSellingProducts(axiosPrivate, sellerResponse.store_id);
+          setTopProducts(productsResponse.data || []);
+        }
       } catch (err) {
-        setError(err.message || 'Failed to load seller info');
+        setError(err.message || 'Failed to load seller or store info');
       } finally {
         setLoading(false);
       }
     };
 
-    const fetchStore = async () => {
-      try {
-        const store = await getStore(axiosPrivate);
-        setStore(store);
-        setOriginalStoreInfo(store);
-      } catch (err) {
-        setError(err.message || 'Failed to load store info');
-      }
-    };
-
-
-    fetchSellerInfo();
-    fetchStore();
+    fetchData();
   }, [axiosPrivate]);
 
   const handleEditSeller = () => {
@@ -141,7 +138,7 @@ const SellerInfo = () => {
           <input
             type="text"
             name="username"
-            value={sellerInfo.username || ''}
+            value={sellerInfo?.username || ''}
             className="text-gray-500 w-full border-b border-gray-300"
             disabled={true}
           />
@@ -151,7 +148,7 @@ const SellerInfo = () => {
           <input
             type="email"
             name="email"
-            value={sellerInfo.email || ''}
+            value={sellerInfo?.email || ''}
             className="text-gray-500 w-full border-b border-gray-300"
             disabled={true}
           />
@@ -266,8 +263,8 @@ const SellerInfo = () => {
             </div>
           ) : (
             <img
-              src={store.icon || '/path/to/default/logo.png'}
-              alt="Store Logo"
+              src={store?.icon || '/path/to/default/logo.png'}
+              alt="Logo"
               className="w-32 h-32 mx-auto rounded-full"
             />
           )}

@@ -28,9 +28,9 @@ const getSellerInfo = async (req, res) => {
 
         // Thêm thuộc tính username và email vào sellerInfo
         const fullSellerInfo = {
-            ...sellerInfo.toJSON(), 
-            username: sellerAuth.username,
-            email: sellerAuth.email,
+            ...sellerInfo.toJSON(),
+            username: sellerAuth?.username,
+            email: sellerAuth?.email,
         };
 
         res.status(200).json(fullSellerInfo);
@@ -50,7 +50,7 @@ const createSellerInfo = async (req, res) => {
             }
         });
 
-        if(!seller) {
+        if (!seller) {
             return res.status(404).json({ message: 'Seller not found' });
         }
 
@@ -93,6 +93,6 @@ const updateSellerInfo = async (req, res) => {
 
 module.exports = {
     getSellerInfo,
-    createSellerInfo, 
+    createSellerInfo,
     updateSellerInfo
 };

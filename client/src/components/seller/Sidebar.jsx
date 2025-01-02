@@ -19,6 +19,10 @@ const Sidebar = () => {
                         <span>Product Management</span>
                         <ChevronDown className="w-4 h-4" />
                     </Link>
+                    <Link to="/seller/order" className="flex items-center space-x-2 p-2 rounded hover:bg-blue-600">
+                        <span>Order</span>
+                        <ChevronDown className="w-4 h-4" />
+                    </Link>
                     <Link to="/seller/voucher" className="flex items-center space-x-2 p-2 rounded hover:bg-blue-600">
                         <span>Voucher</span>
                         <ChevronDown className="w-4 h-4" />

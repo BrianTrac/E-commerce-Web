@@ -17,7 +17,7 @@ const getAllProductsByStoreId = async (req, res) => {
         attributes: ['store_id']
     });
 
-    const storeId = seller.store_id;
+    const storeId = seller?.store_id;
 
     if (!storeId) {
         return res.status(400).json({ message: 'storeId is required' });

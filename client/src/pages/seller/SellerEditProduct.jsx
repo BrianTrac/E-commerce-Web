@@ -1,49 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import slugify from 'slugify';
 import { getProductById, updateProduct } from '../../service/seller/productApi';
-import { FaArrowLeft, FaTimes } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
-import Select from 'react-select';
+import { Form, Input, InputNumber, Button, Select, Upload, message, Space, Table, Typography } from 'antd';
+import { UploadOutlined, MinusCircleOutlined, PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import useCategories from '../../hooks/useCategories';
 import { uploadImages } from '../../helpers/upload';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
-const schema = yup.object().shape({
-  name: yup.string().required('Tên sản phẩm là bắt buộc'),
-  discount_rate: yup
-    .number()
-    .min(0, 'Tỷ lệ giảm giá không được âm')
-    .max(100, 'Tỷ lệ giảm giá không được vượt quá 100'),
-  original_price: yup
-    .number()
-    .required('Giá gốc là bắt buộc')
-    .positive('Giá gốc phải lớn hơn 0'),
-});
+const { Option } = Select;
+const { TextArea } = Input;
 
 const SellerEditProduct = () => {
   const { productId } = useParams();
-  const {
-    control,
-    handleSubmit,
-    register,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
-
+  const [form] = Form.useForm();
   const [previewImages, setPreviewImages] = useState([]);
   const [imageUploads, setImageUploads] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [specifications, setSpecifications] = useState([]);
-
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
-
   const { categories, loadCategories } = useCategories(searchTerm, 1, 50);
 
   useEffect(() => {
@@ -52,353 +28,270 @@ const SellerEditProduct = () => {
         const productResponse = await getProductById(axiosPrivate, productId);
         const product = productResponse.data;
 
-        setValue('name', product.name);
-        setValue('discount_rate', product.discount_rate);
-        setValue('original_price', parseFloat(product.original_price));
-        setValue('short_description', product.short_description);
-        setValue('description', product.description);
+        form.setFieldsValue({
+          name: product.name,
+          discount_rate: product.discount_rate,
+          original_price: parseFloat(product.original_price),
+          short_description: product.short_description,
+          description: product.description,
+          qty: product.qty,
+        });
 
         const parsedSpecifications = Array.isArray(product.specifications)
           ? product.specifications
           : JSON.parse(product.specifications || '[]');
         setSpecifications(parsedSpecifications);
-        setValue('specifications', JSON.stringify(parsedSpecifications));
 
-        setValue('qty', product.qty);
 
-        // Set preview images
-        if (product.thumbnails) {
-          setPreviewImages(product.thumbnails);
-        }
 
-        // Set category
+        // Chuyển đổi thumbnails từ API thành fileList
+        const thumbnails = product.thumbnails || [];
+        const formattedThumbnails = thumbnails.map((url, index) => ({
+          uid: `existing-${index}`,
+          name: url.split('/').pop(),
+          status: 'done',
+          url: url, // URL của ảnh
+        }));
+
+        // Cập nhật state previewImages
+        setPreviewImages(formattedThumbnails);
+
         setSelectedCategory({ value: product.category_id, label: product.category_name });
-        setValue('category', { value: product.category_id, label: product.category_name });
+
+        form.setFieldsValue({
+          category: product.category_id, // Sử dụng ID để khớp với Select
+        });
       } catch (error) {
         console.error('Error loading product:', error);
-        alert('Không thể tải dữ liệu sản phẩm!');
+        message.error('Không thể tải dữ liệu sản phẩm!');
       }
     };
 
     fetchData();
-  }, [productId, setValue]);
+  }, [productId, form]);
 
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    setImageUploads(files);
-    const fileReaders = files.map((file) => {
-      return new Promise((resolve, reject) => {
-        const fileReader = new FileReader();
-        fileReader.onloadend = () => resolve(fileReader.result);
-        fileReader.onerror = reject;
-        fileReader.readAsDataURL(file);
-      });
-    });
-    Promise.all(fileReaders)
-      .then((imagePreviews) => {
-        setPreviewImages(imagePreviews);
-      })
-      .catch((error) => console.error('Error reading files:', error));
+  const handleImageChange = ({ fileList }) => {
+    const updatedPreviews = fileList.map((file) => ({
+      uid: file.uid,
+      name: file.name || file.url.split('/').pop(), // Tên file thực hoặc lấy từ URL
+      status: file.status,
+      url: file.url || (file.originFileObj ? URL.createObjectURL(file.originFileObj) : null),
+      originFileObj: file.originFileObj,
+    }));
+    setPreviewImages(updatedPreviews);
+    setImageUploads(fileList.filter((file) => file.originFileObj).map((file) => file.originFileObj));
   };
 
-  const handleSearchChange = (inputValue) => {
-    setSearchTerm(inputValue);
-    loadCategories(inputValue, 1); // Gọi lại API để tìm kiếm và lấy trang 1
+  const handleRemoveImage = (file) => {
+    setPreviewImages(previewImages.filter((img) => img.uid !== file.uid));
+    setImageUploads(imageUploads.filter((upload) => upload.name !== file.name));
   };
 
-  // Xử lý xóa ảnh
-  const handleRemoveImage = (index) => {
-    const newPreviewImages = [...previewImages];
-    const newImageUploads = [...imageUploads];
-    newPreviewImages.splice(index, 1); // Xóa ảnh trong preview
-    newImageUploads.splice(index, 1); // Xóa ảnh trong danh sách đã chọn
-    setPreviewImages(newPreviewImages);
-    setImageUploads(newImageUploads);
-  };
-
-  const handleAddSpec = () => {
-    setSpecifications((prev) => [
-      ...prev,
-      { name: '', attributes: [{ code: '', name: '', value: '' }] },
-    ]);
-  };
-
-  const handleRemoveSpec = (index) => {
-    setSpecifications((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleAddRow = (specIndex) => {
-    setSpecifications((prev) => {
-      const updated = prev.map((spec, index) => {
-        if (index === specIndex) {
-          return {
-            ...spec,
-            attributes: [...spec.attributes, { code: '', name: '', value: '' }],
-          };
-        }
-        return spec;
-      });
-      return updated;
-    });
-  };
-
-  const handleRemoveRow = (specIndex, attrIndex) => {
-    setSpecifications((prev) => {
-      const updated = prev.map((spec, index) => {
-        if (index === specIndex) {
-          const updatedAttributes = spec.attributes.filter((_, i) => i !== attrIndex);
-          return {
-            ...spec,
-            attributes: updatedAttributes,
-          };
-        }
-        return spec;
-      });
-      return updated;
-    });
-  };
-
-  const handleChange = (specIndex, attrIndex, field, value) => {
-    setSpecifications((prev) => {
-      const updated = [...prev];
-      updated[specIndex].attributes[attrIndex][field] = value;
-      return updated;
-    });
-  };
-
-  const handleSpecNameChange = (specIndex, value) => {
-    setSpecifications((prev) => {
-      const updated = [...prev];
-      updated[specIndex].name = value;
-      return updated;
-    });
-  };
-
-  const onSubmit = async (data) => {
+  const onSubmit = async (values) => {
     try {
-      const imageUrls = await uploadImages(imageUploads);
+      const newImageUrls = await uploadImages(imageUploads);
+      const existingImageUrls = previewImages
+        .filter(img => img.uid.startsWith('existing'))
+        .map(img => img.url);
+
+      const allImageUrls = [...existingImageUrls, ...newImageUrls];
+
       const updatedData = {
-        ...data,
+        ...values,
         category_id: selectedCategory?.value,
         category_name: selectedCategory?.label,
-        images: imageUrls.length > 0 ? imageUrls : undefined,
-        thumbnail_url: imageUrls[0]?.thumbnail_url || previewImages[0],
-        price: parseFloat(data.original_price) * (1 - data.discount_rate / 100),
-        url_key: slugify(data.name, { lower: true, strict: true }),
+        images: allImageUrls.map((url) => ({ thumbnail_url: url })), // For full image list
+        thumbnail_url: allImageUrls[0] || '', // Ensure a string is passed
         specifications,
       };
 
       const response = await updateProduct(axiosPrivate, productId, updatedData);
-      alert(response.message);
-      window.location.reload();
+      message.success(response.message);
     } catch (error) {
       console.error('Error updating product:', error);
-      alert('Có lỗi xảy ra khi cập nhật sản phẩm!');
+      message.error('Có lỗi xảy ra khi cập nhật sản phẩm!');
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <button
-        onClick={() => navigate(-1)}
-        className="text-white bg-gray-800 p-2 rounded-full"
-      >
-        <FaArrowLeft />
-      </button>
-      <h2 className="text-2xl text-center font-semibold mb-6">Chỉnh Sửa Sản Phẩm</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label className="block text-sm font-medium">Tên sản phẩm</label>
-          <input
-            {...register('name')}
-            type="text"
-            className="mt-1 block w-full border border-gray-300 p-2 rounded"
-          />
-          {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
-        </div>
+    <div className="container mx-auto p-4">
+      <Button onClick={() => navigate(-1)} className="mb-4" icon={<MinusCircleOutlined />}>Quay lại</Button>
+      <Typography.Title level={2} className="text-center">Chỉnh Sửa Sản Phẩm</Typography.Title>
+      <Form form={form} layout="vertical" onFinish={onSubmit}>
+        <Form.Item
+          name="name"
+          label="Tên sản phẩm"
+          rules={[{ required: true, message: 'Tên sản phẩm là bắt buộc' }]}
+        >
+          <Input placeholder="Nhập tên sản phẩm" />
+        </Form.Item>
 
-        {/* Danh mục */}
-        <div>
-          <label className="block font-medium mb-1">Danh mục</label>
+        <Form.Item
+          name="category"
+          label="Danh mục"
+          rules={[{ required: true, message: 'Danh mục là bắt buộc' }]}
+        >
           <Select
-            value={selectedCategory}
-            onChange={setSelectedCategory}
-            onInputChange={handleSearchChange} // Cập nhật từ khóa tìm kiếm khi người dùng gõ
-            options={categories.map((category) => ({
-              value: category.id,
-              label: category.name,
-            }))}
+            showSearch
             placeholder="Chọn danh mục"
-            isClearable
-          />
-          {errors.category && <p className="text-red-500 text-sm">{errors.category.message}</p>}
-        </div>
+            filterOption={false}
+            onSearch={(value) => setSearchTerm(value)}
+            onChange={(value) => setSelectedCategory(categories.find(category => category.id === value))}
+          >
+            {categories.map(category => (
+              <Option key={category.id} value={category.id}>{category.name}</Option>
+            ))}
+          </Select>
+        </Form.Item>
 
-        <div>
-          <label className="block font-medium mb-1">Ảnh sản phẩm</label>
-          <div className="mt-2">
-            {/* Hiển thị số lượng tệp được chọn */}
-            {previewImages.length > 0 ? (
-              <p>{previewImages.length} tệp đã chọn</p>
-            ) : (
-              <p>Không có tệp nào được chọn</p>
+        <Form.Item label="Ảnh sản phẩm">
+          <Upload
+            listType="picture-card" // Hiển thị dạng ảnh preview
+            fileList={previewImages} // Gắn danh sách ảnh từ state
+            onChange={handleImageChange} // Xử lý khi thêm ảnh mới
+            onRemove={handleRemoveImage} // Xử lý khi xóa ảnh
+            beforeUpload={() => false} // Không tự động upload
+          >
+            {previewImages.length < 8 && (
+              <div>
+                <UploadOutlined />
+                <div style={{ marginTop: 8 }}>Tải ảnh lên</div>
+              </div>
             )}
-          </div>
-          {/* Hiển thị các ảnh đã chọn */}
-          {previewImages.length > 0 && (
-            <div className="mt-4 flex space-x-4">
-              {previewImages.map((src, index) => (
-                <div key={index} className="relative">
-                  <img src={src} alt={`preview-${index}`} className="w-24 h-24 rounded" />
-                  {/* Nút X để xóa ảnh */}
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveImage(index)}
-                    className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
-                  >
-                    <FaTimes size={12} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            className="mt-2"
-            onChange={handleImageChange}
-          />
-        </div>
+          </Upload>
+        </Form.Item>
 
-        <div>
-          <label className="block text-sm font-medium">Tỷ lệ giảm giá (%)</label>
-          <input
-            {...register('discount_rate')}
-            type="number"
-            className="mt-1 block w-full border border-gray-300 p-2 rounded"
-          />
-          {errors.discount_rate && <p className="text-red-500 text-sm">{errors.discount_rate.message}</p>}
-        </div>
+        <Form.Item
+          name="discount_rate"
+          label="Tỷ lệ giảm giá (%)"
+          rules={[{ type: 'number', min: 0, max: 100, message: 'Tỷ lệ giảm giá từ 0 đến 100' }]}
+        >
+          <InputNumber className="w-full" placeholder="Nhập tỷ lệ giảm giá" />
+        </Form.Item>
 
-        <div>
-          <label className="block text-sm font-medium">Giá gốc</label>
-          <input
-            {...register('original_price')}
-            type="number"
-            className="mt-1 block w-full border border-gray-300 p-2 rounded"
-          />
-          {errors.original_price && <p className="text-red-500 text-sm">{errors.original_price.message}</p>}
-        </div>
+        <Form.Item
+          name="original_price"
+          label="Giá gốc"
+          rules={[{ required: true, message: 'Giá gốc là bắt buộc' }]}
+        >
+          <InputNumber className="w-full" placeholder="Nhập giá gốc" />
+        </Form.Item>
 
-        <div>
-          <label className="block text-sm font-medium">Miêu tả ngắn</label>
-          <textarea
-            {...register('short_description')}
-            className="mt-1 block w-full border border-gray-300 p-2 rounded"
-          ></textarea>
-          {errors.short_description && <p className="text-red-500 text-sm">{errors.short_description.message}</p>}
-        </div>
+        <Form.Item name="short_description" label="Miêu tả ngắn">
+          <TextArea rows={3} placeholder="Nhập miêu tả ngắn" />
+        </Form.Item>
 
-        <div>
-          <label className="block text-sm font-medium">Miêu tả chi tiết</label>
-          <textarea
-            {...register('description')}
-            className="mt-1 block w-full border border-gray-300 p-2 rounded"
-          ></textarea>
-          {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
-        </div>
+        <Form.Item name="description" label="Miêu tả chi tiết">
+          <TextArea rows={5} placeholder="Nhập miêu tả chi tiết" />
+        </Form.Item>
 
-        {/* Other form fields */}
-        <div>
-          <label>Thông số</label>
-          {specifications.map((spec, specIndex) => (
-            <div key={specIndex} className="mb-4 border rounded p-2">
-              {/* Hiển thị tên nhóm bên ngoài */}
-              <h3 className="text-lg font-semibold mb-2">{spec.name || 'Tên nhóm chưa có'}</h3>
+        <Form.Item name="qty" label="Số lượng">
+          <InputNumber className="w-full" placeholder="Nhập số lượng" />
+        </Form.Item>
 
-              {/* Input để chỉnh sửa tên nhóm */}
-              <input
-                type="text"
-                placeholder="Tên nhóm"
+        <Typography.Title level={4}>Thông số</Typography.Title>
+        {specifications.map((spec, specIndex) => (
+          <div key={specIndex} className="border p-4 rounded mb-4">
+            <Space direction="vertical" className="w-full">
+              <Input
+                placeholder="Tên nhóm thông số"
                 value={spec.name}
-                onChange={(e) => handleSpecNameChange(specIndex, e.target.value)}
-                className="w-full p-2 mb-2 border rounded"
+                onChange={(e) => {
+                  const newSpecs = [...specifications];
+                  newSpecs[specIndex].name = e.target.value;
+                  setSpecifications(newSpecs);
+                }}
               />
 
-              <table className="w-full">
-                <thead>
-                  <tr>
-                    <th>Thuộc tính</th>
-                    <th>Giá trị</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {spec.attributes.map((attr, attrIndex) => (
-                    <tr key={attrIndex}>
-                      <td>
-                        <input
-                          type="text"
-                          value={attr.name}
-                          onChange={(e) => handleChange(specIndex, attrIndex, 'name', e.target.value)}
-                          className="w-full p-2 border rounded"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={attr.value}
-                          onChange={(e) => handleChange(specIndex, attrIndex, 'value', e.target.value)}
-                          className="w-full p-2 border rounded"
-                        />
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveRow(specIndex, attrIndex)}
-                          className="text-red-500"
-                        >
-                          <FaTimes />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              <button
-                type="button"
-                onClick={() => handleAddRow(specIndex)}
-                className="text-blue-500 mt-2"
+              <Table
+                dataSource={spec.attributes}
+                columns={[
+                  {
+                    title: 'Thuộc tính',
+                    dataIndex: 'name',
+                    render: (text, record, index) => (
+                      <Input
+                        value={text}
+                        onChange={(e) => {
+                          const newSpecs = [...specifications];
+                          newSpecs[specIndex].attributes[index].name = e.target.value;
+                          setSpecifications(newSpecs);
+                        }}
+                      />
+                    ),
+                  },
+                  {
+                    title: 'Giá trị',
+                    dataIndex: 'value',
+                    render: (text, record, index) => (
+                      <Input
+                        value={text}
+                        onChange={(e) => {
+                          const newSpecs = [...specifications];
+                          newSpecs[specIndex].attributes[index].value = e.target.value;
+                          setSpecifications(newSpecs);
+                        }}
+                      />
+                    ),
+                  },
+                  {
+                    title: 'Hành động',
+                    render: (_, record, index) => (
+                      <Button
+                        type="link"
+                        onClick={() => {
+                          const newSpecs = [...specifications];
+                          newSpecs[specIndex].attributes.splice(index, 1);
+                          setSpecifications(newSpecs);
+                        }}
+                      >
+                        <MinusCircleOutlined />
+                      </Button>
+                    ),
+                  },
+                ]}
+                rowKey={(record, index) => index}
+                pagination={false}
+              />
+              <Button
+                type="dashed"
+                icon={<PlusOutlined />}
+                onClick={() => {
+                  const newSpecs = [...specifications];
+                  newSpecs[specIndex].attributes.push({ name: '', value: '' });
+                  setSpecifications(newSpecs);
+                }}
               >
                 Thêm dòng
-              </button>
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={handleAddSpec}
-            className="text-blue-500"
-          >
-            Thêm nhóm
-          </button>
-        </div>
+              </Button>
+              <Button
+                type="text"
+                icon={<CloseOutlined />}
+                className="text-red-500 mt-2"
+                onClick={() => {
+                  const newSpecs = specifications.filter((_, idx) => idx !== specIndex);
+                  setSpecifications(newSpecs);
+                }}
+              >
+                Xóa nhóm
+              </Button>
+            </Space>
+          </div>
+        ))}
 
-        {/* Số lượng */}
-        <div>
-          <label className="block text-sm font-medium">Số lượng</label>
-          <input
-            {...register('qty')}
-            type="number"
-            className="mt-1 block w-full border border-gray-300 p-2 rounded"
-          />
-          {errors.qty && <p className="text-red-500 text-sm">{errors.qty.message}</p>}
-        </div>
-        <button type="submit" className="w-full bg-blue-500 p-3 rounded text-white">
-          Lưu thay đổi
-        </button>
-      </form>
+        <Button
+          type="dashed"
+          icon={<PlusOutlined />}
+          className="mb-4"
+          onClick={() => setSpecifications([...specifications, { name: '', attributes: [] }])}
+        >
+          Thêm nhóm thông số
+        </Button>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>Lưu thay đổi</Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

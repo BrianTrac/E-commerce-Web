@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Card, Space, Input, Tooltip, Button, Typography, Modal, message } from 'antd';
-import { EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Table, Card, Space, Input, Tooltip, Button, Typography, Modal, message, Checkbox } from 'antd';
+import { EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { deleteProductById, getProductsByStatus } from '../../service/seller/productApi';
+import { deleteMultipleProductsById, deleteProductById, getProductsByStatus } from '../../service/seller/productApi';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const { confirm } = Modal;
@@ -16,6 +16,7 @@ const SellerProductManagement = () => {
   const [searchText, setSearchText] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [sorter, setSorter] = useState({ field: '', order: '' });
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   const axiosPrivate = useAxiosPrivate();
 
@@ -70,7 +71,28 @@ const SellerProductManagement = () => {
     navigate(`/seller/product-management/edit/${product.id}`);
   };
 
-  const handleDelete = (productId) => {
+  const handleDeleteMultiple = async (ids) => {
+    confirm({
+      title: `Are you sure you want to delete ${ids.length} selected product(s)?`,
+      icon: <ExclamationCircleOutlined />,
+      content: 'This action cannot be undone.',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk: async () => {
+        try {
+          await deleteMultipleProductsById(axiosPrivate, ids);
+          message.success('Selected products deleted successfully');
+          setSelectedRowKeys([]);
+          loadProducts();
+        } catch (error) {
+          message.error(error.message || 'Failed to delete products');
+        }
+      },
+    });
+  };
+
+  const handleDelete = (id) => {
     confirm({
       title: 'Are you sure you want to delete this product?',
       icon: <ExclamationCircleOutlined />,
@@ -80,7 +102,7 @@ const SellerProductManagement = () => {
       cancelText: 'No',
       onOk: async () => {
         try {
-          await deleteProductById(axiosPrivate, productId);
+          await deleteProductById(axiosPrivate, id);
           message.success('Product deleted successfully');
           loadProducts();
         } catch (error) {
@@ -91,6 +113,26 @@ const SellerProductManagement = () => {
   };
 
   const columns = [
+    {
+      title: <Checkbox
+        indeterminate={selectedRowKeys.length > 0 && selectedRowKeys.length < products.length}
+        checked={selectedRowKeys.length === products.length}
+        onChange={(e) => setSelectedRowKeys(e.target.checked ? products.map((item) => item.id) : [])}
+      />,
+      dataIndex: 'checkbox',
+      width: '50px',
+      render: (_, record) => (
+        <Checkbox
+          checked={selectedRowKeys.includes(record.id)}
+          onChange={(e) => {
+            const selected = e.target.checked
+              ? [...selectedRowKeys, record.id]
+              : selectedRowKeys.filter((key) => key !== record.id);
+            setSelectedRowKeys(selected);
+          }}
+        />
+      ),
+    },
     {
       title: 'No.',
       key: 'index',
@@ -187,7 +229,17 @@ const SellerProductManagement = () => {
   ];
 
   return (
-    <Card title="Product Management" className="shadow-md">
+    <Card
+      title={
+        <div className="flex justify-between items-center">
+          <span>Product Management</span>
+          <Button type="default" icon={<ReloadOutlined />} onClick={loadProducts}>
+            Refresh
+          </Button>
+        </div>
+      }
+      className="shadow-md"
+    >
       <div className="mb-4 flex justify-between items-center">
         <Input.Search
           placeholder="Search products..."
@@ -210,10 +262,21 @@ const SellerProductManagement = () => {
             Suspend
           </Button>
         </div>
-        <Button type="primary" onClick={() => navigate('/seller/product-management/add')}>
-          Add New Product
-        </Button>
+        <Space>
+          {selectedRowKeys.length > 0 && (
+            <Button
+              type="primary"
+              onClick={() => handleDeleteMultiple(selectedRowKeys)}
+            >
+              Delete ({selectedRowKeys.length})
+            </Button>
+          )}
+          <Button type="primary" onClick={() => navigate('/seller/product-management/add')}>
+            Add New Product
+          </Button>
+        </Space>
       </div>
+
       <Table
         columns={columns}
         dataSource={products}

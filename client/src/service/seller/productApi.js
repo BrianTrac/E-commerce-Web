@@ -51,6 +51,15 @@ export const deleteProductById = async (axiosPrivate, id) => {
     }
 };
 
+export const deleteMultipleProductsById = async (axiosPrivate, ids) => {
+    try {
+        const response = await axiosPrivate.post(`/api/seller/products/remove-multiple`, { ids });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to delete products');
+    }
+}
+
 export const updateProduct = async (axiosPrivate, id, productData) => {
     try {
         const response = await axiosPrivate.patch(`/api/seller/products/update/${id}`, productData);

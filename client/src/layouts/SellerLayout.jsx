@@ -6,7 +6,7 @@ import Footer from "../components/seller/Footer";
 
 const SellerLayout = () => {
     return (
-        <div className="flex min-h-screen bg-gradient-to-r from-gray-50 to-gray-100">
+        <div className="flex min-h-screen bg-gray-100">
             {/* Sidebar */}
             <Sidebar />
 
@@ -16,7 +16,7 @@ const SellerLayout = () => {
                 <Header />
 
                 {/* Page Content */}
-                <div className="p-6 bg-white shadow-md rounded-lg">
+                <div className="p-6 bg-gray-100 shadow-md rounded-lg">
                     <Outlet />
                 </div>
 
@@ -24,7 +24,6 @@ const SellerLayout = () => {
                 <Footer />
             </div>
         </div>
-
     );
 };
 

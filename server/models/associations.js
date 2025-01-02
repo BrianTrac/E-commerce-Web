@@ -52,7 +52,7 @@ User.hasMany(Order, { foreignKey: 'user_id' });
 Order.belongsTo(User, { foreignKey: 'user_id' });
 
 Order.hasMany(OrderItem, { foreignKey: 'order_id'});
-OrderItem.belongsTo(Order, { foreignKey: 'order_id'});
+OrderItem.belongsTo(Order, { foreignKey: 'order_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 
 // OrderItem.belongsTo(Product, { foreignKey: 'id' });
 // Product.hasMany(OrderItem, { foreignKey: 'id'});

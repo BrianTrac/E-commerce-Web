@@ -228,6 +228,10 @@ const addProductToStore = async (req, res) => {
             return res.status(400).json({ message: 'Seller not found' });
         }
 
+        if (!productData.current_seller) {
+            productData.current_seller = {};
+        }
+
         productData.current_seller.id = seller.id;
         productData.current_seller.store_id = seller.store_id;
 

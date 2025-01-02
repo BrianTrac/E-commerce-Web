@@ -138,23 +138,33 @@ const SellerAddProduct = () => {
     setSpecifications((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Thêm một dòng thuộc tính trong nhóm
   const handleAddRow = (specIndex) => {
     setSpecifications((prev) => {
-      const updated = [...prev];
-      updated[specIndex].attributes.push({ code: '', name: '', value: '' });
+      const updated = prev.map((spec, index) => {
+        if (index === specIndex) {
+          return {
+            ...spec,
+            attributes: [...spec.attributes, { code: '', name: '', value: '' }],
+          };
+        }
+        return spec;
+      });
       return updated;
     });
   };
 
-  // Xóa một dòng thuộc tính trong nhóm
   const handleRemoveRow = (specIndex, attrIndex) => {
     setSpecifications((prev) => {
-      const updated = [...prev];
-      updated[specIndex].attributes.splice(attrIndex, 1);
-      if (updated[specIndex].attributes.length === 0) {
-        updated.splice(specIndex, 1); // Nếu không còn thuộc tính, xóa nhóm
-      }
+      const updated = prev.map((spec, index) => {
+        if (index === specIndex) {
+          const updatedAttributes = spec.attributes.filter((_, i) => i !== attrIndex);
+          return {
+            ...spec,
+            attributes: updatedAttributes,
+          };
+        }
+        return spec;
+      });
       return updated;
     });
   };

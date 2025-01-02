@@ -15,12 +15,13 @@ const SellerProductManagement = () => {
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
   const [searchText, setSearchText] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [sorter, setSorter] = useState({ field: '', order: '' });
 
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    loadProducts(axiosPrivate);
-  }, [pagination.current, statusFilter]);
+    loadProducts();
+  }, [pagination.current, statusFilter, sorter]);
 
   const loadProducts = async () => {
     setLoading(true);
@@ -30,7 +31,9 @@ const SellerProductManagement = () => {
         statusFilter,
         pagination.current,
         pagination.pageSize,
-        searchText
+        searchText,
+        sorter.field,
+        sorter.order
       );
       setProducts(response.data);
       setPagination({ ...pagination, total: response.total });
@@ -49,6 +52,14 @@ const SellerProductManagement = () => {
   const handleStatusClick = (status) => {
     setStatusFilter(status);
     setPagination({ ...pagination, current: 1 });
+  };
+
+  const handleTableChange = (pagination, filters, sorter) => {
+    setPagination({ ...pagination, current: pagination.current });
+    setSorter({
+      field: sorter.field,
+      order: sorter.order === 'ascend' ? 'ASC' : sorter.order === 'descend' ? 'DESC' : '',
+    });
   };
 
   const handleView = (product) => {
@@ -99,25 +110,28 @@ const SellerProductManagement = () => {
       dataIndex: 'name',
       key: 'name',
       width: '350px',
+      sorter: true,
     },
     {
       title: 'Category Name',
       dataIndex: 'category',
       key: 'category',
       width: '250px',
+      sorter: true,
     },
     {
       title: 'Rating',
       dataIndex: 'rating',
       key: 'rating',
+      sorter: true,
       render: (rating) =>
         rating !== undefined && rating !== null ? `${parseFloat(rating).toFixed(1)} ⭐` : 'No rating',
-      sorter: (a, b) => (parseFloat(a.rating) || 0) - (parseFloat(b.rating) || 0),
     },
     {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
+      sorter: true,
       render: (price) =>
         price
           ? `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(price))}`
@@ -212,7 +226,7 @@ const SellerProductManagement = () => {
           showTotal: (total) => `Total ${total} products`,
           position: ['bottomCenter'],
         }}
-        onChange={(pag) => setPagination({ ...pagination, current: pag.current, pageSize: pag.pageSize })}
+        onChange={handleTableChange}
       />
     </Card>
   );

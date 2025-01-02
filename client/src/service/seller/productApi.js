@@ -60,16 +60,17 @@ export const updateProduct = async (axiosPrivate, id, productData) => {
     }
 };
 
-export const getProductsByStatus = async (axiosPrivate, status, page = 1, limit = 10, search = '') => {
+export const getProductsByStatus = async (axiosPrivate, status, page = 1, limit = 10, search = '', sortField = '', sortOrder = '') => {
     try {
         const response = await axiosPrivate.get(`${BASE_URL}/seller/products`, {
-            params: { status, page, limit, search },
+            params: { status, page, limit, search, sortField, sortOrder },
         });
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to fetch products by status');
     }
 };
+
 
 
 export const getTotalProducts = async (axiosPrivate) => {

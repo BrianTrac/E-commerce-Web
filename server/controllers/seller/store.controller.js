@@ -1,12 +1,13 @@
 const Seller = require('../../models/Seller');
+const SellerInfo = require('../../models/SellerInfo');
 
 const getStore = async (req, res) => {
     try {
-        const seller_id = req.user?.id || 11;  // Use default seller ID if not available
+        const idAccount = req.user?.id || 11;  // Use default seller ID if not available
 
         let store = await Seller.findOne({
             where: {
-                user_id: seller_id
+                user_id: idAccount
             }
         });
 
@@ -26,9 +27,14 @@ const getStore = async (req, res) => {
                 }
             }
 
+            const maxId = await Seller.max('id') || 0;
+            const randomIncrement = Math.floor(Math.random() * 10000); // Random trong khoảng 10000
+            const seller_id = maxId + randomIncrement;
+
             // Create a new store with default values
             store = await Seller.create({
-                user_id: seller_id,
+                id: seller_id,
+                user_id: idAccount,
                 name: '',  
                 avg_rating_point: 0,        
                 icon: '',  
@@ -39,6 +45,19 @@ const getStore = async (req, res) => {
                 url: '',    
                 is_official: false,        
             });
+
+            // Update the seller info with the store_id
+            const sellerInfo = await SellerInfo.findOne({
+                where: {
+                    user_id: idAccount
+                }
+            });
+
+            if (sellerInfo) {
+                await sellerInfo.update({
+                    store_id: store_id,
+                });
+            }
         }
 
         res.status(200).json(store);  // Return the store information

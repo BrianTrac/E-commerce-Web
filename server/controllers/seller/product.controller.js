@@ -17,42 +17,44 @@ const getAllProductsByStoreId = async (req, res) => {
         attributes: ['store_id']
     });
 
-    const storeId = seller.store_id;
+    const storeId = seller?.store_id;
 
     if (!storeId) {
         return res.status(400).json({ message: 'storeId is required' });
     }
 
     try {
-        // Lấy query từ request
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const search = req.query.search || '';
         const status = req.query.status || '';
+        const sortField = req.query.sortField || 'id'; // Default sort field
+        const sortOrder = req.query.sortOrder === 'DESC' ? 'DESC' : 'ASC'; // Default sort order
 
-        // Tính toán offset cho phân trang
         const offset = (page - 1) * limit;
 
-        // Điều kiện tìm kiếm
         const whereCondition = {
-            'current_seller.store_id': storeId, // Điều kiện bắt buộc cho store_id
+            'current_seller.store_id': storeId,
             ...(search && {
                 name: {
-                    [Op.iLike]: `${search}%`, // Tìm kiếm những category_name bắt đầu với từ khóa
+                    [Op.iLike]: `${search}%`,
                 },
             }),
-            ...(status && { inventory_status: status }) // Lọc theo trạng thái
+            ...(status && { inventory_status: status })
         };
 
-        // Lấy tổng số sản phẩm để dùng cho phân trang
-        const totalCount = await Product.count({
-            where: whereCondition
-        });
+        // Adjust sortField for database query
+        const dbSortField = sortField === 'category'
+            ? 'category_name'
+            : sortField === 'rating'
+            ? 'rating_average'
+            : sortField;
 
-        // Lấy danh sách sản phẩm theo trang
+        const totalCount = await Product.count({ where: whereCondition });
+
         const products = await Product.findAll({
             where: whereCondition,
-            order: [['rating_average', 'DESC']], // Sắp xếp theo điểm đánh giá trung bình giảm dần
+            order: [[dbSortField, sortOrder]], // Sort dynamically
             limit: limit,
             offset: offset,
             attributes: [
@@ -67,11 +69,10 @@ const getAllProductsByStoreId = async (req, res) => {
             ]
         });
 
-        // Xử lý định dạng dữ liệu trước khi trả về
         const formattedProducts = products.map(product => {
             const images = Array.isArray(product.images)
                 ? product.images
-                : JSON.parse(product.images || '[]'); // Nếu là chuỗi JSON, parse sang mảng
+                : JSON.parse(product.images || '[]');
             const thumbnails = images.map(image => image.thumbnail_url);
             return {
                 id: product.id,
@@ -85,7 +86,6 @@ const getAllProductsByStoreId = async (req, res) => {
             };
         });
 
-        // Trả về kết quả
         return res.status(200).json({
             data: formattedProducts,
             total: totalCount,
@@ -100,6 +100,7 @@ const getAllProductsByStoreId = async (req, res) => {
         });
     }
 };
+
 
 // Get top 10 selling products
 // GET /api/seller/products/:storeId/top-selling/
@@ -319,7 +320,7 @@ let getTopSellingProducts_v2 = async (req, res) => {
             return res.status(400).json({ message: "Missing storeId parameter" });
         }
 
-        const limit = parseInt(req.query.limit) || 3;  // Number of products per page 
+        const limit = parseInt(req.query.limit) || 20;  // Number of products per page 
         const page = parseInt(req.query.page) || 1;    // Default to page 1
         const offset = (page - 1) * limit;            // Calculate offset for pagination
 

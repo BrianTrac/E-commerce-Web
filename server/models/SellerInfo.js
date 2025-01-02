@@ -7,10 +7,6 @@ const SellerInfo = sequelize.define('SellerInfo', {
     primaryKey: true,
     autoIncrement: true,
   },
-  seller_id: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-  },
   store_id: {
     type: DataTypes.INTEGER,
     allowNull: true, 

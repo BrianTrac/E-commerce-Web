@@ -129,19 +129,31 @@ const SellerEditProduct = () => {
 
   const handleAddRow = (specIndex) => {
     setSpecifications((prev) => {
-      const updated = [...prev];
-      updated[specIndex].attributes.push({ code: '', name: '', value: '' });
+      const updated = prev.map((spec, index) => {
+        if (index === specIndex) {
+          return {
+            ...spec,
+            attributes: [...spec.attributes, { code: '', name: '', value: '' }],
+          };
+        }
+        return spec;
+      });
       return updated;
     });
   };
 
   const handleRemoveRow = (specIndex, attrIndex) => {
     setSpecifications((prev) => {
-      const updated = [...prev];
-      updated[specIndex].attributes.splice(attrIndex, 1);
-      if (updated[specIndex].attributes.length === 0) {
-        updated.splice(specIndex, 1);
-      }
+      const updated = prev.map((spec, index) => {
+        if (index === specIndex) {
+          const updatedAttributes = spec.attributes.filter((_, i) => i !== attrIndex);
+          return {
+            ...spec,
+            attributes: updatedAttributes,
+          };
+        }
+        return spec;
+      });
       return updated;
     });
   };

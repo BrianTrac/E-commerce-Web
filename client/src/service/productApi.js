@@ -75,7 +75,6 @@ const fetchProductReviews = async (id) => {
   }
 };
 
-
 export {
   getTopDeals,
   getFlashSale,

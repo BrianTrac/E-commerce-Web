@@ -6,4 +6,8 @@ router.get('/', orderController.getOrders);
 
 router.patch('/:orderId', orderController.updateOrderStatus);
 
+router.get('/potential-customer', orderController.getPotentialCustomer);
+
+router.get('/recent', orderController.getRecentOrders);
+
 module.exports = router;

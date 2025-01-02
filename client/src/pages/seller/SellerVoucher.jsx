@@ -296,7 +296,7 @@ const SellerVoucher = () => {
                         </div>
 
                         <div>
-                            <p>Sản phẩm</p>
+                            <p className="mb-2">Sản phẩm</p>
                             <Select
                                 value={selectedProduct}
                                 onChange={setSelectedProduct}

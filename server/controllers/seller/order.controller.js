@@ -92,7 +92,154 @@ const updateOrderStatus = async (req, res) => {
   }
 };
 
+const getPotentialCustomer = async (req, res) => {
+  try {
+    const sellerId = req.user.id;
+
+    const seller = await Seller.findOne({
+      where: { user_id: sellerId },
+      attributes: ['store_id'],
+    });
+
+    if (!seller) {
+      return res.status(404).json({ message: 'Seller not found' });
+    }
+
+    const storeId = seller.store_id;
+
+    const orders = await Order.findAll({
+      attributes: ['id', 'user_id', 'total_price', 'status', 'created_at', 'updated_at'],
+      include: [
+        {
+          model: OrderItem,
+          attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'created_at'],
+          include: [
+            {
+              model: Product,
+              as: 'Product',
+              attributes: ['id', 'name', 'price', 'current_seller', 'thumbnail_url'],
+              where: {
+                [Op.and]: [
+                  Sequelize.where(
+                    Sequelize.cast(Sequelize.json('current_seller.store_id'), 'INTEGER'), storeId
+                  )
+                ],
+              },
+              required: true, // Chỉ lấy các OrderItem có Product phù hợp
+            },
+          ],
+          required: true, // Chỉ lấy các Order có OrderItem phù hợp
+        },
+        {
+          model: User,
+          attributes: ['id', 'username', 'email'],
+        },
+      ],
+    });
+
+    if (!orders.length) {
+      return res.status(404).json({ message: 'No orders found for this store' });
+    }
+
+    const result = orders.map((order) => {
+      const spending = order.OrderItems.reduce((total, item) => {
+        return total + item.price * item.quantity;
+      }, 0);
+    
+      return {
+        id: order.id,
+        userId: order.user_id,
+        username: order.User?.username || 'N/A',
+        email: order.User?.email || 'N/A',
+        status: order.status,
+        spending,
+        createdAt: order.created_at,
+        updatedAt: order.updated_at,
+      };
+    });
+    
+    // Trả về kết quả
+    res.status(200).json({
+      message: 'Orders with spending fetched successfully',
+      data: result,
+    });
+  } catch (error) {
+    console.error('Error fetching potential customers:', error.message);
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
+};
+
+const getRecentOrders = async (req, res) => {
+  try {
+    const sellerId = req.user.id;
+
+    const seller = await Seller.findOne({
+      where: { user_id: sellerId },
+      attributes: ['store_id'],
+    });
+
+    if (!seller) {
+      return res.status(404).json({ message: 'Seller not found' });
+    }
+
+    const storeId = seller.store_id;
+
+    const orders = await Order.findAll({
+      attributes: ['id', 'user_id', 'total_price', 'status', 'created_at', 'updated_at'],
+      include: [
+        {
+          model: OrderItem,
+          attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'created_at'],
+          include: [
+            {
+              model: Product,
+              as: 'Product',
+              attributes: ['id', 'name', 'price', 'current_seller', 'thumbnail_url'],
+              where: {
+                [Op.and]: [
+                  Sequelize.where(
+                    Sequelize.cast(Sequelize.json('current_seller.store_id'), 'INTEGER'),
+                    storeId
+                  )
+                ],
+              },
+              required: true, // Chỉ lấy các OrderItem có Product phù hợp
+            },
+          ],
+          required: true, // Chỉ lấy các Order có OrderItem phù hợp
+        },
+        {
+          model: User,
+          attributes: ['id', 'username', 'email'],
+        },
+      ],
+      order: [['created_at', 'DESC']], // Sắp xếp theo created_at giảm dần
+    });
+
+    if (!orders.length) {
+      return res.status(404).json({ message: 'No orders found for this store' });
+    }
+
+    res.status(200).json({
+      message: 'Recent orders fetched successfully',
+      orders,
+    });
+  } catch (error) {
+    console.error('Error fetching recent orders:', error.message);
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getOrders,
   updateOrderStatus,
+  getPotentialCustomer,
+  getRecentOrders,
 };
+

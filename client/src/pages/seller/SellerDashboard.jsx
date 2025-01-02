@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Table } from 'antd';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import { BarChart, Bar, ResponsiveContainer } from 'recharts';
-import { getTopSellingProductInDashboard, getTopSellingProducts, getTotalFollowers, getTotalProducts, getTotalRevenue, getTotalReviews } from '../../service/seller/productApi';
+import { Table, Button, Tooltip, Typography, Tag } from 'antd';
+import { EyeOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as TooltipRecharts, ResponsiveContainer } from 'recharts';
+import { getTopSellingProductInDashboard, getTotalFollowers, getTotalProducts, getTotalRevenue, getTotalReviews } from '../../service/seller/productApi';
+import { getPotentialCustomer, getRecentOrders } from '../../service/seller/orderApi';
 import {
     DollarSign,
     Users,
@@ -11,8 +13,9 @@ import {
     Package,
 } from 'lucide-react';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+const { Text } = Typography;
 
-const SellerDashboard = () => {
+const SellerDashboard = () => {  
     const lineChartData = [
         { name: 'Jan', value: 100 },
         { name: 'Feb', value: 120 },
@@ -31,15 +34,22 @@ const SellerDashboard = () => {
         { month: 'Jun', min: 280, max: 520 },
         { month: 'Jul', min: 300, max: 550 },
         { month: 'Aug', min: 320, max: 580 },
+        { month: 'Sep', min: 350, max: 600 },
+        { month: 'Oct', min: 380, max: 620 },
+        { month: 'Nov', min: 400, max: 650 },
+        { month: 'Dec', min: 420, max: 680 },
     ];
 
+    const navigate = useNavigate();
     const [topSellingProducts, setTopSellingProducts] = useState([]);
-    const [pagination, setPagination] = useState({ current: 1, pageSize: 3, total: 0 });
+    const [pagination, setPagination] = useState({ current: 1, pageSize: 5, total: 0 });
     const [loading, setLoading] = useState(true);
     const [totalRevenue, setTotalRevenue] = useState(0);
     const [totalProducts, setTotalProducts] = useState(0);
     const [totalFollowers, setTotalFollowers] = useState(0);
     const [totalReviews, setTotalReviews] = useState(0);
+    const [potentialCustomers, setPotentialCustomers] = useState([]);
+    const [recentOrders, setRecentOrders] = useState([]);
     const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
@@ -51,6 +61,8 @@ const SellerDashboard = () => {
         loadTotalProducts();
         loadTotalFollowers();
         loadTotalReviews();
+        loadPotentialCustomers();
+        loadRecentOrders();
     }, []);
 
     const loadTotalRevenue = async () => {
@@ -89,13 +101,32 @@ const SellerDashboard = () => {
         }
     }
 
+    const loadPotentialCustomers = async () => {
+        try {
+            const response = await getPotentialCustomer(axiosPrivate);
+            setPotentialCustomers(response.data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const loadRecentOrders = async () => {
+        try {
+            const response = await getRecentOrders(axiosPrivate);
+            console.log(response);
+            setRecentOrders(response.orders);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     const loadTopSellingProducts = async () => {
         setLoading(true);
         try {
             const response = await getTopSellingProductInDashboard(axiosPrivate, pagination.current, pagination.pageSize);
 
             // Giới hạn số lượng sản phẩm hiển thị tối đa
-            const maxTotal = Math.min(response.totalItems, 9); // Giới hạn tối đa 10 sản phẩm
+            const maxTotal = Math.min(response.totalItems, 19); // Giới hạn tối đa 20 sản phẩm
 
             setTopSellingProducts(response.products);
             setPagination({
@@ -109,9 +140,14 @@ const SellerDashboard = () => {
         }
     };
 
+
     if (loading) {
         return <div className="text-center text-xl">Loading...</div>;
     }
+
+    const handleView = (product) => {
+        navigate(`/seller/product-management/detail/${product.id}`);
+    };
 
     const formatCurrency = (value) => {
         if (value >= 1_000_000_000) {
@@ -123,22 +159,97 @@ const SellerDashboard = () => {
         }
     };
 
-    const columns = [
+    const topSellingProductsColumns = [
+        {
+            title: 'Image', key: 'image', width: '80px',
+            render: (_, record) => (
+                <img 
+                    src={(Array.isArray(record.thumbnails) && record.thumbnails[0]) || ''} 
+                    alt={record.name || 'No image'} 
+                    className="w-10 h-10 object-cover border rounded" 
+                />
+            ),
+        },
         { title: 'Name', dataIndex: 'name', key: 'name' },
         { title: 'Sold', dataIndex: 'quantity_sold', key: 'quantity_sold' },
         {
             title: 'Price', dataIndex: 'price', key: 'price',
             render: (price) =>
-                price
-                    ? `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(price))}`
-                    : 'N/A',
+                price ? (
+                    <span style={{ color: 'green' }}>
+                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', }).format(Number(price))}
+                    </span>
+                ) : (
+                    <span style={{ color: 'red' }}>N/A</span>
+                ),
         },
+        {
+            title: 'Rating', dataIndex: 'rating', key: 'rating',
+            render: (rating) =>
+              rating !== undefined && rating !== null ? `${parseFloat(rating).toFixed(1)} ⭐` : 'No rating',
+            },
         {
             title: 'Earnings', dataIndex: 'earnings', key: 'earnings',
             render: (price) =>
                 price
                     ? `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(price))}`
                     : 'N/A',
+        },
+        {
+            title: 'View detail', dataIndex: 'action', key: 'action',
+            render: (_, record) => (
+                <Tooltip title="View Product">
+                    <Button
+                    type="link"
+                    icon={<EyeOutlined />}
+                    onClick={() => handleView(record)}
+                    className="text-blue-600 p-0 hover:text-blue-800"
+                    />
+                </Tooltip>
+            )
+        }
+    ];
+
+    const potentialCustomersColumns = [
+        { title: 'Customer', dataIndex: 'username', key: 'username' },
+        { title: 'Email', dataIndex: 'email', key: 'email' },
+        { title: 'Total Spending', dataIndex: 'spending', key: 'spending',
+            render: (price) =>
+                price ? (
+                    <span style={{ color: 'green' }}>
+                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', }).format(Number(price))}
+                    </span>
+                ) : (
+                    <span style={{ color: 'red' }}>N/A</span>
+                ),
+        },
+    ];
+
+    const recentOrdersColumns = [
+        {
+            title: 'Customer', dataIndex: 'User', key: 'User',
+            render: (user) => (
+                <>
+                    <Text strong>{user.username}</Text>
+                    <br />
+                    <Text type="secondary">{user.email}</Text>
+                </>
+            ),
+        },
+        {
+            title: 'Total Price', dataIndex: 'total_price', key: 'total_price',
+            render: (price) => <Text style={{ color: 'green' }}>{Number(price).toLocaleString()} VND</Text>,
+        },
+        {
+            title: 'Status', dataIndex: 'status', key: 'status',
+            render: (status) => {
+                const color =
+                    status === 'pending' 
+                        ? 'orange' : status === 'processing'
+                        ? 'green' : status === 'cancelled'
+                        ? 'red' : 'blue';
+                return <Tag color={color}>{status.toUpperCase()}</Tag>;
+            },
         },
     ];
 
@@ -235,16 +346,15 @@ const SellerDashboard = () => {
                     </div>
                 </div>
 
-                {/* Top Selling Products and Sales Overview */}
-                <div className="grid grid-cols-2 gap-6 mb-8">
-                    {/* Top Selling Products */}
-                    <div className="bg-white p-6 rounded-lg shadow">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-semibold">Top selling products</h3>
-                            <MoreVertical className="w-4 h-4 text-gray-400" />
-                        </div>
-                        <Table
-                            columns={columns}
+                {/* Top Selling Products */}
+                <div className="bg-white p-6 rounded-lg shadow mb-8">
+                    <div className="flex justify-between items-center mb-6">
+                        <h3 className="text-lg font-semibold">Top selling products</h3>
+                        <MoreVertical className="w-4 h-4 text-gray-400" />
+                    </div>
+
+                    <Table
+                            columns={topSellingProductsColumns}
                             dataSource={topSellingProducts}
                             loading={loading}
                             rowKey="id"
@@ -258,89 +368,55 @@ const SellerDashboard = () => {
                                 onChange: (page) => setPagination({ ...pagination, current: page }),
                             }}
                         />
+                </div>
+                
+                {/* Sales Overview */}
+                <div className="bg-white p-6 rounded-lg shadow mb-8">
+                    <div className="flex justify-between items-center mb-6">
+                        <h3 className="text-lg font-semibold">Sales Overview</h3>
+                        <MoreVertical className="w-4 h-4 text-gray-400" />
                     </div>
-
-                    {/* Sales Overview */}
-                    <div className="bg-white p-6 rounded-lg shadow">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-semibold">Sales Overview</h3>
-                            <MoreVertical className="w-4 h-4 text-gray-400" />
-                        </div>
-                        <div className='flex justify-betwwen' style={{ width: '100%', height: '80%' }}>
-                            <ResponsiveContainer>
-                                <BarChart data={salesData}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="month" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Bar dataKey="max" fill="#3b82f6" />
-                                    <Bar dataKey="min" fill="#93c5fd" />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
+                    <div className='flex justify-betwwen' style={{ width: '100%', height: '100%' }}>
+                        <BarChart width={1000} height={600} data={salesData}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="month" />
+                            <YAxis />
+                            <TooltipRecharts />
+                            <Bar dataKey="max" fill="#3b82f6" />
+                            <Bar dataKey="min" fill="#93c5fd" />
+                        </BarChart>
                     </div>
                 </div>
 
-                {/*
-                {/* Recent Customers and Top Sellers 
-                <div className="grid grid-cols-2 gap-6"> 
-                    {/* Recent Customers 
+                {/* Top Selling Products and Sales Overview */}
+                <div className="grid grid-cols-2 gap-6 mb-8">
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-semibold">Recent Customers</h3>
+                            <h3 className="text-lg font-semibold">Top customers</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
-                        <div className="space-y-4">
-                            {/* Customer items 
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-3">
-                                    <img src="/api/placeholder/40/40" alt="Customer" className="w-10 h-10 rounded-full" />
-                                    <div>
-                                        <p className="font-medium">Junsung Park</p>
-                                        <p className="text-sm text-gray-500">ID #32449</p>
-                                    </div>
-                                </div>
-                                <span className="px-2 py-1 bg-green-100 text-green-600 rounded">Paid</span>
-                            </div>
-                            {/* Add more customer items *
-                        </div>
+                        <Table
+                            columns={potentialCustomersColumns}
+                            dataSource={potentialCustomers}
+                            loading={loading}
+                            rowKey="id"
+                        />
                     </div>
 
-                    {/* Top Sellers 
+                    {/*  */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-semibold">Top Seller Of The Month</h3>
+                            <h3 className="text-lg font-semibold">Recent Orders</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
-                        <table className="w-full">
-                            <thead>
-                                <tr className="text-left">
-                                    <th className="pb-4">Seller Name</th>
-                                    <th className="pb-4">Product</th>
-                                    <th className="pb-4">Sold</th>
-                                    <th className="pb-4">Price</th>
-                                    <th className="pb-4">Earnings</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td className="py-2">
-                                        <div className="flex items-center space-x-2">
-                                            <img src="/api/placeholder/32/32" alt="Seller" className="w-8 h-8 rounded-full" />
-                                            <span>Gary Waters</span>
-                                        </div>
-                                    </td>
-                                    <td className="py-2">Clothes</td>
-                                    <td className="py-2">650</td>
-                                    <td className="py-2">$37.50</td>
-                                    <td className="py-2">$24,375</td>
-                                </tr>
-                                {/* Add more rows as needed *
-                            </tbody>
-                        </table>
+                        <Table
+                            columns={recentOrdersColumns}
+                            dataSource={recentOrders}
+                            loading={loading}
+                            rowKey="id"
+                        />
                     </div>
                 </div>
-                */}
             </div>
         </div>
     );

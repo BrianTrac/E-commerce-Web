@@ -15,3 +15,21 @@ export const updateOrderStatus = async (axiosPrivate, orderId, status) => {
     throw new Error(error.response?.data?.message || 'Failed to update order status');
   }
 };
+
+export const getPotentialCustomer = async (axiosPrivate) => {
+  try {
+    const response = await axiosPrivate.get('/api/seller/orders/potential-customer');
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to fetch potential customer');
+  }
+}
+
+export const getRecentOrders = async (axiosPrivate) => {
+  try {
+    const response = await axiosPrivate.get('/api/seller/orders/recent');
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to fetch recent orders');
+  }
+};

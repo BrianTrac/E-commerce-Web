@@ -330,7 +330,9 @@ let getTopSellingProducts_v2 = async (req, res) => {
                 'id',
                 'name',
                 'price',
+                'rating_average',
                 'quantity_sold',
+                'images',
                 [Sequelize.literal('price * quantity_sold'), 'earnings']
             ],
             where: Sequelize.where(
@@ -348,12 +350,28 @@ let getTopSellingProducts_v2 = async (req, res) => {
             }
         });
 
+        const formattedProducts = topSellingProducts.map(product => {
+            const images = Array.isArray(product.images)
+                ? product.images
+                : JSON.parse(product.images || '[]');
+            const thumbnails = images.map(image => image.thumbnail_url);
+            return {
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                rating: product.rating_average,
+                quantity_sold: product.quantity_sold,
+                thumbnails,
+                earnings: product.dataValues.earnings
+            };
+        });
+
         res.status(200).json({
             message: "Top selling products fetched successfully",
             currentPage: page,
             pageSize: limit,
             totalItems: totalItems,
-            products: topSellingProducts
+            products: formattedProducts
         });
     } catch (error) {
         console.error('Error fetching top selling products:', error);

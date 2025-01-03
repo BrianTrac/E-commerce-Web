@@ -22,8 +22,13 @@ let getAllProducts = async (req, res) => {
         const limit = req.query.limit || 30;
         const offset = (page - 1) * limit;
 
+        const whereCondition = {
+            inventory_status: 'available'
+        };
+
         const result = await Product.findAndCountAll(
             {
+                where: whereCondition,
                 limit: limit,
                 offset: offset
             }
@@ -188,6 +193,8 @@ const fetchProductsByQuery = async (query, limit, offset, filters, sortOption) =
             [Op.between]: filters.price.sort((a, b) => a - b),
         };
     }
+
+    where.inventory_status = 'available';
 
     let order = [];
 

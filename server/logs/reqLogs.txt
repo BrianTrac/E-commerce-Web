@@ -18914,3 +18914,15 @@
 2025-01-03 20:53:18 	 9c23518b-c04f-4a66-b4ae-8879de26f32f 	  GET 	 /api/categories?include=children&parent_id=0 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0
 2025-01-03 20:53:18 	 2b2e07ff-500f-412a-8427-9a3eb028c57f 	  GET 	 /api/cart 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0
 2025-01-03 20:53:18 	 0f215b6e-bf19-4c84-a4c4-c3dd912a662e 	  GET 	 /api/cart 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0
+2025-01-03 21:05:25 	 e4134a53-e20b-4ffe-aa6b-c9bcb958bc39 	  POST 	 /api/auth/token/refresh 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0
+2025-01-03 21:05:25 	 723d4c92-4dc8-4652-b977-fd148049e0a0 	  POST 	 /api/auth/token/refresh 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0
+2025-01-03 21:05:25 	 079179a5-9464-49c5-88ff-f7783efc01f1 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0
+2025-01-03 21:05:25 	 2aa05ba2-9dea-455e-8283-eec915ed7a4d 	  GET 	 /api/products/top_deals?limit=36&page=1 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0
+2025-01-03 21:05:25 	 a4e0dd54-e89c-4d65-ad96-ef3301960e80 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0
+2025-01-03 21:05:25 	 e6648a37-698a-4a70-9bf9-ebe04ea6766b 	  GET 	 /api/products/flash_sale?limit=36&page=1 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0
+2025-01-03 21:05:25 	 a0e44786-4a02-4471-bed4-6fa4476b631e 	  OPTIONS 	 /api/cart 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0
+2025-01-03 21:05:25 	 d1e62eab-b702-4f2c-a84e-7d0b43087393 	  OPTIONS 	 /api/cart 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0
+2025-01-03 21:05:25 	 8eae4946-4eec-4cad-80ac-8830923491ee 	  GET 	 /api/cart 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0
+2025-01-03 21:05:25 	 0788415a-af4f-41c3-98e7-3e5d5fe87d6b 	  GET 	 /api/categories?include=children&parent_id=0 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0
+2025-01-03 21:05:25 	 d19acb67-0e8c-4c62-90af-854189191b5a 	  GET 	 /api/cart 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0
+2025-01-03 21:05:25 	 c415beb8-cee9-4b02-9528-08f28c700d8f 	  GET 	 /api/categories?include=children&parent_id=0 	 ::ffff:127.0.0.1 	 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0

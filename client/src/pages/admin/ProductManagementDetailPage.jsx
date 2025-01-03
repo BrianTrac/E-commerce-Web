@@ -86,21 +86,21 @@ const ProductManagementDetailPage = () => {
                             </div>
                             <Text className="text-gray-500">Store ID: {currentProduct.id}</Text>
                         </div>
-                        <Space>
+                        {/* <Space>
                             <Button
                                 onClick={() => navigate(`/admin/seller-management/edit/${id}`)}
                                 type="default"
                             >
-                                Edit Seller
+                                Sửa đổi
                             </Button>
                             <Button
                                 type="primary"
                                 icon={<ShopOutlined />}
                                 onClick={() => window.open(currentProduct.url, '_blank')}
                             >
-                                Visit Product
+                                Xem sản phẩm
                             </Button>
-                        </Space>
+                        </Space> */}
                     </div>
 
                     <Divider />
@@ -146,14 +146,14 @@ const ProductManagementDetailPage = () => {
 
                     {/* Quick Links */}
                     <div className="space-y-4">
-                        <Title level={4}>Management Actions</Title>
+                        <Title level={4}>Quản lý</Title>
                         <Row gutter={[16, 16]}>
                             {[
                                 { label: 'View Reviews', action: () => navigate(`/admin/product-management/${id}/products`) },
                                 { label: 'Performance Analytics', action: () => navigate(`/admin/product-management/${id}/analytics`) },
                             ].map((item) => (
                                 <Col span={12} key={item.label}>
-                                    <Button className="w-full h-12" onClick={item.action}>
+                                    <Button disabled className="w-full h-12" onClick={item.action}>
                                         {item.label}
                                     </Button>
                                 </Col>

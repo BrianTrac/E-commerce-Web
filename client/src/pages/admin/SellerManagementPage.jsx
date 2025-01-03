@@ -113,7 +113,7 @@ const SellerManagement = () => {
             ),
         },
         {
-            title: 'Store Icon',
+            title: 'Avatar',
             key: 'icon',
             width: '80px',
             render: (_, record) => (
@@ -127,7 +127,7 @@ const SellerManagement = () => {
             ),
         },
         {
-            title: 'Store Name',
+            title: 'Tên shop',
             key: 'name',
             render: (_, record) => (
                 <Space direction="vertical" size={1}>
@@ -158,7 +158,7 @@ const SellerManagement = () => {
             sorter: (a, b) => (a.rating || 0) - (b.rating || 0),
         },
         {
-            title: 'Reviews',
+            title: 'Đánh giá',
             dataIndex: 'review_count',
             key: 'review_count',
             width: '100px',
@@ -168,7 +168,7 @@ const SellerManagement = () => {
             sorter: (a, b) => a.review_count - b.review_count,
         },
         {
-            title: 'Followers',
+            title: 'Lượt theo dõi',
             dataIndex: 'total_follower',
             key: 'total_follower',
             width: '100px',
@@ -178,7 +178,7 @@ const SellerManagement = () => {
             sorter: (a, b) => a.total_follower - b.total_follower,
         },
         {
-            title: 'Actions',
+            title: 'Hành động',
             key: 'actions',
             width: '150px',
             render: (_, record) => (
@@ -257,7 +257,7 @@ const SellerManagement = () => {
                     total: filteredSellers?.length,
                     showSizeChanger: true,
                     showQuickJumper: true,
-                    showTotal: (total) => `Total ${total} sellers`,
+                    showTotal: (total) => `Tổng cộng ${total} shop`,
                     position: ['bottomCenter']
                 }}
                 onChange={handleTableChange}

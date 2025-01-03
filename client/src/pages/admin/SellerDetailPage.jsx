@@ -34,7 +34,7 @@ const SellerDetailPage = () => {
                     icon={<ArrowLeftOutlined />}
                     onClick={() => navigate('/admin/seller-management')}
                 >
-                    Back
+                    Quay về
                 </Button>
             </Space>
 
@@ -71,10 +71,11 @@ const SellerDetailPage = () => {
                                         onClick={() => navigate(`/admin/seller-management/${id}/edit`)}
                                 type="default"
                             >
-                                Edit Seller
+                                Chỉnh sửa
                             </Button>
                             <Button
                                 type="primary"
+                                disabled
                                 icon={<ShopOutlined />}
                                 onClick={() => window.open(currentSeller.url, '_blank')}
                             >
@@ -89,34 +90,34 @@ const SellerDetailPage = () => {
                         <Col span={8}>
                             <Card className="text-center bg-blue-50">
                                 <Statistic
-                                    title={<span className="flex items-center justify-center gap-2"><StarFilled className="text-yellow-500" /> Rating</span>}
+                                    title={<span className="flex items-center justify-center gap-2"><StarFilled className="text-yellow-500" /> Đánh giá</span>}
                                     value={Number(currentSeller.avg_rating_point).toFixed(1)}
                                     suffix={`/ 5.0`}
                                     precision={1}
                                 />
                                 <Text className="text-gray-500">
-                                    {Number(currentSeller.review_count).toLocaleString()} reviews
+                                    {Number(currentSeller.review_count).toLocaleString()} đánh giá
                                 </Text>
                             </Card>
                         </Col>
                         <Col span={8}>
                             <Card className="text-center bg-green-50">
                                 <Statistic
-                                    title={<span className="flex items-center justify-center gap-2"><UserOutlined /> Followers</span>}
+                                    title={<span className="flex items-center justify-center gap-2"><UserOutlined /> Người theo dõi</span>}
                                     value={Number(currentSeller.total_follower).toLocaleString()}
                                 />
-                                <Text className="text-gray-500">Active followers</Text>
+                                <Text className="text-gray-500">Người dùng hoạt động</Text>
                             </Card>
                         </Col>
                         <Col span={8}>
                             <Card className="text-center bg-purple-50">
                                 <Statistic
-                                    title="Store Performance"
-                                    value={Number(currentSeller.avg_rating_point) >= 4.5 ? "Excellent" :
-                                        Number(currentSeller.avg_rating_point) >= 4.0 ? "Good" : "Average"}
+                                    title="Hiệu quả"
+                                    value={Number(currentSeller.avg_rating_point) >= 4.5 ? "Xuất sắc" :
+                                        Number(currentSeller.avg_rating_point) >= 4.0 ? "Tốt" : "Khá"}
                                     className="text-purple-600"
                                 />
-                                <Text className="text-gray-500">Based on ratings & followers</Text>
+                                <Text className="text-gray-500">Dựa trên đánh giá và số lượng theo dõi</Text>
                             </Card>
                         </Col>
                     </Row>
@@ -124,11 +125,11 @@ const SellerDetailPage = () => {
                     {/* Quick Links */}
                     <Divider />
                     <div className="space-y-4">
-                        <Title level={4}>Management Actions</Title>
+                        <Title level={4}>Quản lý</Title>
                         <Row gutter={[16, 16]}>
                             {[
-                                { label: 'View Products', action: () => navigate(`/admin/seller-management/${id}/products`) },
-                                { label: 'Performance Analytics', action: () => navigate(`/admin/seller-management/${id}/analytics`) },
+                                { label: 'Xem sản phảm của shop', action: () => navigate(`/admin/seller-management/${id}/products`) },
+                                { label: 'Thống kê', action: () => navigate(`/admin/seller-management/${id}/analytics`) },
                             ].map((item) => (
                                 <Col span={12} key={item.label}>
                                     <Button className="w-full h-12" onClick={item.action}>

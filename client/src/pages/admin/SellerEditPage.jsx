@@ -118,13 +118,13 @@ const SellerEditPage = () => {
                     className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50"
                 >
                     <ArrowLeft className="w-4 h-4" />
-                    <span>Back</span>
+                    <span>Quay về</span>
                 </button>
             </div>
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Edit Seller</CardTitle>
+                    <CardTitle>Chỉnh sửa</CardTitle>
                 </CardHeader>
                 <CardContent>
                     {error && (
@@ -141,7 +141,7 @@ const SellerEditPage = () => {
 
                         <div className="space-y-2">
                             <label htmlFor="name" className="block text-sm font-medium">
-                                Store Name
+                                Tên shop
                             </label>
                             <input
                                 type="text"
@@ -164,7 +164,7 @@ const SellerEditPage = () => {
                                 className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
                             />
                             <label htmlFor="isOfficial" className="text-sm font-medium">
-                                Official Store Status
+                                Trạng thái official
                             </label>
                         </div>
 
@@ -182,7 +182,7 @@ const SellerEditPage = () => {
                                 className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
                             >
                                 <Save className="w-4 h-4" />
-                                <span>{isSubmitting ? 'Saving...' : 'Save Changes'}</span>
+                                <span>{isSubmitting ? 'Đang lưu...' : 'Lưu thay đổi'}</span>
                             </button>
                         </div>
                     </form>

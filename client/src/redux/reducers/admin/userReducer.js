@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 import {
     fetchUsers,
     fetchOneUser,
@@ -13,6 +14,7 @@ const userSlice = createSlice({
     initialState: {
         data: [],
         currentUser: null,
+        analytics: null,
         loading: false,
         error: null,
         pagination: {
@@ -54,7 +56,7 @@ const userSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchOneUser.fulfilled, (state, action) => {
-                state.currentUser = action.payload;
+                state.currentUser = action.payload.user;
                 state.loading = false;
             })
             .addCase(fetchOneUser.rejected, (state, action) => {
@@ -69,12 +71,14 @@ const userSlice = createSlice({
             })
             .addCase(fetchUserTotalSpent.fulfilled, (state, action) => {
                 state.totalSpent = action.payload.total_spent;
+                state.orderCount = action.payload.order_count;
                 state.loading = false;
             })
             .addCase(fetchUserTotalSpent.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload?.message || 'An error occurred';
                 state.totalSpent = null;
+                state.orderCount = null;
             })
             // Fetch User Order List
             .addCase(fetchUserOrderList.pending, (state, action) => {

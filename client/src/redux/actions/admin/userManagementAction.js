@@ -8,10 +8,10 @@ const axios = useAxiosPrivate;
 
 export const fetchUsers = createAsyncThunk(
     'admin/users/fetchAll',
-    async ({ axiosInstance, page = 1, limit = 10 }, { rejectWithValue }) => {
+    async ({ axiosInstance, page = 1, limit = 10, search ='' }, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.get('/api/admin/user', {
-                params: { page, limit },
+                params: { page, limit, search },
             });
             return {
                 users: response.data.data,
@@ -121,7 +121,7 @@ export const fetchUserTotalSpent = createAsyncThunk(
     'admin/users/fetchUserTotalSpent',
     async ({ id, axiosInstance }, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.get(`/api/admin/user/${id}/total-spent`);
+            const response = await axiosInstance.put(`/api/admin/user/${id}/total-spent`);
             return response.data.data;
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Failed to fetch total spent';

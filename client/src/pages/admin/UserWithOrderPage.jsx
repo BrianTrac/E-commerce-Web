@@ -128,6 +128,7 @@ const UserWithOrderPage = () => {
         {
             title: 'Product Name',
             key: 'name',
+            width: '250px',
             render: (_, record) => (
                 <div>
                     {record?.OrderItems?.map((item) => (
@@ -419,7 +420,6 @@ const UserWithOrderPage = () => {
                     }}
                     onChange={handleTableChange}
                     className="border border-gray-200 rounded"
-                    scroll={{ x: 1200 }}
                 />
             </Card>
         </div>

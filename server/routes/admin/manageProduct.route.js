@@ -8,4 +8,6 @@ router.get('/', productController.getAllProducts);
 // [GET] /api/admin/products/:id
 router.get('/:id', productController.getOneProduct);
 
+router.put('/:id/suspend', productController.suspendProduct);
+
 module.exports = router;

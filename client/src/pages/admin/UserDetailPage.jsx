@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchOneUser } from '../../redux/actions/admin/userManagementAction';
+import { fetchOneUser, fetchUserTotalSpent } from '../../redux/actions/admin/userManagementAction';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { Card, Row, Col, Typography, Statistic, Button, Tag, Divider, Spin, Space } from 'antd';
 import {
@@ -19,16 +19,37 @@ const UserDetailPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const axiosPrivate = useAxiosPrivate();
-    const { currentUser, loading } = useSelector(state => state.admin.users);
+    const { currentUser, totalSpent, orderCount, loading, error } = useSelector(state => state.admin.users);
 
     useEffect(() => {
-        if (id) {
-            // Assuming you'll create this action
+        if (id && !currentUser) {
             dispatch(fetchOneUser({ id, axiosInstance: axiosPrivate }));
-            //dispatch(fetchUserTotalSpent({ id, axiosInstance: axiosPrivate }));
+            dispatch(fetchUserTotalSpent({ id, axiosInstance: axiosPrivate }));
         }
-    }, [id, dispatch]);
-    console.log(currentUser);
+    }, [id, dispatch, axiosPrivate, currentUser]);
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <Spin size="large" />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <Text type="danger">{error}</Text>
+            </div>
+        );
+    }
+
+    if (!currentUser) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <Text type="secondary">User not found</Text>
+            </div>
+        );
+    }
 
     return (
         <div className="p-6">
@@ -58,14 +79,14 @@ const UserDetailPage = () => {
                         />
                         <div className="flex-grow">
                             <div className="flex items-center gap-3">
-                                <Title level={3} className="mb-0">{currentUser.user.username}</Title>
+                                <Title level={3} className="mb-0">{currentUser.username}</Title>
                                 {currentUser.is_official === "true" && (
                                     <Tag color="blue" icon={<CheckCircleFilled />} className="mt-1">
                                         Official Store
                                     </Tag>
                                 )}
                             </div>
-                            <Text className="text-gray-500">Email: {currentUser.user.email}</Text>
+                            <Text className="text-gray-500">Email: {currentUser.email}</Text>
                         </div>
                         <Space>
                             <Button
@@ -84,7 +105,7 @@ const UserDetailPage = () => {
                             <Card className="text-center bg-blue-50">
                                 <Statistic
                                     title={<span className="flex items-center justify-center gap-2"><StarFilled className="text-yellow-500" /> Status </span>}
-                                    value={(currentUser.user.is_active)? "Active" : "Inactive"}
+                                    value={(currentUser.is_active)? "Active" : "Inactive"}
                                     precision={1}
                                 />
                             </Card>
@@ -92,16 +113,16 @@ const UserDetailPage = () => {
                         <Col span={8}>
                             <Card className="text-center bg-green-50">
                                 <Statistic
-                                    title={<span className="flex items-center justify-center gap-2"><UserOutlined /> Order quantity </span>}
-                                    // value={`₫${Number(totalSpent).toLocaleString()}`}
+                                    title={<span className="flex items-center justify-center gap-2"><UserOutlined /> Total purchase amount </span>}
+                                    value={`₫${Number(totalSpent).toLocaleString()}`}
                                 />
                             </Card>
                         </Col>
                         <Col span={8}>
                             <Card className="text-center bg-purple-50">
                                 <Statistic
-                                    title="Create at"
-                                    value={new Date(currentUser.user.created_at).toLocaleDateString()}
+                                    title="Number of orders"
+                                    value={orderCount||0}
                                     className="text-purple-600"
                                 />
                             </Card>
@@ -114,9 +135,9 @@ const UserDetailPage = () => {
                         <Row gutter={[16, 16]}>
                             {[
                                 { label: 'View Order List', action: () => navigate(`/admin/user-management/${id}/products`) },
-                                { label: 'Performance Analytics', action: () => navigate(`/admin/user-management/${id}/analytics`) },
+
                             ].map((item) => (
-                                <Col span={12} key={item.label}>
+                                <Col span={24} key={item.label}>
                                     <Button className="w-full h-12" onClick={item.action}>
                                         {item.label}
                                     </Button>

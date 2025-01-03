@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SearchOutlined, UserOutlined, ShoppingCartOutlined, BellOutlined, LogoutOutlined } from '@ant-design/icons';
+import { SearchOutlined, UserOutlined, ShoppingCartOutlined, BellOutlined, LogoutOutlined, DownOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAuth } from '../../redux/reducers/user/authReducer';
@@ -20,6 +20,15 @@ function Header() {
         dispatch(setSearchQuery(''));
         navigate('/');
     }
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
+    const closeMenu = () => {
+        setIsMenuOpen(false);
+    };
 
     return (
         <>
@@ -44,7 +53,7 @@ function Header() {
                     {/* Conditional Rendering for User Login */}
                     {isAuthenticated ? (
                         <div className="flex items-center space-x-6 mt-4 sm:mt-0">
-                            <div className='relative'>
+                            <div className="relative">
                                 <button className="flex items-center text-gray-600 hover:text-gray-800">
                                     <ShoppingCartOutlined style={{ fontSize: '20px', marginRight: '12px' }} />
                                     Giỏ hàng
@@ -59,15 +68,29 @@ function Header() {
                                     2
                                 </span>
                             </div>
-                            <button className="flex items-center text-gray-600 hover:text-gray-800 font-semibold" >
-                                <UserOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
-                                {user?.username || 'Anonymous'}
-                            </button>
-                            <button className="flex items-center space-x-2 px-4 py-2 hover:text-gray-800 font-semibold rounded-md transition duration-200">
-                                <LogoutOutlined style={{ fontSize: '20px' }} />
-                                <span>Logout</span>
-                            </button>
-
+                            <div className="relative">
+                                <button
+                                    onClick={toggleMenu}
+                                    className="flex items-center text-gray-600 hover:text-gray-800 font-semibold"
+                                >
+                                    <UserOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
+                                    {user?.username || 'Anonymous'}
+                                    <DownOutlined style={{ fontSize: '14px', marginLeft: '8px' }} />
+                                </button>
+                                {isMenuOpen && (
+                                    <div
+                                        className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg border border-gray-200 z-10"
+                                        onMouseLeave={closeMenu}
+                                    >
+                                        <button
+                                            className="block w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
+                                            // onClick={handleLogout}
+                                        >
+                                            Logout
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     ) : (
                         <div className="flex items-center space-x-6 mt-4 sm:mt-0">
@@ -88,10 +111,7 @@ function Header() {
                                 <UserOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
                                 Đăng ký
                             </button>
-
-                            {/* Vertical bar */}
                             <div className="h-6 border-l border-gray-300"></div>
-
                             <button
                                 className="flex items-center text-gray-600 hover:text-gray-800"
                                 onClick={() => navigate('/auth/login')}

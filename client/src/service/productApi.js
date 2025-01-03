@@ -1,12 +1,12 @@
 import axios from '../config/axios';
 
 const getTopDeals = async ({ limit = 36, page = 1 } = {}) => {
-  const response = await axios.get(`api/products/top_deals?limit=${limit}&page=${page}`); 
+  const response = await axios.get(`api/products/top_deals?limit=${limit}&page=${page}`);
   return response.data.data;
 };
 
 const getFlashSale = async ({ limit = 36, page = 1 } = {}) => {
-  const response = await axios.get(`api/products/flash_sale?limit=${limit}&page=${page}`);  
+  const response = await axios.get(`api/products/flash_sale?limit=${limit}&page=${page}`);
   return response.data.data;
 };
 
@@ -19,7 +19,7 @@ const fetchProductByCategory = async (
     rating,
     price,
   }) => {
-  
+
   if (!category) {
     throw new Error('Category is required parameter');
   }
@@ -51,7 +51,6 @@ const fetchProductByCategory = async (
 
 const fetchProductById = async (id) => {
   try {
-    debugger
     const response = await axios.get(`api/products/${id}`);
     return response.data;
   } catch (error) {
@@ -59,11 +58,27 @@ const fetchProductById = async (id) => {
     throw error;
   }
 }
-  
+
+const fetchProductReviews = async (id) => {
+  try {
+    const response = await fetch(`https://tiki.vn/api/v2/reviews?product_id=${id}`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json(); 
+    return data; 
+  } catch (error) {
+    console.error('Failed to fetch product reviews', error);
+    throw error; 
+  }
+};
 
 export {
   getTopDeals,
   getFlashSale,
   fetchProductByCategory,
   fetchProductById,
+  fetchProductReviews,
 };

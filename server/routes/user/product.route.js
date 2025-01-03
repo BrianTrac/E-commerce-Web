@@ -13,6 +13,8 @@ router.get('/', (req, res, next) => {
     }
 });
 
+router.get('/', productController.getProductById); // method GET - Read
+
 router.get('/search/suggestion', productController.getSuggestions); // method GET Suggestions
 
 router.get('/top_deals', productController.getTopDeals); // method GET Top Deals

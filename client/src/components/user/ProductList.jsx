@@ -23,7 +23,6 @@ const ProductList = ({ categoryId }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                debugger;
                 let id = parseInt(categoryId.replace('c', ''), 10);
                 const result = await fetchProductByCategory({
                     category: id,

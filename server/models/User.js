@@ -12,6 +12,10 @@ const User = sequelize.define('User', {
         allowNull: false,
         unique: true,
     },
+    shipping_address: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
     password: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -38,6 +42,10 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    is_active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    }
 }, {
     tableName: 'Users',
     timestamps: true,

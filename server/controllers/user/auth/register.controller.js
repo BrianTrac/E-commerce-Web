@@ -88,7 +88,8 @@ const verifyRegistrationOTP = async(req, res) => {
             username: tempUser.username,
             email: tempUser.email,
             password: tempUser.password,
-            role: 'User'
+            role: 'User',
+            is_active: true,
         });
 
         await newUser.save();
@@ -96,7 +97,7 @@ const verifyRegistrationOTP = async(req, res) => {
        
         res.status(200).json({success: true, message: 'User registered successfully'});
     } catch (err) {
-        return res.status(500).json({ message: 'Failed to register user. Please try again later' });
+        return res.status(500).json({ message: err.message });
     }
 };
 

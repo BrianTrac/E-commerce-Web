@@ -12,7 +12,7 @@ const Home = () => {
     const [flashSale, setFlashSale] = useState([]);
 
     useEffect(() => {
-        debugger;
+        
         const fetchTopDeals = async () => {
             const data = await getTopDeals();
             setTopDeals(data);

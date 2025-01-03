@@ -3,7 +3,7 @@ const Product = require('../../models/Product');
 const { Op } = require('sequelize');
 const sequelize = require('../../config/db');
 const { WEB_URL } = require('../../config/config');
-const { get } = require('../../routes/user/product.route');
+//const { get } = require('../../routes/user/product.route');
 
 let createNewProduct = async (req, res) => {
     try {
@@ -22,8 +22,13 @@ let getAllProducts = async (req, res) => {
         const limit = req.query.limit || 30;
         const offset = (page - 1) * limit;
 
+        const whereCondition = {
+            inventory_status: 'available'
+        };
+
         const result = await Product.findAndCountAll(
             {
+                where: whereCondition,
                 limit: limit,
                 offset: offset
             }
@@ -46,10 +51,14 @@ let getAllProducts = async (req, res) => {
     }
 };
 
+// GET /api/products/?id=1
 let getProductById = async (req, res) => {
-    const productId = req.params.id;
-
     try {
+        const productId = req.query.id;
+
+        if (!productId) {
+            return res.status(400).json({ error: 'Query parameter "id" is required' });
+        }
         const result = await Product.findByPk(productId);
 
         if (result === null) {
@@ -188,6 +197,8 @@ const fetchProductsByQuery = async (query, limit, offset, filters, sortOption) =
             [Op.between]: filters.price.sort((a, b) => a - b),
         };
     }
+
+    where.inventory_status = 'available';
 
     let order = [];
 

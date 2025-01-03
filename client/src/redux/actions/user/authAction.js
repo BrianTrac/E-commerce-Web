@@ -7,10 +7,12 @@ export const login = createAsyncThunk(
     async ({ username, password }, { rejectWithValue }) => {
         try {
             const response = await authServices.login({ username, password });
+            console.log('response: ', response);
 
             const accessToken = response?.accessToken;
             if (accessToken) {
                 const decodedToken = jwtDecode(accessToken);
+                console.log('decodedToken: ', decodedToken);
                 const role = decodedToken?.role;
                 const email = decodedToken?.email;
                 return { username, email, accessToken, role };
@@ -104,9 +106,22 @@ export const refreshToken = createAsyncThunk(
                 const role = decodedToken?.role;
                 const email = decodedToken?.email;
                 const username = decodedToken?.username;
+                console.log('accessToken', accessToken);    
                 return { accessToken, role, email, username };
             }
             
+        } catch (err) {
+            return rejectWithValue(err?.response?.data?.message);
+        }
+    }
+);
+
+export const logout = createAsyncThunk(
+    'auth/logout',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await authServices.logout();
+            return response.message;
         } catch (err) {
             return rejectWithValue(err?.response?.data?.message);
         }

@@ -21,7 +21,6 @@ const PersistLogin = () => {
                 setIsLoading(false);  // Only set to false after attempting refresh
             }
         };
-
         if (!user?.accessToken) {
             verifyRefreshToken();
         } else {
@@ -31,8 +30,8 @@ const PersistLogin = () => {
 
 
     useEffect(() => {
-        console.log(`isLoading: ${isLoading}`)
-        console.log(`accessToken: ${JSON.stringify(user?.accessToken)}`)
+        //console.log(`isLoading: ${isLoading}`)
+        //console.log(`accessToken: ${JSON.stringify(user?.accessToken)}`)
     }, [isLoading])
 
     return isLoading ? (

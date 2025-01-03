@@ -58,7 +58,6 @@ const Search = () => {
 
     // Clear suggestions when navigating to another page
     useEffect(() => {
-        debugger;
         const clearSuggestionsOnNavigate = () => {
             setShowSuggestions(false)
             dispatch(clearSuggestions());
@@ -70,7 +69,6 @@ const Search = () => {
 
 
     const handleSuggestionClick = (suggestion) => {
-        debugger;
         dispatch(setSearchQuery(suggestion.name)); // Update search query
         const encodedQuery = encodeURIComponent(suggestion.name.trim()); // Encode the query
         setShowSuggestions(false); // Hide suggestions
@@ -82,7 +80,6 @@ const Search = () => {
     }
 
     const handleSearch = (e) => {
-        debugger;
         if (e.key === 'Enter' && searchQuery.trim()) {
             const encodedQuery = encodeURIComponent(searchQuery.trim());
             navigate(`/search/${encodedQuery}`);
@@ -91,7 +88,6 @@ const Search = () => {
     };
 
     const handleButtonClick = () => {
-        debugger;
         if (searchQuery.trim()) {
             const encodedQuery = encodeURIComponent(searchQuery);
             navigate(`/search/${encodedQuery}`);

@@ -1,5 +1,5 @@
 const express = require('express');
-const passport = require('passport');
+const passport = require('../../services/passport-setup.service');
 const router = express.Router();
 const { WEB_URL } = require('../../config/config');
 const { generateAccessToken, generateRefreshToken } = require('../../utils/jwtToken');

@@ -12,6 +12,10 @@ const User = sequelize.define('User', {
         allowNull: false,
         unique: true,
     },
+    shipping_address: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
     password: {
         type: DataTypes.STRING,
         allowNull: false,

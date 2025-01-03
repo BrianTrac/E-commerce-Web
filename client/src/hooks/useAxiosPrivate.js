@@ -8,10 +8,10 @@ import useRefreshToken from "./useRefreshToken";
 const useAxiosPrivate = () => {
     const refreshToken = useRefreshToken();
     const { user } = useSelector(selectAuth);
+    
     //  const { auth } = useAuth();
 
     useEffect(() => {
-        debugger;
         const requestInterceptor = axiosPrivate.interceptors.request.use(
             async config => {
                 if (!config.headers['Authorization']) {

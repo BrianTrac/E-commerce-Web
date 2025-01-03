@@ -51,7 +51,6 @@ const fetchProductByCategory = async (
 
 const fetchProductById = async (id) => {
   try {
-    debugger
     const response = await axios.get(`api/products/${id}`);
     return response.data;
   } catch (error) {

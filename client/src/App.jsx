@@ -24,6 +24,10 @@ import UserManagement from "./pages/admin/UserManagementPage.jsx";
 import SellerManagement from "./pages/admin/SellerManagementPage.jsx";
 import SellerDetailPage from "./pages/admin/SellerDetailPage.jsx";
 import SellerProductPage from "./pages/admin/SellerWithProductPage.jsx";
+import Cart from "./pages/user/CartPage.jsx";
+import PaymentPage from "./pages/user/PaymentPage.jsx";
+import PaymentSuccess from "./components/user/PaymentSuccess.jsx";
+import PaymentFailure from "./components/user/PaymentFailure.jsx";
 
 const ROLES = {
     User: 'User',
@@ -41,6 +45,16 @@ const App = () => {
                     <Route path="/search/:keyword" element={<Search />} />
                     <Route path="/:url_key/:id" element={<CategoryWithProducts />} />
                     <Route path="/:url_key" element={<ProductDetails />} />
+                </Route>
+
+                {/* USER ROUTE RequireAuth */}
+                <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+                    <Route path="/" element={<UserLayout />}>
+                        <Route path="/checkout/cart" element={<Cart />} />
+                        <Route path="/checkout/payment" element={<PaymentPage />} />
+                    </Route>
+                    <Route path="/checkout/success" element={<PaymentSuccess />} />
+                    <Route path="/checkout/failure" element={<PaymentFailure />} />
                 </Route>
 
                 {/* ADMIN ROUTES */}

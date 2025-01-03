@@ -11,7 +11,7 @@ const credentials = require('./middlewares/credentials.middleware');
 const passport = require('passport');
 require('./services/passport-setup.service');
 const session = require('express-session'); // Middleware for session handling
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 require('./models/associations'); // Import associations
 
 

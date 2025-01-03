@@ -47,9 +47,30 @@ const getUserById = async (req, res) => {
     }
 };
 
+const getUserByEmail = async (req, res) => {
+    if (!req.params.email) {
+        return res.status(400).json({ message: 'Bad request' });
+    }
+
+    try {
+        const
+            user = await User.findOne({ where: { email: req.params.email } });
+        if (!user) {
+            return res.status(404).json({ message: `User ${req.params.email} not found` });
+        }
+
+        res.json(user);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 module.exports = {
     getAllUsers,
     deleteUser,
-    getUserById
+    getUserById,
+    getUserByEmail,
 };
 

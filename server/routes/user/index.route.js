@@ -1,5 +1,6 @@
 const express = require('express');
 const verifyJWT = require('../../middlewares/verifyJWT.middleware');
+const attachOrCreateCartId = require('../../middlewares/attachOrCreateCardId.middleware');
 
 const userRoutes = (app) => {
     // Routes
@@ -19,9 +20,20 @@ const userRoutes = (app) => {
      // Routes for products
      app.use('/api/products', require('./product.route')); // have not authenticated users yet (i.e. no JWT)
 
+     app.use('/api/payment', require('./payment.route'));
+    
     // Middleware to verify JWT
     app.use(verifyJWT);
 
+    // Middleware to attach or create cart_id
+    app.use(attachOrCreateCartId);
+
+    app.use('/api/users', require('./users.route'));
+
+    app.use('/api/orders', require('./order.route'));
+
+    app.use('/api/cart', require('./cart.route'));
+   
 
     // User routes
     app.use('/api/users', require('./users.route'));

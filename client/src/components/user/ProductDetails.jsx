@@ -4,6 +4,12 @@ import { useEffect, useState } from "react";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { AiOutlineLike } from "react-icons/ai";
 import Recommend from "./Recommend";
+import QuantityControl from "./QuantityControl";
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { addToCardItem } from '../../redux/services/user/cartService';
+import { setCartQuantity } from "../../redux/reducers/user/cartReducer";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -13,12 +19,36 @@ const ProductDetails = () => {
     const { state } = useLocation();
     const { product } = state || {};
     const [isExpanded, setIsExpanded] = useState(false);
+    const [quantity, setQuantity] = useState(1);
+    const axiosPrivate = useAxiosPrivate();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     if (!product) {
         return <div>No product details available. Please navigate through the product list.</div>;
     }
 
     const toggleExpand = () => setIsExpanded(!isExpanded);
+
+    const addToCart = async (id, quantity) => {
+        const response = await addToCardItem(axiosPrivate, { itemId: id, quantity, selected: true });
+        
+        if (response.success) {
+            dispatch(setCartQuantity(response.length));
+            alert('Added to cart successfully');
+        }
+    }
+ 
+    const handleQuantityChange = (value) => {
+        setQuantity(value);
+    };
+
+    const handleCheckout = () => {
+        const cartItems = [{ product_id: product.id, quantity, product }];
+        navigate('/checkout/payment', {
+            state: { cartItems }
+        });
+    };
 
     return (
         product && (
@@ -35,10 +65,17 @@ const ProductDetails = () => {
                         <p className="text-2xl font-bold">{product.name}</p>
                         <p className="text-xl text-red-500 font-bold">{formatPrice(product.price)}</p>
                         <p className="text-lg">{product.short_description}</p>
+                        <div className="flex items-center gap-2">
+                            <p>Số Lượng</p>
+                            <QuantityControl maxNumber={product.qty} onChange={handleQuantityChange} />
+                            <p>Còn {product.qty} sản phẩm</p>
+                        </div>
                         <div class="flex flex-col mt-auto gap-4">
                             <div className="flex gap-3">
-                                <button className="bg-transparent border-2 border-blue-500 text-blue-500 w-1/2 px-4 py-2 rounded-md hover:bg-blue-600 hover:text-white
-                            ">
+                                <button
+                                    className="bg-transparent border-2 border-blue-500 text-blue-500 w-1/2 px-4 py-2 rounded-md hover:bg-blue-600 hover:text-white"
+                                    onClick={() => addToCart(product.id, quantity)}
+                                >
                                     Thêm vào giỏ hàng
                                 </button>
                                 <button className="bg-transparent border-2 border-blue-500 text-blue-500 w-1/2 px-4 py-2 rounded-md hover:bg-blue-600 hover:text-white">
@@ -46,7 +83,10 @@ const ProductDetails = () => {
                                 </button>
                             </div>
                             <div>
-                                <button className="bg-orange-400 text-white w-full px-4 py-2 rounded-md hover:bg-orange-600">
+                                <button
+                                    className="bg-orange-400 text-white w-full px-4 py-2 rounded-md hover:bg-orange-600"
+                                    onClick={handleCheckout}
+                                >
                                     Mua ngay
                                 </button>
                             </div>

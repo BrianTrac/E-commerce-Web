@@ -56,8 +56,11 @@ sequelize.sync({ force: false })
 
         // Admin routes
         require('./routes/admin/index.route')(app);
-        // Shop routes
-        require('./routes/shop/index.route')(app);
+        // // Shop routes
+        // require('./routes/shop/index.route')(app);
+
+        // Seller routes
+        require('./routes/seller/index.route')(app);
         
         app.all('*', (req, res) => {
             res.status(404).json({ message: 'Resource not found' });

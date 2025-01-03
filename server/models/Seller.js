@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); // Kết nối với cơ sở dữ liệu
+const sequelize = require('../config/db');
 
-// Định nghĩa Model Product
 const Seller = sequelize.define('Seller', {
     id: {
         type: DataTypes.INTEGER,
@@ -9,7 +8,7 @@ const Seller = sequelize.define('Seller', {
         autoIncrement: true,
     },
     name: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     avg_rating_point: {
@@ -17,7 +16,7 @@ const Seller = sequelize.define('Seller', {
         allowNull: false,
     },
     icon: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     info: {
@@ -46,15 +45,15 @@ const Seller = sequelize.define('Seller', {
     },
     user_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     is_active: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        defaultValue: true,
     }
 }, {
     tableName: 'seller',
-    timestamps: true,
+    timestamps: false,
 });
 
 module.exports = Seller;

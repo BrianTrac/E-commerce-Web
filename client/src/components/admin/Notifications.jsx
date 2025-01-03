@@ -43,7 +43,7 @@ export const Notifications = () => {
 
     const handleNotificationClick = (notif) => async () => {
         try {
-            const storeId = notif.storeId;
+            const storeId = notif.sellerId;
 
             // Update in Firebase
             const notifRef = ref(database, `notifications/${notif.id}`);

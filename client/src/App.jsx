@@ -5,9 +5,9 @@ import Home from "./pages/user/HomePage.jsx";
 import UserLayout from "./layouts/UserLayout.jsx";
 import AuthLayout from "./layouts/AuthLayout";
 import AdminLayout from "./layouts/AdminLayout";
+import SellerLayout from "./layouts/SellerLayout.jsx";
 import MissingPage from "./pages/MissingPage.jsx";
 import RequireAuth from "./hooks/RequireAuth";
-import Shop from "./pages/shop/ShopPage.jsx";
 import PersistLogin from "./hooks/PersistLogin";
 import OTPVerification from "./pages/user/OTPVerificationPage.jsx";
 import ForgetPassword from "./pages/user/ForgetPasswordPage.jsx";
@@ -35,9 +35,20 @@ import SellerEditPage from "./pages/admin/SellerEditPage.jsx";
 import ProductManagement from "./pages/admin/ProductManagementPage.jsx";
 import ProductDetailPage from "./pages/admin/ProductManagementDetailPage.jsx";
 
+
+// Seller page components
+import SellerDashboard from "./pages/seller/SellerDashboard.jsx";
+import SellerProductManagement from "./pages/seller/SellerProductManagement.jsx";
+import SellerProductDetail from "./pages/seller/SellerProductDetail.jsx";
+import SellerAddProduct from "./pages/seller/SellerAddProduct.jsx";
+import SellerVoucher from "./pages/seller/SellerVoucher.jsx";
+import SellerEditProduct from "./pages/seller/SellerEditProduct.jsx";
+import SellerInfo from "./pages/seller/SellerInfo.jsx";
+import SellerOrder from "./pages/seller/SellerOrder.jsx";
+
 const ROLES = {
     User: 'User',
-    Shop: 'Shop',
+    Seller: 'Seller',
     Admin: 'Admin',
 }
 
@@ -69,7 +80,7 @@ const App = () => {
                         {/* Redirect to /admin/dashboards */}
                         <Route index element={<Navigate to="/admin/dashboards" replace />} />
                         {/* Admin Dashboards */}
-                        <Route path="dashboards" element={<AdminDashboard />} />
+                        <Route path="dashboards" element={<AdminDashboard  />} />
                         {/* Role Management */}
                         <Route path="role-management" element={<RoleManagement />} />
                         {/* User Management */}
@@ -93,11 +104,22 @@ const App = () => {
                         </Route>
                     </Route>
                 </Route>
-
-
-                {/* SHOP ROUTE */}
-                <Route element={<RequireAuth allowedRoles={[ROLES.Shop]} />}>
-                    <Route path="/Shop" element={<Shop />} />
+                
+                {/* SELLER ROUTE */}
+                <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
+                    <Route path="/seller" element={<SellerLayout/>}>
+                        <Route index element={<Navigate to="dashboard" replace />} />
+                        <Route index path="dashboard" element={<SellerDashboard />} />
+                        <Route path="product-management">
+                            <Route index element={<SellerProductManagement />} />
+                            <Route path="detail/:productId" element={<SellerProductDetail />} />
+                            <Route path="add" element={<SellerAddProduct />} />
+                            <Route path="edit/:productId" element={<SellerEditProduct />} />
+                        </Route>
+                        <Route path="order" element={<SellerOrder/>} />
+                        <Route path="voucher" element={<SellerVoucher />} />
+                        <Route path="info" element={<SellerInfo />} />
+                    </Route>
                 </Route>
             </Route>
 
@@ -109,11 +131,12 @@ const App = () => {
             </Route>
             <Route path="/auth/forget-password" element={<ForgetPassword />} />
             <Route path="/auth/reset-password" element={<ResetPassword />} />
-            <Route path="/auth/register/verify-otp" element={<OTPVerification />} />
+            <Route path="/auth/register/verify-otp" element={<OTPVerification />}  />
             <Route path="/auth/google/callback" element={<GoogleAuthHandler />} />
 
             {/* ERROR PAGES */}
             <Route path="unauthorized" element={<MissingPage />} /> {/* 403 Page */}
+
             <Route path="*" element={<MissingPage />} /> {/* 404 Page */}
         </Routes>
     );

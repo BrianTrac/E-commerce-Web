@@ -17,8 +17,8 @@ const userRoutes = (app) => {
     app.use('/api/auth/google', require('./google-auth.route'));
     // app.use('/api/auth/facebook', require('./facebook-auth.route'));
 
-     // Routes for products
-     app.use('/api/products', require('./product.route')); // have not authenticated users yet (i.e. no JWT)
+    // Routes for products
+    app.use('/api/products', require('./product.route')); // have not authenticated users yet (i.e. no JWT)
 
      app.use('/api/payment', require('./payment.route'));
     

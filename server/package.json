@@ -33,6 +33,7 @@
     "pg-hstore": "^2.3.4",
     "querystring": "^0.2.1",
     "sequelize": "^6.37.4",
+    "slick": "^1.12.2",
     "stripe": "^17.5.0",
     "uuid": "^10.0.0"
   },

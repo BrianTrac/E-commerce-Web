@@ -315,7 +315,7 @@ const getSellerStatistics = async (req, res) => {
         `;
         const productResult = await sequelize.query(productStat, { type: QueryTypes.SELECT });
         // Select top 10 products has the highest total sales
-        productResult.sort((a, b) => b.quantity_sold - a.quantity_sold);
+        productResult.sort((a, b) => b.total_sales - a.total_sales);
         const topProducts = productResult.slice(0, 10);
 
         res.status(200).json({

@@ -324,8 +324,12 @@ const getUserTotalSpent = async (req, res) => {
 
         // Check if any orders exist
         if (!result || !result.dataValues.total_spent) {
-            return res.status(404).json({
-                message: 'No orders found for this user',
+            return res.status(200).json({
+                data: {
+                    user_id: userId,
+                    total_spent: 0,
+                    order_count: 0,
+                },
             });
         }
 

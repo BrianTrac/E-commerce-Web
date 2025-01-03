@@ -152,8 +152,36 @@ const suspendProduct = async (req, res) => {
     }
 };
 
+const restoreProduct = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const product = await Product.findByPk(id);
+        if (!product) {
+            return res.status(404).json({
+                message: 'Product not found',
+            });
+        }
+
+        product.inventory_status = product.inventory_status === 'available' ? 'suspend' : 'available';
+        await product.save();
+
+        return res.status(200).json({
+            message: `Product ${product.inventory_status === 'available' ? 'restored' : 'suspended'} successfully`,
+            data: product,
+        });
+    } catch (error) {
+        console.error('Error in suspendProduct:', error);
+        res.status(500).json({
+            message: error.message,
+            error: error,
+        });
+    }
+};
+
 module.exports = {
     getAllProducts,
     getOneProduct,
     suspendProduct,
+    restoreProduct,
 };

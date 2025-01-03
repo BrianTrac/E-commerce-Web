@@ -53,3 +53,17 @@ export const deleteProduct = createAsyncThunk(
         }
     }
 );
+
+export const restoreProduct = createAsyncThunk(
+    'admin/products/restore',
+    async ({ id, axiosInstance }, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.put(`/api/admin/products/${id}/restore`);
+            return response.data.data;
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || error.message;
+            toast.error(errorMessage);
+            return rejectWithValue({ message: errorMessage });
+        }
+    }
+);

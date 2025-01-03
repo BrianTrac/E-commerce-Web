@@ -243,7 +243,7 @@ const SellerManagement = () => {
                     onClick={loadSellers}
                     icon={<RedoOutlined />}
                 >
-                    Refresh
+                    Tải lại
                 </Button>
             </div>
             <Table

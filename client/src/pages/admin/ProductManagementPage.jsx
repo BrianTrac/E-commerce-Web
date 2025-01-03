@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Space, Button, Input, Card, Typography, Tooltip, message, Tag, Modal } from 'antd';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchAllProducts, deleteProduct } from '../../redux/actions/admin/productManagementAction';
+import { fetchAllProducts, deleteProduct, restoreProduct } from '../../redux/actions/admin/productManagementAction';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { useDispatch } from 'react-redux';
 import {
@@ -96,7 +96,32 @@ const ProductManagement = () => {
             },
         });
     };
-    const handleView = (record) => {}
+    const handleRestored = (record) => {
+        Modal.confirm({
+            title: 'Are you sure you want to restore this product?',
+            content: `Product Name: ${record.name}`,
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk: async () => {
+                try {
+                    if (record.qty) {
+                        await dispatch(restoreProduct({ id: record.id, axiosInstance: axiosPrivate }));
+                        message.success('Product restored successfully');
+                        fetchProducts(pagination.current, pagination.pageSize, searchText);
+                    } else {
+                        message.error('Product cannot be restored because it is out of stock');
+                    }
+                } catch (error) {
+                    message.error('Failed to unsuspend product: ' + error.message);
+                }
+            },
+        });
+    };
+
+    const handleView = (record) => {
+        navigate(`/admin/product-management/${record.id}`);
+    }
 
     const columns = [
         {
@@ -110,7 +135,7 @@ const ProductManagement = () => {
             ),
         },
         {
-            title: 'Image',
+            title: 'Ảnh',
             key: 'thumbnail_url',
             width: '70px',
             render: (_, record) => (
@@ -122,7 +147,7 @@ const ProductManagement = () => {
             ),
         },
         {
-            title: 'Product Name',
+            title: 'Tên SP',
             key: 'name',
             width: '400px',
             render: (_, record) => (
@@ -133,13 +158,13 @@ const ProductManagement = () => {
             ),
         },
         {
-            title: 'Category',
+            title: 'Danh mục',
             key: 'category_name',
             width: '90px',
             render: (_, record) => <Text>{record.category_name}</Text>,
         },
         {
-            title: 'Price',
+            title: 'Giá',
             key: 'price',
             width: '180px',
             render: (_, record) => (
@@ -160,7 +185,7 @@ const ProductManagement = () => {
             sorter: (a, b) => (a.price || 0) - (b.price || 0),
         },
         {
-            title: 'Stock',
+            title: 'SL Tồn',
             key: 'qty',
             width: '80px',
             render: (_, record) => (
@@ -177,7 +202,7 @@ const ProductManagement = () => {
             sorter: (a, b) => (a.qty || 0) - (b.qty || 0),
         },
         {
-            title: 'Sold',
+            title: 'SL Bán',
             key: 'quantity_sold',
             width: '50px',
             render: (_, record) => <Text>{record.quantity_sold}</Text>,
@@ -195,7 +220,7 @@ const ProductManagement = () => {
             sorter: (a, b) => (a.rating_average || 0) - (b.rating_average || 0),
         },
         {
-            title: 'Actions',
+            title: 'Hành động',
             key: 'actions',
             width: '80px',
             fixed: 'right',
@@ -206,7 +231,7 @@ const ProductManagement = () => {
                             type="link"
                             icon={<EyeOutlined />}
                             onClick={() => handleView(record)}
-                            className="text-gray-600 p-0 hover:text-gray-800"
+                            className="text-blue-600 p-0 hover:text-gray-800"
                         />
                     </Tooltip>
                     <Tooltip title="Edit">
@@ -214,15 +239,17 @@ const ProductManagement = () => {
                             type="link"
                             icon={<EditOutlined />}
                             onClick={() => handleView(record)}
-                            className="text-gray-600 p-0 hover:text-gray-800"
+                            className="text-yellow-600 p-0 hover:text-gray-800"
                         />
                     </Tooltip>
                     <Tooltip title={record.inventory_status == 'available' ? 'suspend' : 'available'}>
                         <Button
                             type="link"
                             icon={record.inventory_status == 'available' ? <DeleteOutlined /> : <RedoOutlined />}
-                            onClick={() => handleDelete(record)}
-                            className={record.inventory_status ? 'text-red-600 hover:text-red-800' : 'text-green-600 hover:text-green-800'}
+                            onClick={() => {
+                                record.inventory_status == 'available' ? handleDelete(record) : handleRestored(record)
+                            }}
+                            className={record.inventory_status == 'available' ? 'text-red-600 hover:text-red-800' : 'text-green-600 hover:text-green-800'}
                         />
                     </Tooltip>
                 </Space>
@@ -232,7 +259,7 @@ const ProductManagement = () => {
 
     return (
         <div>
-            <Card title="Products Management" className="shadow-md">
+            <Card title="Quản lý sản phẩm" className="shadow-md">
                 <div className="mb-4 flex justify-between items-center">
                     <Input
                         placeholder="Search products..."
@@ -246,7 +273,7 @@ const ProductManagement = () => {
                         onClick={handleRefresh}
                         icon={<RedoOutlined />}
                     >
-                        Refresh
+                        Tải lại
                     </Button>
                 </div>
 

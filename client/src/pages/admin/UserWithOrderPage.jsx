@@ -402,7 +402,7 @@ const UserWithOrderPage = () => {
                         onClick={handleRefresh}
                         icon={<RedoOutlined />}
                     >
-                        Refresh
+                        Tải lại
                     </Button>
                 </div>
 

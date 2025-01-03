@@ -99,13 +99,17 @@ const SellerProductPage = () => {
 
     const handleRecover = async (record) => {
         try {
-            const response = await axiosPrivate.patch(`/api/admin/seller/${id}/products/${record.id}/unsuspend`);
+            if (record.qty) {
+                const response = await axiosPrivate.patch(`/api/admin/seller/${id}/products/${record.id}/unsuspend`);
 
-            if (response.status === 200) {
-                message.success('Product recovered successfully');
-                fetchProducts(pagination.current, pagination.pageSize, searchText);
+                if (response.status === 200) {
+                    message.success('Product recovered successfully');
+                    fetchProducts(pagination.current, pagination.pageSize, searchText);
+                } else {
+                    throw new Error(response.message);
+                }
             } else {
-                throw new Error(response.message);
+                message.error('Product must have stock to recover');
             }
         } catch (error) {
             message.error('Failed to recover product: ' + error.message);
@@ -150,7 +154,7 @@ const SellerProductPage = () => {
         ];
 
         switch (record.inventory_status) {
-            case 'available': 
+            case 'available':
                 buttons.push(
                     <Tooltip key="delete" title="Suspend">
                         <Button
@@ -303,7 +307,7 @@ const SellerProductPage = () => {
                         icon={<RedoOutlined />}
                         className="w-full md:w-auto"
                     >
-                        Refresh
+                        Tải lại
                     </Button>
                 </div>
 

@@ -108,11 +108,11 @@ const getPotentialCustomer = async (req, res) => {
     const storeId = seller.store_id;
 
     const orders = await Order.findAll({
-      attributes: ['id', 'user_id', 'total_price', 'status', 'created_at', 'updated_at'],
+      attributes: ['id', 'user_id', 'status', 'created_at', 'updated_at', 'shipping_address', 'payment_method', 'total_amount'],
       include: [
         {
           model: OrderItem,
-          attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'created_at'],
+          attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'created_at', 'updated_at'],
           include: [
             {
               model: Product,
@@ -121,7 +121,8 @@ const getPotentialCustomer = async (req, res) => {
               where: {
                 [Op.and]: [
                   Sequelize.where(
-                    Sequelize.cast(Sequelize.json('current_seller.store_id'), 'INTEGER'), storeId
+                    Sequelize.cast(Sequelize.json('current_seller.store_id'), 'INTEGER'),
+                    storeId
                   )
                 ],
               },
@@ -135,28 +136,47 @@ const getPotentialCustomer = async (req, res) => {
           attributes: ['id', 'username', 'email'],
         },
       ],
+      where: {
+        status: 'delivered', // Chỉ lấy các order đã giao hàng
+      },
     });
 
     if (!orders.length) {
       return res.status(404).json({ message: 'No orders found for this store' });
     }
 
-    const result = orders.map((order) => {
-      const spending = order.OrderItems.reduce((total, item) => {
-        return total + item.price * item.quantity;
+    const groupedUsers = orders.reduce((acc, order) => {
+      const userId = order.user_id;
+    
+      // Tính tổng spending của từng order
+      const orderTotal = order.OrderItems.reduce((total, item) => {
+        return total + parseFloat(item.price) * item.quantity;
       }, 0);
     
-      return {
-        id: order.id,
-        userId: order.user_id,
-        username: order.User?.username || 'N/A',
-        email: order.User?.email || 'N/A',
-        status: order.status,
-        spending,
+      // Gộp theo user_id
+      if (!acc[userId]) {
+        acc[userId] = {
+          userId: userId,
+          username: order.User.username,
+          email: order.User.email,
+          totalSpending: 0,
+          orders: []
+        };
+      }
+    
+      acc[userId].totalSpending += orderTotal;
+      acc[userId].orders.push({
+        orderId: order.id,
+        spending: orderTotal,
         createdAt: order.created_at,
-        updatedAt: order.updated_at,
-      };
-    });
+        updatedAt: order.updated_at
+      });
+    
+      return acc;
+    }, {});
+    
+    // Chuyển từ object sang array nếu cần
+    const result = Object.values(groupedUsers);
     
     // Trả về kết quả
     res.status(200).json({
@@ -188,11 +208,11 @@ const getRecentOrders = async (req, res) => {
     const storeId = seller.store_id;
 
     const orders = await Order.findAll({
-      attributes: ['id', 'user_id', 'total_price', 'status', 'created_at', 'updated_at'],
+      attributes: ['id', 'user_id', 'status', 'created_at', 'updated_at', 'shipping_address', 'payment_method', 'total_amount'],
       include: [
         {
           model: OrderItem,
-          attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'created_at'],
+          attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'created_at', 'updated_at'],
           include: [
             {
               model: Product,
@@ -216,7 +236,7 @@ const getRecentOrders = async (req, res) => {
           attributes: ['id', 'username', 'email'],
         },
       ],
-      order: [['created_at', 'DESC']], // Sắp xếp theo created_at giảm dần
+      order: [['created_at', 'DESC']], // Sắp xếp theo thời gian tạo giảm dần
     });
 
     if (!orders.length) {
@@ -224,11 +244,11 @@ const getRecentOrders = async (req, res) => {
     }
 
     res.status(200).json({
-      message: 'Recent orders fetched successfully',
+      message: 'Orders fetched successfully',
       orders,
     });
   } catch (error) {
-    console.error('Error fetching recent orders:', error.message);
+    console.error('Error fetching orders:', error.message);
     res.status(500).json({
       message: 'Internal server error',
       error: error.message,
@@ -276,7 +296,9 @@ const getMonthlyRevenue = async (req, res) => {
           required: true, 
         },
       ],
-
+      where: {
+        status: 'delivered', // Chỉ lấy các order đã giao hàng
+      },
     });
 
     if (!orders.length) {

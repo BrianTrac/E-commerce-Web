@@ -25,20 +25,20 @@ const SellerDashboard = () => {
         { name: 'Jun', value: 130 },
     ];
 
-    // const salesDataSample = [
-    //     { month: "Jan", value: 400000 },
-    //     { month: "Feb", value: 0 },
-    //     { month: "Mar", value: 200000 },
-    //     { month: "Apr", value: 300000 },
-    //     { month: "May", value: 150000 },
-    //     { month: "Jun", value: 0 },
-    //     { month: "Jul", value: 250000 },
-    //     { month: "Aug", value: 100000 },
-    //     { month: "Sep", value: 450000 },
-    //     { month: "Oct", value: 0 },
-    //     { month: "Nov", value: 350000 },
-    //     { month: "Dec", value: 400000 },
-    // ];
+    const salesDataSample = [
+        { month: "Jan", value: 0 },
+        { month: "Feb", value: 0 },
+        { month: "Mar", value: 0 },
+        { month: "Apr", value: 0 },
+        { month: "May", value: 0 },
+        { month: "Jun", value: 0 },
+        { month: "Jul", value: 0 },
+        { month: "Aug", value: 0 },
+        { month: "Sep", value: 0 },
+        { month: "Oct", value: 0 },
+        { month: "Nov", value: 0 },
+        { month: "Dec", value: 0 },
+    ];
 
     const navigate = useNavigate();
     const [topSellingProducts, setTopSellingProducts] = useState([]);
@@ -124,8 +124,14 @@ const SellerDashboard = () => {
     const loadMonthlySales = async () => {
         try {
             const response = await getMonthlyRevenue(axiosPrivate);
-            setSalesData(response.data);
+            if (response?.data && response.data.length > 0) {
+                setSalesData(response.data);
+            } else {
+                // Nếu dữ liệu không hợp lệ, sử dụng dữ liệu mẫu
+                setSalesData(salesDataSample);
+            }
         } catch (err) {
+            setSalesData(salesDataSample);
             console.error(err);
         }
     }
@@ -180,7 +186,7 @@ const SellerDashboard = () => {
                 />
             ),
         },
-        { title: 'Tên', dataIndex: 'name', key: 'name' },
+        { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name' },
         { title: 'Đã bán', dataIndex: 'quantity_sold', key: 'quantity_sold' },
         {
             title: 'Giá', dataIndex: 'price', key: 'price',
@@ -201,9 +207,13 @@ const SellerDashboard = () => {
         {
             title: 'Doanh thu', dataIndex: 'earnings', key: 'earnings',
             render: (price) =>
-                price
-                    ? `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(price))}`
-                    : 'N/A',
+                price ? (
+                    <span style={{ color: 'green' }}>
+                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', }).format(Number(price))}
+                    </span>
+                ) : (
+                    <span style={{ color: 'red' }}>N/A</span>
+                ),
         },
         {
             title: 'Chi tiết', dataIndex: 'action', key: 'action',
@@ -223,7 +233,7 @@ const SellerDashboard = () => {
     const potentialCustomersColumns = [
         { title: 'Khách hàng', dataIndex: 'username', key: 'username' },
         { title: 'Email', dataIndex: 'email', key: 'email' },
-        { title: 'Tổng chi tiêu', dataIndex: 'spending', key: 'spending',
+        { title: 'Tổng chi tiêu', dataIndex: 'totalSpending', key: 'totalSpending',
             render: (price) =>
                 price ? (
                     <span style={{ color: 'green' }}>
@@ -247,18 +257,32 @@ const SellerDashboard = () => {
             ),
         },
         {
-            title: 'Tổng tiền', dataIndex: 'total_price', key: 'total_price',
+            title: 'Tổng tiền', dataIndex: 'total_amount', key: 'total_amount',
             render: (price) => <Text style={{ color: 'green' }}>{Number(price).toLocaleString()} VND</Text>,
         },
         {
             title: 'Trạng thái', dataIndex: 'status', key: 'status',
             render: (status) => {
-                const color =
-                    status === 'pending' 
-                        ? 'orange' : status === 'processing'
-                        ? 'green' : status === 'cancelled'
-                        ? 'red' : 'blue';
-                return <Tag color={color}>{status.toUpperCase()}</Tag>;
+                let color = '';
+                let text = '';
+                switch (status) {
+                    case 'pending': 
+                        color = 'orange';
+                        text = 'Chờ duyệt';
+                    break;
+                    case 'processing':
+                        color = 'green';
+                        text = 'Đang vận chuyển';
+                    break;
+                    case 'cancelled':
+                        color = 'red';
+                        text = 'Đã hủy';
+                    break;
+                    default:
+                        color = 'blue';
+                        text = 'Không xác định';
+                }
+                return <Tag color={color}>{text}</Tag>;
             },
         },
     ];
@@ -272,7 +296,7 @@ const SellerDashboard = () => {
                     {/* Total Revenue */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-2xl text-gray-500 font-bold">Tổng doanh thu</h3>
+                            <h3 className="text-2xl text-gray-500 font-bold">Tổng doanh thu cửa hàng</h3>
                         </div>
                         <div className="flex items-center justify-start mb-4">
                             <div className="p-2 bg-purple-100 rounded-full">
@@ -331,7 +355,7 @@ const SellerDashboard = () => {
                     {/* Total Reviews */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-2xl text-gray-500 font-bold ">Đánh giá</h3>
+                            <h3 className="text-2xl text-gray-500 font-bold ">Số lượng đánh giá</h3>
                         </div>
                         <div className="flex items-center justify-start mb-4">
                             <div className="p-2 bg-pink-100 rounded-full">
@@ -389,7 +413,7 @@ const SellerDashboard = () => {
                             <XAxis dataKey="month"/>
                             <YAxis
                                 tickFormatter={formatCurrency} // Format Y-axis as currency
-                                domain={[0, "dataMax + 100000"]} // Ensure some padding above max value 
+                                domain={[0, (dataMax) => (dataMax > 0 ? dataMax * 1.5 : 100000)]} // Ensure some padding above max value 
                             />
                             <TooltipRecharts />
                             <Bar dataKey="value" fill="#3b82f6" />
@@ -400,9 +424,10 @@ const SellerDashboard = () => {
 
                 {/* Top Selling Products and Sales Overview */}
                 <div className="grid grid-cols-2 gap-6 mb-8">
+                    {/* Potential Customers */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-semibold">Khách hàng tiềm năng</h3>
+                            <h3 className="text-lg font-semibold">Khách hàng chi tiêu nhiều nhất</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
                         <Table
@@ -410,6 +435,7 @@ const SellerDashboard = () => {
                             dataSource={potentialCustomers}
                             loading={loading}
                             rowKey="id"
+                            pagination={{ pageSize: 5 }}
                         />
                     </div>
 
@@ -424,6 +450,7 @@ const SellerDashboard = () => {
                             dataSource={recentOrders}
                             loading={loading}
                             rowKey="id"
+                            pagination={{ pageSize: 5 }}
                         />
                     </div>
                 </div>

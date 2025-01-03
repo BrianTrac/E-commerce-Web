@@ -180,10 +180,10 @@ const SellerDashboard = () => {
                 />
             ),
         },
-        { title: 'Name', dataIndex: 'name', key: 'name' },
-        { title: 'Sold', dataIndex: 'quantity_sold', key: 'quantity_sold' },
+        { title: 'Tên', dataIndex: 'name', key: 'name' },
+        { title: 'Đã bán', dataIndex: 'quantity_sold', key: 'quantity_sold' },
         {
-            title: 'Price', dataIndex: 'price', key: 'price',
+            title: 'Giá', dataIndex: 'price', key: 'price',
             render: (price) =>
                 price ? (
                     <span style={{ color: 'green' }}>
@@ -194,19 +194,19 @@ const SellerDashboard = () => {
                 ),
         },
         {
-            title: 'Rating', dataIndex: 'rating', key: 'rating',
+            title: 'Đánh giá', dataIndex: 'rating', key: 'rating',
             render: (rating) =>
               rating !== undefined && rating !== null ? `${parseFloat(rating).toFixed(1)} ⭐` : 'No rating',
             },
         {
-            title: 'Earnings', dataIndex: 'earnings', key: 'earnings',
+            title: 'Doanh thu', dataIndex: 'earnings', key: 'earnings',
             render: (price) =>
                 price
                     ? `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(price))}`
                     : 'N/A',
         },
         {
-            title: 'View detail', dataIndex: 'action', key: 'action',
+            title: 'Chi tiết', dataIndex: 'action', key: 'action',
             render: (_, record) => (
                 <Tooltip title="View Product">
                     <Button
@@ -221,9 +221,9 @@ const SellerDashboard = () => {
     ];
 
     const potentialCustomersColumns = [
-        { title: 'Customer', dataIndex: 'username', key: 'username' },
+        { title: 'Khách hàng', dataIndex: 'username', key: 'username' },
         { title: 'Email', dataIndex: 'email', key: 'email' },
-        { title: 'Total Spending', dataIndex: 'spending', key: 'spending',
+        { title: 'Tổng chi tiêu', dataIndex: 'spending', key: 'spending',
             render: (price) =>
                 price ? (
                     <span style={{ color: 'green' }}>
@@ -237,7 +237,7 @@ const SellerDashboard = () => {
 
     const recentOrdersColumns = [
         {
-            title: 'Customer', dataIndex: 'User', key: 'User',
+            title: 'Khách hàng', dataIndex: 'User', key: 'User',
             render: (user) => (
                 <>
                     <Text strong>{user.username}</Text>
@@ -247,11 +247,11 @@ const SellerDashboard = () => {
             ),
         },
         {
-            title: 'Total Price', dataIndex: 'total_price', key: 'total_price',
+            title: 'Tổng tiền', dataIndex: 'total_price', key: 'total_price',
             render: (price) => <Text style={{ color: 'green' }}>{Number(price).toLocaleString()} VND</Text>,
         },
         {
-            title: 'Status', dataIndex: 'status', key: 'status',
+            title: 'Trạng thái', dataIndex: 'status', key: 'status',
             render: (status) => {
                 const color =
                     status === 'pending' 
@@ -272,8 +272,7 @@ const SellerDashboard = () => {
                     {/* Total Revenue */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-2xl text-gray-500 font-bold">Total Revenue</h3>
-                            <MoreVertical className="w-4 h-4 text-gray-400" />
+                            <h3 className="text-2xl text-gray-500 font-bold">Tổng doanh thu</h3>
                         </div>
                         <div className="flex items-center justify-start mb-4">
                             <div className="p-2 bg-purple-100 rounded-full">
@@ -294,8 +293,7 @@ const SellerDashboard = () => {
                     {/* Total products */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-2xl text-gray-500 font-bold ">Total Products</h3>
-                            <MoreVertical className="w-4 h-4 text-gray-400" />
+                            <h3 className="text-2xl text-gray-500 font-bold ">Số lượng sản phẩm</h3>
                         </div>
                         <div className="flex items-center justify-start mb-4">
                             <div className="p-2 bg-blue-100 rounded-full">
@@ -314,8 +312,7 @@ const SellerDashboard = () => {
                     {/* Total Followers */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-2xl text-gray-500 font-bold ">Total Followers</h3>
-                            <MoreVertical className="w-4 h-4 text-gray-400" />
+                            <h3 className="text-2xl text-gray-500 font-bold ">Khách hàng theo dõi</h3>
                         </div>
                         <div className="flex items-center justify-start mb-4">
                             <div className="p-2 bg-orange-100 rounded-full">
@@ -334,8 +331,7 @@ const SellerDashboard = () => {
                     {/* Total Reviews */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-2xl text-gray-500 font-bold ">Total Reviews</h3>
-                            <MoreVertical className="w-4 h-4 text-gray-400" />
+                            <h3 className="text-2xl text-gray-500 font-bold ">Đánh giá</h3>
                         </div>
                         <div className="flex items-center justify-start mb-4">
                             <div className="p-2 bg-pink-100 rounded-full">
@@ -355,7 +351,7 @@ const SellerDashboard = () => {
                 {/* Top Selling Products */}
                 <div className="bg-white p-6 rounded-lg shadow mb-8">
                     <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-lg font-semibold">Top selling products</h3>
+                        <h3 className="text-lg font-semibold">Sản phẩm bán chạy</h3>
                         <MoreVertical className="w-4 h-4 text-gray-400" />
                     </div>
 
@@ -379,7 +375,7 @@ const SellerDashboard = () => {
                 {/* Sales Overview */}
                 <div className="bg-white p-6 rounded-lg shadow mb-8">
                     <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-lg font-semibold">Sales Overview</h3>
+                        <h3 className="text-lg font-semibold">Biểu đồ doanh thu</h3>
                         <MoreVertical className="w-4 h-4 text-gray-400" />
                     </div>
                     <div style={{ width: '100%', height: '500px' }}>
@@ -406,7 +402,7 @@ const SellerDashboard = () => {
                 <div className="grid grid-cols-2 gap-6 mb-8">
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-semibold">Top customers</h3>
+                            <h3 className="text-lg font-semibold">Khách hàng tiềm năng</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
                         <Table
@@ -420,7 +416,7 @@ const SellerDashboard = () => {
                     {/* Recent orders */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-semibold">Recent Orders</h3>
+                            <h3 className="text-lg font-semibold">Orders gần đây</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
                         <Table

@@ -39,7 +39,7 @@ const SellerProductManagement = () => {
       setProducts(response.data);
       setPagination({ ...pagination, total: response.total });
     } catch (error) {
-      message.error(error.message || 'Failed to load products');
+      message.error('Lỗi tải dữ liệu sản phẩm');
     } finally {
       setLoading(false);
     }
@@ -73,20 +73,20 @@ const SellerProductManagement = () => {
 
   const handleDeleteMultiple = async (ids) => {
     confirm({
-      title: `Are you sure you want to delete ${ids.length} selected product(s)?`,
+      title: `Bạn thật sự muốn xóa những ${ids.length} sản phẩm này chứ?`,
       icon: <ExclamationCircleOutlined />,
-      content: 'This action cannot be undone.',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
+      content: 'Thao tác này không thể hoàn tác.',
+      okText: 'Có',
+      okType: 'Cảnh báo',
+      cancelText: 'Không',
       onOk: async () => {
         try {
           await deleteMultipleProductsById(axiosPrivate, ids);
-          message.success('Selected products deleted successfully');
+          message.success('Xóa sản phẩm thành công');
           setSelectedRowKeys([]);
           loadProducts();
         } catch (error) {
-          message.error(error.message || 'Failed to delete products');
+          message.error('Lỗi xóa sản phẩm');
         }
       },
     });
@@ -94,19 +94,19 @@ const SellerProductManagement = () => {
 
   const handleDelete = (id) => {
     confirm({
-      title: 'Are you sure you want to delete this product?',
+      title: 'Bạn có chắc chắn muốn xóa sản phẩm này không?',
       icon: <ExclamationCircleOutlined />,
-      content: 'This action cannot be undone.',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
+      content: 'Thao tác này không thể hoàn tác.',
+      okText: 'Có',
+      okType: 'Cảnh báo',
+      cancelText: 'Không',
       onOk: async () => {
         try {
           await deleteProductById(axiosPrivate, id);
-          message.success('Product deleted successfully');
+          message.success('Xóa sản phẩm thành công');
           loadProducts();
         } catch (error) {
-          message.error(error.message || 'Failed to delete product');
+          message.error('Lỗi xóa sản phẩm');
         }
       },
     });
@@ -140,7 +140,7 @@ const SellerProductManagement = () => {
       render: (_, __, index) => <Text>{(pagination.current - 1) * pagination.pageSize + index + 1}</Text>,
     },
     {
-      title: 'Image',
+      title: 'Ảnh',
       key: 'image',
       width: '80px',
       render: (_, record) => (
@@ -148,21 +148,21 @@ const SellerProductManagement = () => {
       ),
     },
     {
-      title: 'Product Name',
+      title: 'Tên sản phẩm',
       dataIndex: 'name',
       key: 'name',
       width: '350px',
       sorter: true,
     },
     {
-      title: 'Category Name',
+      title: 'Tên danh mục',
       dataIndex: 'category',
       key: 'category',
       width: '250px',
       sorter: true,
     },
     {
-      title: 'Rating',
+      title: 'Đánh giá',
       dataIndex: 'rating',
       key: 'rating',
       sorter: true,
@@ -170,7 +170,7 @@ const SellerProductManagement = () => {
         rating !== undefined && rating !== null ? `${parseFloat(rating).toFixed(1)} ⭐` : 'No rating',
     },
     {
-      title: 'Price',
+      title: 'Giá',
       dataIndex: 'price',
       key: 'price',
       sorter: true,
@@ -180,7 +180,7 @@ const SellerProductManagement = () => {
           : 'N/A',
     },
     {
-      title: 'Status',
+      title: 'Trạng thái',
       dataIndex: 'inventory_status',
       key: 'status',
       render: (status) => (
@@ -194,12 +194,12 @@ const SellerProductManagement = () => {
       ),
     },
     {
-      title: 'Actions',
+      title: 'Hành động',
       key: 'actions',
       width: '100px',
       render: (_, record) => (
         <Space size="middle">
-          <Tooltip title="View Product">
+          <Tooltip title="Xem chi tiết">
             <Button
               type="link"
               icon={<EyeOutlined />}
@@ -207,7 +207,7 @@ const SellerProductManagement = () => {
               className="text-blue-600 p-0 hover:text-blue-800"
             />
           </Tooltip>
-          <Tooltip title="Edit">
+          <Tooltip title="Chỉnh sửa">
             <Button
               type="link"
               icon={<EditOutlined />}
@@ -215,7 +215,7 @@ const SellerProductManagement = () => {
               className="text-green-600 p-0 hover:text-green-800"
             />
           </Tooltip>
-          <Tooltip title="Delete">
+          <Tooltip title="Xóa">
             <Button
               type="link"
               icon={<DeleteOutlined />}
@@ -232,9 +232,9 @@ const SellerProductManagement = () => {
     <Card
       title={
         <div className="flex justify-between items-center">
-          <span>Product Management</span>
+          <span>Quản lý sản phẩm</span>
           <Button type="default" icon={<ReloadOutlined />} onClick={loadProducts}>
-            Refresh
+            Tải lại
           </Button>
         </div>
       }
@@ -242,7 +242,7 @@ const SellerProductManagement = () => {
     >
       <div className="mb-4 flex justify-between items-center">
         <Input.Search
-          placeholder="Search products..."
+          placeholder="Tìm kiếm sản phẩm..."
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
           onSearch={handleSearch}
@@ -250,16 +250,16 @@ const SellerProductManagement = () => {
         />
         <div className="flex space-x-2">
           <Button type={statusFilter === '' ? 'primary' : 'default'} onClick={() => handleStatusClick('')}>
-            All
+            Tất cả
           </Button>
           <Button type={statusFilter === 'available' ? 'primary' : 'default'} onClick={() => handleStatusClick('available')}>
-            Available
+            Sẵn sàng
           </Button>
           <Button type={statusFilter === 'pending' ? 'primary' : 'default'} onClick={() => handleStatusClick('pending')}>
-            Pending
+            Đang chờ
           </Button>
           <Button type={statusFilter === 'suspend' ? 'primary' : 'default'} onClick={() => handleStatusClick('suspend')}>
-            Suspend
+            Tạm dừng
           </Button>
         </div>
         <Space>
@@ -268,11 +268,11 @@ const SellerProductManagement = () => {
               type="primary"
               onClick={() => handleDeleteMultiple(selectedRowKeys)}
             >
-              Delete ({selectedRowKeys.length})
+              Xóa ({selectedRowKeys.length})
             </Button>
           )}
           <Button type="primary" onClick={() => navigate('/seller/product-management/add')}>
-            Add New Product
+            Thêm sản phẩm
           </Button>
         </Space>
       </div>
@@ -286,7 +286,7 @@ const SellerProductManagement = () => {
           ...pagination,
           showSizeChanger: true,
           showQuickJumper: true,
-          showTotal: (total) => `Total ${total} products`,
+          showTotal: (total) => `${total} sản phẩm`,
           position: ['bottomCenter'],
         }}
         onChange={handleTableChange}

@@ -86,31 +86,31 @@ const SellerVoucher = () => {
     const handleAddVoucherShop = async() => {
         // Kiểm tra xem các thông tin bắt buộc có được nhập đầy đủ không
         if (!voucherShop.discount) {
-            message.error('Please choose percentage off for voucher!');
+            message.error('Chọn phần trăm giảm cho voucher!');
             return;
         }
         if (!voucherShop.start_date) {
-            message.error('Please choose start date voucher!');
+            message.error('Chọn ngày bắt đầu cho voucher!');
             return;
         }
         if (!voucherShop.end_date) {
-            message.error('Please choose end date voucher!');
+            message.error('Chọn ngày kết thúc cho voucher!');
             return;
         }
 
         if (new Date(voucherShop.start_date) > new Date(voucherShop.end_date)) {
-            message.error('Start date must be before end date!');
+            message.error('Ngày bắt đầu phải trước ngày kết thúc!');
             return;
         }
 
         if (new Date(voucherShop.end_date) < new Date()) {
-            message.error('End date must be after current date!');
+            message.error('Ngày kết thúc phải sau ngày hiện tại!');
             return;
         }
         
         const newVoucher = await addVoucher(axiosPrivate, voucherShop);
         if (!newVoucher) {
-            message.error('Failed to add voucher!');
+            message.error('Thêm voucher thất bại');
             return;
         }
     
@@ -118,48 +118,48 @@ const SellerVoucher = () => {
     
         // Reset voucherForProduct 
         setVoucherShop({ discount: "", start_date: "", end_date: "" });
-        message.success('Voucher added successfully');
+        message.success('Thêm voucher thành công');
     };
 
     const handleAddVoucherForProduct = async() => {
         if (!voucherForProduct.discount) {
-            message.error('Please choose percentage off for voucher!');
+            message.error('Chọn phần trăm giảm cho voucher!');
             return;
         }
         if (!voucherForProduct.start_date) {
-            message.error('Please choose start date voucher!');
+            message.error('Chọn ngày bắt đầu cho voucher!');
             return;
         }
         if (!voucherForProduct.end_date) {
-            message.error('Please choose end date voucher!');
+            message.error('Chọn ngày kết thúc cho voucher!');
             return;
         }
 
         if (new Date(voucherForProduct.start_date) > new Date(voucherForProduct.end_date)) {
-            message.error('Start date must be before end date!');
+            message.error('Ngày bắt đầu phải trước ngày kết thúc!');
             return;
         }
 
         if (new Date(voucherForProduct.end_date) < new Date()) {
-            message.error('End date must be after current date!');
+            message.error('Ngày kết thúc phải sau ngày hiện tại!');
             return;
         }
 
         if (!selectedProduct) {
-            message.error('Please choose product for voucher!');
+            message.error('Chọn sản phẩm có thể áp dụng voucher!');
             return;
         }
         voucherForProduct.product_id = selectedProduct.value;
 
         const response = await checkProductExist(axiosPrivate, voucherForProduct.product_id);
         if (response.message === "Product does not exist in the store") {
-            message.error('Your store does not have products with this ID!');
+            message.error('Sản phẩm không tồn tại trong cửa hàng');
             return;
         }
 
         const newVoucher = await addVoucher(axiosPrivate, voucherForProduct);
         if (!newVoucher) {
-            message.error('Failed to add voucher');
+            message.error('Thêm voucher thất bại');
             return;
         }
 
@@ -168,24 +168,24 @@ const SellerVoucher = () => {
         // Reset voucherForProduct
         setVoucherForProduct({ discount: "", start_date: "", end_date: "", product_id: "" });
     
-        message.success('Voucher added successfully');
+        message.success('Thêm voucher thành công');
     };
 
     const handleDelete = (voucherId) => {
         confirm({
-          title: 'Are you sure you want to delete this voucher?',
+          title: 'Bạn có chắc chắn muốn xóa voucher này?',
           icon: <ExclamationCircleOutlined />,
-          content: 'This action cannot be undone.',
-          okText: 'Yes',
-          okType: 'danger',
-          cancelText: 'No',
+          content: 'Hành động này không thể hoàn tác',
+          okText: 'Có',
+          okType: 'Cảnh báo',
+          cancelText: 'Không',
           onOk: async () => {
             try {
               await deleteVoucher(axiosPrivate, voucherId);
-              message.success('Voucher deleted successfully');
+              message.success('Xóa voucher thành công');
               loadVouchers();
             } catch (error) {
-              message.error(error.message || 'Failed to delete voucher');
+              message.error('Xóa voucher thất bại');
             }
           },
         });

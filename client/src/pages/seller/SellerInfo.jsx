@@ -85,7 +85,7 @@ const SellerInfo = () => {
       setOriginalSellerInfo(sellerInfo);
       setIsEditingSeller(false);
     } catch (err) {
-      message.error('Failed to save seller info');
+      message.error('Lỗi khi lưu thông tin người bán');
     }
   };
 
@@ -106,7 +106,7 @@ const SellerInfo = () => {
       setLogoPreview(null);
       setIsEditingStore(false);
     } catch (err) {
-      message.error('Failed to save store info');
+      message.error('Lỗi khi lưu thông tin cửa hàng');
     }
   };
 
@@ -143,14 +143,14 @@ const SellerInfo = () => {
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-8">
       <Card className="shadow-lg p-6">
-        <Title level={3}>Seller Information</Title>
+        <Title level={3}>Thông tin người bán</Title>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <Input
             addonBefore={<PhoneOutlined />}
             name="phone"
             value={sellerInfo.phone || ''}
             onChange={handleChange}
-            placeholder="Phone Number"
+            placeholder="Số điện thoại"
             disabled={!isEditingSeller}
           />
           <Input
@@ -158,7 +158,7 @@ const SellerInfo = () => {
             name="address"
             value={sellerInfo.address || ''}
             onChange={handleChange}
-            placeholder="Address"
+            placeholder="Địa chỉ"
             disabled={!isEditingSeller}
           />
           <Input
@@ -166,7 +166,7 @@ const SellerInfo = () => {
             name="working_time"
             value={sellerInfo.working_time || ''}
             onChange={handleChange}
-            placeholder="Working Hours"
+            placeholder="Giờ làm việc"
             disabled={!isEditingSeller}
           />
           <Input
@@ -174,7 +174,7 @@ const SellerInfo = () => {
             name="payment_info"
             value={sellerInfo.payment_info || ''}
             onChange={handleChange}
-            placeholder="Payment Information"
+            placeholder="Thông tin thanh toán"
             disabled={!isEditingSeller}
           />
           <Input.TextArea
@@ -182,7 +182,7 @@ const SellerInfo = () => {
             name="description"
             value={sellerInfo.description || ''}
             onChange={handleChange}
-            placeholder="Description"
+            placeholder="Mô tả"
             disabled={!isEditingSeller}
             rows={3}
           />
@@ -190,19 +190,19 @@ const SellerInfo = () => {
         <Space className="mt-4">
           {!isEditingSeller ? (
             <Button type="primary" icon={<EditOutlined />} onClick={handleEditSeller}>
-              Edit Seller Info
+              Chỉnh sửa thông tin người bán
             </Button>
           ) : (
             <>
-              <Button onClick={handleCancelSeller}>Cancel</Button>
-              <Button type="primary" onClick={handleSaveSeller}>Save</Button>
+              <Button onClick={handleCancelSeller}>Hủy</Button>
+              <Button type="primary" onClick={handleSaveSeller}>LưuLưu</Button>
             </>
           )}
         </Space>
       </Card>
 
       <Card className="shadow-lg p-6">
-        <Title level={3}>Store Information</Title>
+        <Title level={3}>Tên cửa hàng</Title>
         <div className="text-center mb-6">
           {isEditingStore ? (
             <Upload
@@ -227,7 +227,7 @@ const SellerInfo = () => {
           name="name"
           value={store.name || ''}
           onChange={handleChangeStore}
-          placeholder="Store Name"
+          placeholder="Tên cửa hàng"
           disabled={!isEditingStore}
           className="text-center font-semibold text-lg"
         />
@@ -236,12 +236,12 @@ const SellerInfo = () => {
           <div className="flex items-center gap-2">
             <StarOutlined className="text-yellow-500" />
             <span className="font-medium">
-              {parseFloat(store.avg_rating_point || 0).toFixed(1)} Stars
+              {parseFloat(store.avg_rating_point || 0).toFixed(1)} Sao
             </span>
           </div>
           <div className="flex items-center gap-2">
             <UsergroupAddOutlined className="text-blue-500" />
-            <span className="font-medium">{store.total_follower || 0} Followers</span>
+            <span className="font-medium">{store.total_follower || 0} người theo dõi</span>
           </div>
         </div>
 
@@ -249,12 +249,12 @@ const SellerInfo = () => {
           <Space className="mt-4">
             {!isEditingStore ? (
               <Button type="primary" icon={<EditOutlined />} onClick={handleEditStore}>
-                Edit Store Info
+                Chỉnh sửa thông tin cửa hàng
               </Button>
             ) : (
               <>
-                <Button onClick={handleCancelStore}>Cancel</Button>
-                <Button type="primary" onClick={handleSaveStore}>Save</Button>
+                <Button onClick={handleCancelStore}>Hủy</Button>
+                <Button type="primary" onClick={handleSaveStore}>Lưu</Button>
               </>
             )}
           </Space>

@@ -19,7 +19,7 @@ const SellerOrder = () => {
         setOrders(response.orders);
         setFilteredOrders(response.orders); // Show all orders by default
       } catch (err) {
-        message.error(err.message || 'Failed to load orders');
+        message.error('Lỗi khi lấy danh sách đơn hàng');
       } finally {
         setLoading(false);
       }
@@ -51,18 +51,18 @@ const SellerOrder = () => {
         window.location.reload();
       }, 1000);
     } catch (err) {
-      message.error(err.message || 'Failed to update order status');
+      message.error('Lỗi khi cập nhật trạng thái đơn hàng');
     }
   };
 
   const columns = [
     {
-      title: 'Order ID',
+      title: 'Mã đơn hàng',
       dataIndex: 'id',
       key: 'id',
     },
     {
-      title: 'Customer',
+      title: 'Khách hàng',
       dataIndex: 'User',
       key: 'User',
       render: (user) => (
@@ -72,13 +72,13 @@ const SellerOrder = () => {
       ),
     },
     {
-      title: 'Total Price',
+      title: 'Tổng tiền',
       dataIndex: 'total_price',
       key: 'total_price',
       render: (price) => <Text style={{ color: 'green' }}>{Number(price).toLocaleString()} VND</Text>,
     },
     {
-      title: 'Status',
+      title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
       render: (status) => {
@@ -94,7 +94,7 @@ const SellerOrder = () => {
       },
     },
     {
-      title: 'Order Date & Time',
+      title: 'Ngày tạo',
       dataIndex: 'created_at',
       key: 'created_at',
       render: (created_at) => {
@@ -112,7 +112,7 @@ const SellerOrder = () => {
       },
     },
     {
-      title: 'Actions',
+      title: 'Hành động',
       key: 'actions',
       render: (_, record) =>
         record.status === 'pending' ? (
@@ -140,7 +140,7 @@ const SellerOrder = () => {
 
   return (
     <div className="container mx-auto p-6 bg-white rounded-lg shadow-lg space-y-8">
-      <Title level={3}>Seller Orders</Title>
+      <Title level={3}>Đơn hàng</Title>
 
       {/* Status Filter Buttons */}
       <Space>
@@ -148,25 +148,25 @@ const SellerOrder = () => {
           type={!statusFilter ? 'primary' : 'default'}
           onClick={() => handleStatusFilter('')}
         >
-          All
+          Tất cả
         </Button>
         <Button
           type={statusFilter === 'processing' ? 'primary' : 'default'}
           onClick={() => handleStatusFilter('processing')}
         >
-          Processing
+          Đang xử lý
         </Button>
         <Button
           type={statusFilter === 'pending' ? 'primary' : 'default'}
           onClick={() => handleStatusFilter('pending')}
         >
-          Pending
+          Chờ xử lý
         </Button>
         <Button
           type={statusFilter === 'cancelled' ? 'primary' : 'default'}
           onClick={() => handleStatusFilter('cancelled')}
         >
-          Cancelled
+          Đã hủy
         </Button>
       </Space>
 

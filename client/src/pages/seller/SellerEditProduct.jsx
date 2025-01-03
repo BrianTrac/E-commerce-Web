@@ -87,6 +87,15 @@ const SellerEditProduct = () => {
     setImageUploads(imageUploads.filter((upload) => upload.name !== file.name));
   };
 
+  const validateFileType = (file) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      message.error(`${file.name} không phải là định dạng ảnh hợp lệ!`);
+      return Upload.LIST_IGNORE;
+    }
+    return false;
+  };
+
   const onSubmit = async (values) => {
     console.log('Form values:', values);
     try {
@@ -106,6 +115,7 @@ const SellerEditProduct = () => {
         category_name: selectedCategory?.label,
         images: formattedImages,
         thumbnail_url: allImageUrls[0] || '', // Ensure a string is passed
+        price: values.original_price * (1 - values.discount_rate / 100),
         specifications,
       };
 
@@ -161,7 +171,8 @@ const SellerEditProduct = () => {
             fileList={previewImages} // Gắn danh sách ảnh từ state
             onChange={handleImageChange} // Xử lý khi thêm ảnh mới
             onRemove={handleRemoveImage} // Xử lý khi xóa ảnh
-            beforeUpload={() => false} // Không tự động upload
+            beforeUpload={validateFileType} // Không tự động upload
+            multiple
           >
             {previewImages.length < 8 && (
               <div>

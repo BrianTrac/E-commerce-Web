@@ -238,7 +238,7 @@ const addProductToStore = async (req, res) => {
         // Kiểm tra và xử lý dữ liệu nếu cần (có thể bạn sẽ cần xử lý ảnh hay thông tin trước khi lưu)
         const newProduct = await Product.create(productData);
 
-        await addNotification(productData.current_seller.store_id, productData.name);
+        await addNotification(productData.current_seller.id, productData.name);
 
         res.status(201).json({
             message: 'Add product successfully, wait for admin approve',

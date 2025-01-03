@@ -23,7 +23,7 @@ const SellerVoucher = () => {
 
     const columns = [
         { 
-            title: 'No.', key: 'index', width: '60px',
+            title: 'STT', key: 'index', width: '60px',
             render: (_, __, index) => <Text>{(pagination.current - 1) * pagination.pageSize + index + 1}</Text>, 
         },
         { title: 'Phần trăm giảm', dataIndex: 'discount', key: 'discount', render: (discount) => <span>{discount}%</span> },
@@ -198,12 +198,12 @@ const SellerVoucher = () => {
                 <div className="flex-1 p-4">
                     {/* Header */}
                     <div className="flex justify-between items-center mb-8">
-                        <h2 className="text-xl font-semibold">Đặt voucher cho cửa hàng</h2>
+                        <h2 className="text-xl font-semibold">Đặt mã giảm giá cho cửa hàng</h2>
                     </div>
                     {/* Content for voucher shop */}
                     <div>
                         <div>
-                            <p>Percentage off</p>
+                            <p>Phần trăm giảm</p>
                             <select 
                                 className="border-dashed border-2 rounded-md p-3 w-full mt-2 mb-4" 
                                 name="discount" 
@@ -326,7 +326,7 @@ const SellerVoucher = () => {
 
             <div className="flex-col justify-between mt-6 p-4">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-semibold">Vouchers</h2>
+                    <h2 className="text-xl font-semibold">Mã giảm giá</h2>
                 </div>
                 <Table
                     columns={columns}

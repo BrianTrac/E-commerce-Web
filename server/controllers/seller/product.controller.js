@@ -152,7 +152,7 @@ const getProductById = async (req, res) => {
     const id = req.params.productId;
 
     if (!id) {
-        return res.status(400).json({ message: 'Product ID is required' });
+        return res.status(400).json({ message: 'Cần Product ID' });
     }
 
     try {
@@ -207,7 +207,7 @@ const getProductById = async (req, res) => {
         res.status(200).json({ data: productDetail });
     } catch (error) {
         console.error('Error fetching product by ID:', error);
-        res.status(500).json({ message: 'Server error', error: error.message });
+        res.status(500).json({ message: 'Lỗi server', error: error.message });
     }
 };
 
@@ -225,7 +225,7 @@ const addProductToStore = async (req, res) => {
         });
 
         if(!seller) {
-            return res.status(400).json({ message: 'Seller not found' });
+            return res.status(400).json({ message: 'Không tim thấy seller' });
         }
 
         if (!productData.current_seller) {
@@ -241,13 +241,13 @@ const addProductToStore = async (req, res) => {
         await addNotification(productData.current_seller.id, productData.name);
 
         res.status(201).json({
-            message: 'Add product successfully, wait for admin approve',
+            message: 'Thêm sản phẩm thành công, chờ admin duyệt',
             product: newProduct
         });
     } catch (error) {
         console.error('Error adding product to store:', error);
         res.status(500).json({
-            message: 'Internal server error while adding product',
+            message: 'Lỗi server khi thêm sản phẩm',
             error: error.message
         });
     }
@@ -272,7 +272,7 @@ const deleteProduct = async (req, res) => {
         }
 
         console.log(`Product with ID: ${productId} deleted successfully`);
-        res.status(200).json({ message: "Product deleted successfully" });
+        res.status(200).json({ message: "Sản phẩm đã xóa thành công" });
     } catch (error) {
         console.error('Error deleting product:', error);
         res.status(500).json({ message: "Error deleting product" });
@@ -303,14 +303,14 @@ const deleteMultipleProducts = async (req, res) => {
         // Nếu không xóa được sản phẩm nào
         if (result === 0) {
             console.warn(`No products found matching the provided IDs: ${ids}`);
-            return res.status(404).json({ message: "No products found for deletion" });
+            return res.status(404).json({ message: "Không tìm thấy sản phẩm để xóa" });
         }
 
         console.log(`Products with IDs ${ids} deleted successfully`);
-        res.status(200).json({ message: `${result} product(s) deleted successfully` });
+        res.status(200).json({ message: `${result} sản phẩm đã được xóa thành công` });
     } catch (error) {
         console.error('Error deleting multiple products:', error);
-        res.status(500).json({ message: "Error deleting multiple products" });
+        res.status(500).json({ message: "Lỗi khi xóa nhiều sản phẩm" });
     }
 };
 
@@ -329,13 +329,13 @@ const updateProduct = async (req, res) => {
         const updatedProduct = await product.update(updateData);
 
         res.status(200).json({
-            message: 'Product updated successfully',
+            message: 'Cập nhật sản phẩm thành công',
             product: updatedProduct,
         });
     } catch (error) {
         console.error('Error updating product:', error);
         res.status(500).json({
-            message: 'Internal server error while updating product',
+            message: 'Lỗi khi cập nhật sản phẩm',
             error: error.message,
         });
     }

@@ -171,7 +171,7 @@ const SellerDashboard = () => {
 
     const topSellingProductsColumns = [
         {
-            title: 'Image', key: 'image', width: '80px',
+            title: 'Ảnh', key: 'image', width: '80px',
             render: (_, record) => (
                 <img 
                     src={(Array.isArray(record.thumbnails) && record.thumbnails[0]) || ''} 
@@ -416,7 +416,7 @@ const SellerDashboard = () => {
                     {/* Recent orders */}
                     <div className="bg-white p-6 rounded-lg shadow">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-semibold">Orders gần đây</h3>
+                            <h3 className="text-lg font-semibold">Đơn hàng gần đây</h3>
                             <MoreVertical className="w-4 h-4 text-gray-400" />
                         </div>
                         <Table

@@ -196,7 +196,7 @@ const SellerProductDetail = () => {
               onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
               className="text-blue-500 mt-2"
             >
-              {isDescriptionExpanded ? 'See Less' : 'See More'}
+              {isDescriptionExpanded ? 'Thu gọn' : 'Xem thêm'}
             </button>
           )}
         </div>

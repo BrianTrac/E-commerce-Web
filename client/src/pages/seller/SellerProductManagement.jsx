@@ -134,7 +134,7 @@ const SellerProductManagement = () => {
       ),
     },
     {
-      title: 'No.',
+      title: 'STT.',
       key: 'index',
       width: '60px',
       render: (_, __, index) => <Text>{(pagination.current - 1) * pagination.pageSize + index + 1}</Text>,
@@ -189,7 +189,7 @@ const SellerProductManagement = () => {
             status === 'pending' ? 'text-orange-500' : status === 'suspend' ? 'text-red-500' : 'text-green-500'
           }
         >
-          {status === 'pending' ? 'Pending' : status === 'suspend' ? 'Suspend' : 'Available'}
+          {status === 'pending' ? 'Chờ duyệt' : status === 'suspend' ? 'Bị hủy' : 'Đã duyệt'}
         </span>
       ),
     },
@@ -253,13 +253,13 @@ const SellerProductManagement = () => {
             Tất cả
           </Button>
           <Button type={statusFilter === 'available' ? 'primary' : 'default'} onClick={() => handleStatusClick('available')}>
-            Sẵn sàng
+            Đã duyệt
           </Button>
           <Button type={statusFilter === 'pending' ? 'primary' : 'default'} onClick={() => handleStatusClick('pending')}>
-            Đang chờ
+            Chờ duyệt
           </Button>
           <Button type={statusFilter === 'suspend' ? 'primary' : 'default'} onClick={() => handleStatusClick('suspend')}>
-            Tạm dừng
+            Bị hủy
           </Button>
         </div>
         <Space>

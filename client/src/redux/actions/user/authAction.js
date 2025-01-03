@@ -106,6 +106,7 @@ export const refreshToken = createAsyncThunk(
                 const role = decodedToken?.role;
                 const email = decodedToken?.email;
                 const username = decodedToken?.username;
+                console.log('accessToken', accessToken);    
                 return { accessToken, role, email, username };
             }
             

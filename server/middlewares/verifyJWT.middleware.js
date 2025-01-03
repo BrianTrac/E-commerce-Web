@@ -11,6 +11,7 @@ const verifyJWT = (req, res, next) => {
     // }
 
     const authHeader = req.headers.authorization;
+    console.log('authHeader:', authHeader);
     if (!authHeader?.startsWith('Bearer ')) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
@@ -22,8 +23,7 @@ const verifyJWT = (req, res, next) => {
         process.env.ACCESS_TOKEN_SECRET,
         (err, decoded) => {
             if (err) {
-                console.error('JWT Verification Error:', err.message);
-                return res.status(403).json({ message: 'Forbidden' });
+                return res.status(403).json({ message: `Forbidden: ${err.message}` });
             }
 
             req.user = {
@@ -32,7 +32,7 @@ const verifyJWT = (req, res, next) => {
             }
             console.log('req.user:', req.user);  // In ra thông tin user
             next();
-    });
+        });
 };
 
 module.exports = verifyJWT;

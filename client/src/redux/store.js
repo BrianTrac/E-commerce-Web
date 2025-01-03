@@ -1,20 +1,23 @@
+// redux/store.js
 import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import userReducer from "./reducers/user";
+import adminReducer from "./reducers/admin";
 import sellerReducer from "./reducers/seller";
 
 const persistConfig = {
     key: "root",
     storage,
-    whilelist: ['user']
-}
+    whitelist: ['user'] // Chỉ persist user data
+};
 
-const persistedReducer = persistReducer(persistConfig, userReducer);
+const persistedUserReducer = persistReducer(persistConfig, userReducer);
 
 const store = configureStore({
     reducer: {
-        user: persistedReducer,
+        user: persistedUserReducer,
+        admin: adminReducer, // Không cần persist admin state
         seller: sellerReducer
     },
     middleware: (getDefaultMiddleware) =>

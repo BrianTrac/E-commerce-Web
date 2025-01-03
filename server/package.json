@@ -11,6 +11,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@paypal/checkout-server-sdk": "^1.0.3",
+    "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -29,7 +31,10 @@
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.13.0",
     "pg-hstore": "^2.3.4",
+    "querystring": "^0.2.1",
     "sequelize": "^6.37.4",
+    "slick": "^1.12.2",
+    "stripe": "^17.5.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {

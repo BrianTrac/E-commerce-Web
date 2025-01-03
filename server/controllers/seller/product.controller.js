@@ -4,7 +4,7 @@ const Seller = require('../../models/Seller');
 const User = require('../../models/User');
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
-const { addNotification } = require('../../services/adminNotifcation.service');
+const { addNotification } = require('../../services/adminNotification.service');
 
 
 // Get all products by store ID

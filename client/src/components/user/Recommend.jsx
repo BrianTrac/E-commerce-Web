@@ -13,12 +13,12 @@ const Recommend = () => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
+    <div className="max-w-8xl mx-auto bg-white bg-opacity-80 rounded-md">
       <div className="mb-4">
-        <h2 className="text-red-500 font-medium text-xl">GỢI Ý HÔM NAY</h2>
+        <h2 className="text-red-500 font-medium text-xl p-3">GỢI Ý HÔM NAY</h2>
       </div>
       
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 p-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
         {recommendations.map(item => (
           <RecommendItem
             key={item.id}

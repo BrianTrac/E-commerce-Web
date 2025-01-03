@@ -21,7 +21,6 @@ const PersistLogin = () => {
                 setIsLoading(false);  // Only set to false after attempting refresh
             }
         };
-
         if (!user?.accessToken) {
             verifyRefreshToken();
         } else {

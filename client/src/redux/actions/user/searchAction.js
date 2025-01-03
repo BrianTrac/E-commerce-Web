@@ -5,7 +5,6 @@ export const fetchSuggestions = createAsyncThunk(
     'search/fetchSuggestions',
     async ({ keyword }, { rejectWithValue }) => {
         try {
-            debugger;
             const response = await searchServices.getSuggestions({ keyword });
             return response.data;
         } catch (err) {
@@ -18,7 +17,6 @@ export const fetchSearchResults = createAsyncThunk(
     'search/fetchSearchResults',
     async ({ keyword, limit, page, sort, rating, price }, { rejectWithValue }) => {
         try {
-            debugger;
             const response = await searchServices.getSearchResults({ keyword, limit, page, sort, rating, price });
             return response.data;
         } catch (err) {

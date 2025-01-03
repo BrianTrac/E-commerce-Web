@@ -9,21 +9,21 @@ import { storage } from '../utils/firebase'; // Đường dẫn tới firebase c
  * @returns {Array} - Mảng chứa URL của các ảnh đã upload
  */
 export const uploadImages = async (imageFiles, folderName = 'products') => {
-  if (!imageFiles || imageFiles.length === 0) return [];
+    if (!imageFiles || imageFiles.length === 0) return [];
 
-  try {
-    const uploadPromises = imageFiles.map(async (image) => {
-      const imageRef = ref(storage, `${folderName}/${image.name + v4()}`);
-      const snapshot = await uploadBytes(imageRef, image);
-      const downloadURL = await getDownloadURL(snapshot.ref);
-      return {
-        thumbnail_url: downloadURL,
-      };
-    });
+    try {
+        const uploadPromises = imageFiles.map(async (image) => {
+            const imageRef = ref(storage, `${folderName}/${image.name + v4()}`);
+            const snapshot = await uploadBytes(imageRef, image);
+            const downloadURL = await getDownloadURL(snapshot.ref);
+            return {
+                thumbnail_url: downloadURL,
+            };
+        });
 
-    return Promise.all(uploadPromises); // Trả về danh sách ảnh đã upload
-  } catch (error) {
-    console.error('Error uploading images:', error);
-    throw new Error('Failed to upload images');
-  }
+        return Promise.all(uploadPromises); // Trả về danh sách ảnh đã upload
+    } catch (error) {
+        console.error('Error uploading images:', error);
+        throw new Error('Failed to upload images');
+    }
 };

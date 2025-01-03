@@ -12,9 +12,6 @@ const passport = require('passport');
 require('./services/passport-setup.service');
 const session = require('express-session'); // Middleware for session handling
 const PORT = process.env.PORT || 5000;
-const User = require('./models/User'); 
-const OTP = require('./models/OTP');   
-const TempUser = require('./models/TempUser');
 require('./models/associations'); // Import associations
 
 
@@ -58,6 +55,9 @@ sequelize.sync({ force: false })
         require('./routes/user/index.route')(app);
 
         // Admin routes
+        require('./routes/admin/index.route')(app);
+        // // Shop routes
+        // require('./routes/shop/index.route')(app);
 
         // Seller routes
         require('./routes/seller/index.route')(app);

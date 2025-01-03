@@ -12,7 +12,6 @@ const RequireAuth = ({ allowedRoles }) => {
     const roles = Array.isArray(auth?.role) ? auth.role : [auth?.role];
 
     const isAuthorized = roles.some(role => allowedRoles.includes(role));
-
     return (
         <Outlet />
         // isAuthorized ? (

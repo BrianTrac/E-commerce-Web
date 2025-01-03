@@ -63,7 +63,6 @@ const OTPVerification = () => {
 
   useEffect(() => {
     if (success) {
-      debugger;
       toast.success(success);
       if (isVerified) {
         navigate('/auth/login');

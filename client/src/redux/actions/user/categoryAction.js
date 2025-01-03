@@ -5,7 +5,6 @@ export const fetchChildrenCategories = createAsyncThunk(
     'category/fetchChildrenCategories',
     async ({ parentId }, { rejectWithValue }) => {
         try {
-            debugger;
             const response = await categoryServices.getChildrenCategories({ parentId });
             return response.data;
         } catch (err) {
@@ -18,7 +17,6 @@ export const fetchAncestorCategories = createAsyncThunk(
     'category/fetchAncestorCategories',
     async ({ id }, { rejectWithValue }) => {
         try {
-            debugger;
             const response = await categoryServices.getAncestorCategories({ id });
             return response.data;
         } catch (err) {

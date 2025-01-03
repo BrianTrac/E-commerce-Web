@@ -22,11 +22,11 @@ const getOrders = async (req, res) => {
     const storeId = seller.store_id;
 
     const orders = await Order.findAll({
-      attributes: ['id', 'user_id', 'total_price', 'status', 'created_at', 'updated_at'],
+      attributes: ['id', 'user_id', 'status', 'created_at', 'updated_at', 'shipping_address', 'payment_method', 'total_amount'],
       include: [
         {
           model: OrderItem,
-          attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'created_at'],
+          attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'created_at', 'updated_at'],
           include: [
             {
               model: Product,

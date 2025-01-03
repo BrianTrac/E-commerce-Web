@@ -41,7 +41,7 @@ Product.belongsTo(Category, {
 
 // Define associations User - Order (one-to-many)
 User.hasMany(Order, { foreignKey: 'id' });
-Order.belongsTo(User, { foreignKey: 'id' });
+Order.belongsTo(User, { foreignKey: 'user_id' });
 
 Order.hasMany(OrderItem, { foreignKey: 'order_id'});
 OrderItem.belongsTo(Order, { foreignKey: 'id'});

@@ -73,8 +73,8 @@ const SellerOrder = () => {
     },
     {
       title: 'Tổng tiền',
-      dataIndex: 'total_price',
-      key: 'total_price',
+      dataIndex: 'total_amount',
+      key: 'total_amount',
       render: (price) => <Text style={{ color: 'green' }}>{Number(price).toLocaleString()} VND</Text>,
     },
     {
@@ -82,15 +82,26 @@ const SellerOrder = () => {
       dataIndex: 'status',
       key: 'status',
       render: (status) => {
-        const color =
-          status === 'pending'
-            ? 'orange'
-            : status === 'processing'
-              ? 'green'
-              : status === 'cancelled'
-                ? 'red'
-                : 'blue';
-        return <Tag color={color}>{status.toUpperCase()}</Tag>;
+        let color = '';
+        let text = '';
+        switch (status) {
+          case 'pending':
+            color = 'orange';
+            text = 'Chờ duyệt';
+            break;
+          case 'processing':
+            color = 'green';
+            text = 'Đang vận chuyển';
+            break;
+          case 'cancelled':
+            color = 'red';
+            text = 'Đã hủy';
+            break;
+          default:
+            color = 'blue';
+            text = 'Không xác định';
+        }
+        return <Tag color={color}>{text}</Tag>;
       },
     },
     {
@@ -122,18 +133,18 @@ const SellerOrder = () => {
               onClick={() => handleStatusUpdate(record.id, 'processing')} // Map Accept to processing
               style={{ backgroundColor: 'green', borderColor: 'green' }}
             >
-              Accept
+              Chấp nhận
             </Button>
             <Button
               type="primary"
               danger
               onClick={() => handleStatusUpdate(record.id, 'cancelled')} // Map Deny to cancelled
             >
-              Deny
+              Từ chối
             </Button>
           </div>
         ) : (
-          <Text type="secondary">No actions available</Text>
+          <Text type="secondary">Không thể thực hiện hành động</Text>
         ),
     },
   ];
@@ -154,13 +165,13 @@ const SellerOrder = () => {
           type={statusFilter === 'processing' ? 'primary' : 'default'}
           onClick={() => handleStatusFilter('processing')}
         >
-          Đang xử lý
+          Đang vận chuyển
         </Button>
         <Button
           type={statusFilter === 'pending' ? 'primary' : 'default'}
           onClick={() => handleStatusFilter('pending')}
         >
-          Chờ xử lý
+          Chờ duyệt
         </Button>
         <Button
           type={statusFilter === 'cancelled' ? 'primary' : 'default'}
@@ -179,7 +190,7 @@ const SellerOrder = () => {
         expandable={{
           expandedRowRender: (record) => (
             <>
-              <Divider orientation="left">Order Items</Divider>
+              <Divider orientation="left">Quản lý đơn hàng</Divider>
               <List
                 dataSource={record.OrderItems}
                 bordered
@@ -191,14 +202,14 @@ const SellerOrder = () => {
                         <div>
                           <Text strong>{item.Product.name}</Text>
                           <br />
-                          <Text type="secondary">Price: {Number(item.Product.price).toLocaleString()} VND</Text>
+                          <Text type="secondary">Giá: {Number(item.Product.price).toLocaleString()} VND</Text>
                         </div>
                       }
                       description={
                         <>
-                          <Text>Quantity: {item.quantity}</Text>
+                          <Text>Số lượng: {item.quantity}</Text>
                           <br />
-                          <Text>Total: {Number(item.quantity * item.price).toLocaleString()} VND</Text>
+                          <Text>Tổng tiền: {Number(item.quantity * item.price).toLocaleString()} VND</Text>
                         </>
                       }
                     />

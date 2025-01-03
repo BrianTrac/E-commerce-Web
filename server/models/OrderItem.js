@@ -11,6 +11,10 @@ OrderItem.init(
             primaryKey: true,
             autoIncrement: true,
         },
+        order_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
         product_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -23,9 +27,15 @@ OrderItem.init(
             type: DataTypes.FLOAT,
             allowNull: false,
         },
-        order_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
+        created_at: {
+            type: DataTypes.DATE,
+            allowNull: true,
+            defaultValue: DataTypes.NOW,
+        },
+        updated_at: {
+            type: DataTypes.DATE,
+            allowNull: true,
+            defaultValue: null,
         },
     },
     {

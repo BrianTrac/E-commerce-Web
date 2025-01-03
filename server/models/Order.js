@@ -12,18 +12,31 @@ const Order = sequelize.define('Order', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    total_price: {
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
+    status: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     created_at: {
         type: DataTypes.DATE,
         allowNull: true,
         defaultValue: DataTypes.NOW,
     },
-    status: {
+    updated_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null,
+    },
+    shipping_address: {
         type: DataTypes.STRING,
         allowNull: true,
+    },
+    payment_method: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    total_amount: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
     },
 }, {
     tableName: 'orders',

@@ -31,8 +31,13 @@ const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale }) => {
     return (
         <div className="mt-10 max-w-4xl mx-auto p-4 bg-red-700 rounded-md overflow-hidden">
             <div className="flex justify-between mb-2">
-                <h2 className="text-2xl font-semibold">{title}</h2>
-                <Link to={url} className="text-sm text-gray-500 hover:text-gray-800">Xem tất cả</Link>
+                <h2 className="text-2xl font-semibold text-white">{title}</h2>
+                <Link
+                    to={url}
+                    className="text-sm text-gray-200 hover:text-white hover:underline transition-colors duration-200"
+                >
+                    Xem tất cả
+                </Link>
             </div>
             
             <Swiper

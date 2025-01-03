@@ -21,6 +21,8 @@ import ProductDetails from "./components/user/ProductDetails.jsx";
 import AdminDashboard from "./pages/admin/DashboardPage.jsx";
 import RoleManagement from "./pages/admin/RoleManagementPage.jsx";
 import UserManagement from "./pages/admin/UserManagementPage.jsx";
+import UserDetailPage from "./pages/admin/UserDetailPage.jsx";
+import UserWithOrderPage from "./pages/admin/UserWithOrderPage.jsx";
 import SellerManagement from "./pages/admin/SellerManagementPage.jsx";
 import SellerDetailPage from "./pages/admin/SellerDetailPage.jsx";
 import SellerProductPage from "./pages/admin/SellerWithProductPage.jsx";
@@ -28,6 +30,10 @@ import Cart from "./pages/user/CartPage.jsx";
 import PaymentPage from "./pages/user/PaymentPage.jsx";
 import PaymentSuccess from "./components/user/PaymentSuccess.jsx";
 import PaymentFailure from "./components/user/PaymentFailure.jsx";
+import SellerAnalyticsPage from "./pages/admin/SellerAnalyticsPage.jsx";
+import SellerEditPage from "./pages/admin/SellerEditPage.jsx";
+import ProductManagement from "./pages/admin/ProductManagementPage.jsx";
+import ProductDetailPage from "./pages/admin/ProductManagementDetailPage.jsx";
 
 const ROLES = {
     User: 'User',
@@ -67,12 +73,23 @@ const App = () => {
                         {/* Role Management */}
                         <Route path="role-management" element={<RoleManagement />} />
                         {/* User Management */}
-                        <Route path="user-management" element={<UserManagement />} />
+                        <Route path="user-management" >
+                            <Route index element={<UserManagement />} />
+                            <Route path=":id" element={<UserDetailPage />} />
+                            <Route path=":id/products" element={<UserWithOrderPage />} />
+                        </Route>
                         {/* Seller Management */}
                         <Route path="seller-management">
                             <Route index element={<SellerManagement />} />
                             <Route path=":id" element={<SellerDetailPage />} />
                             <Route path=":id/products" element={<SellerProductPage />} />
+                            <Route path=":id/edit" element={<SellerEditPage />} />
+                            <Route path=":id/analytics" element={<SellerAnalyticsPage />} />
+                        </Route>
+                        {/* Product Management */}
+                        <Route path="product-management" >
+                            <Route index element={<ProductManagement />} />
+                            <Route path=":id" element={<ProductDetailPage />} />
                         </Route>
                     </Route>
                 </Route>

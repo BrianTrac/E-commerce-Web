@@ -26,7 +26,6 @@ const Product = sequelize.define('Product', {
     category_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-
     },
     category_name: {
         type: DataTypes.TEXT,
@@ -53,7 +52,7 @@ const Product = sequelize.define('Product', {
         type: DataTypes.TEXT,
         allowNull: false,
         validate: {
-            isIn: [['available', 'non-available']]
+            isIn: [['available', 'unavailable', 'suspend']],
         }
     },
     thumbnail_url: {

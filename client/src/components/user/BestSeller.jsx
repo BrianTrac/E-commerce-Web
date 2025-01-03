@@ -20,11 +20,13 @@ const BestSeller = () => {
       <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
         <h2 className="text-red-500 font-medium text-xl mb-2 sm:mb-0">SẢN PHẨM BÁN CHẠY</h2>
         <button className="flex items-center text-red-500 hover:opacity-80">
-          <span className="text-sm">Xem Tất Cả</span>
-          <RightOutlined  style={{fontSize: '16px', marginLeft: '4px'}}/>
+          <span className="text-sm font-bold text-white cursor-pointer hover:underline">
+            Xem Tất Cả
+          </span>
+          <RightOutlined style={{ fontSize: '16px', marginLeft: '4px' }} />
         </button>
       </div>
-      
+
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 relative">
         {products.map(product => (
           <BestSellerItem

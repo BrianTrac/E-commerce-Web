@@ -21,20 +21,12 @@ const UserDetailPage = () => {
     const axiosPrivate = useAxiosPrivate();
     const { currentUser, totalSpent, orderCount, loading, error } = useSelector(state => state.admin.users);
 
-    // useEffect(() => {
-    //     if (id) {
-    //         // Assuming you'll create this action
-    //         dispatch(fetchOneUser({ id, axiosInstance: axiosPrivate }));
-    //         dispatch(fetchUserTotalSpent({ id, axiosInstance: axiosPrivate }));
-    //     }
-    // }, [id, dispatch]);
     useEffect(() => {
         if (id && !currentUser) {
             dispatch(fetchOneUser({ id, axiosInstance: axiosPrivate }));
             dispatch(fetchUserTotalSpent({ id, axiosInstance: axiosPrivate }));
         }
     }, [id, dispatch, axiosPrivate, currentUser]);
-    console.log(currentUser);
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-screen">
@@ -58,8 +50,6 @@ const UserDetailPage = () => {
             </div>
         );
     }
-
-
 
     return (
         <div className="p-6">

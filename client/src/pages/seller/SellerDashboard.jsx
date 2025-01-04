@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { Table, Button, Tooltip, Typography, Tag } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ import {
     MoreVertical,
     Package,
 } from 'lucide-react';
+import Select from 'react-select';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 const { Text } = Typography;
 
@@ -39,6 +40,7 @@ const SellerDashboard = () => {
         { month: "Nov", value: 0 },
         { month: "Dec", value: 0 },
     ];
+    const years = Array.from({ length: 20 }, (_, i) => new Date().getFullYear() - i);
 
     const navigate = useNavigate();
     const [topSellingProducts, setTopSellingProducts] = useState([]);
@@ -51,6 +53,7 @@ const SellerDashboard = () => {
     const [potentialCustomers, setPotentialCustomers] = useState([]);
     const [recentOrders, setRecentOrders] = useState([]);
     const [salesData, setSalesData] = useState([]);
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
@@ -64,8 +67,13 @@ const SellerDashboard = () => {
         loadTotalReviews();
         loadPotentialCustomers();
         loadRecentOrders();
-        loadMonthlySales();
     }, []);
+
+
+    useEffect(() => {
+        loadMonthlySales();
+    }, [selectedYear]);
+
 
     const loadTotalRevenue = async () => {
         try {
@@ -123,7 +131,10 @@ const SellerDashboard = () => {
 
     const loadMonthlySales = async () => {
         try {
-            const response = await getMonthlyRevenue(axiosPrivate);
+            const response = await getMonthlyRevenue(axiosPrivate, selectedYear);
+            console.log('Monthly sales:', selectedYear);
+            console.log('Response:', response);
+
             if (response?.data && response.data.length > 0) {
                 setSalesData(response.data);
             } else {
@@ -163,6 +174,11 @@ const SellerDashboard = () => {
 
     const handleView = (product) => {
         navigate(`/seller/product-management/detail/${product.id}`);
+    };
+
+    const handleChangeYear = (value) => {
+        setSelectedYear(value);
+        //console.log('Selected year:', value);
     };
 
     const formatCurrency = (value) => {
@@ -247,12 +263,10 @@ const SellerDashboard = () => {
 
     const recentOrdersColumns = [
         {
-            title: 'Khách hàng', dataIndex: 'User', key: 'User',
+            title: 'Khách hàng', dataIndex: 'user', key: 'user',
             render: (user) => (
                 <>
                     <Text strong>{user.username}</Text>
-                    <br />
-                    <Text type="secondary">{user.email}</Text>
                 </>
             ),
         },
@@ -266,22 +280,25 @@ const SellerDashboard = () => {
                 let color = '';
                 let text = '';
                 switch (status) {
-                    case 'pending': 
-                        color = 'orange';
-                        text = 'Chờ duyệt';
-                    break;
                     case 'processing':
-                        color = 'green';
-                        text = 'Đang vận chuyển';
-                    break;
+                      color = 'orange';
+                      text = 'Chờ duyệt';
+                      break;
+                    case 'delivered':
+                      color = 'green';
+                      text = 'Đang vận chuyển';
+                      break;
+                    case 'shipped':
+                      color = 'blue';
+                      text = 'Đơn hàng thành công';
+                      break;
                     case 'cancelled':
-                        color = 'red';
-                        text = 'Đã hủy';
-                    break;
+                      color = 'red';
+                      text = 'Đã hủy';
+                      break;
                     default:
-                        color = 'blue';
-                        text = 'Không xác định';
-                }
+                      return null;
+                  }
                 return <Tag color={color}>{text}</Tag>;
             },
         },
@@ -400,7 +417,18 @@ const SellerDashboard = () => {
                 <div className="bg-white p-6 rounded-lg shadow mb-8">
                     <div className="flex justify-between items-center mb-6">
                         <h3 className="text-lg font-semibold">Biểu đồ doanh thu</h3>
-                        <MoreVertical className="w-4 h-4 text-gray-400" />
+                        <Select
+                            value={selectedYear}
+                            style={{ width: 100 }}
+                            onChange={handleChangeYear}
+                            placeholder="Chọn năm"
+                            defaultValue={new Date().getFullYear()}
+                            options={years.map(year => ({
+                                value: year,
+                                label: year
+                            }))}
+                            >
+                        </Select>
                     </div>
                     <div style={{ width: '100%', height: '500px' }}>
                     <ResponsiveContainer width="100%" height="100%">
@@ -422,7 +450,7 @@ const SellerDashboard = () => {
                     </div>
                 </div>
 
-                {/* Top Selling Products and Sales Overview */}
+                {/* Potential customers and rêcnt orders */}
                 <div className="grid grid-cols-2 gap-6 mb-8">
                     {/* Potential Customers */}
                     <div className="bg-white p-6 rounded-lg shadow">

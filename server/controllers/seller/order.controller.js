@@ -94,7 +94,8 @@ const updateOrderStatus = async (req, res) => {
   }
 };
 
-const getPotentialCustomer = async (req, res) => {
+
+const getRecentOrders = async (req, res) => {
   try {
     const sellerId = req.user.id;
 
@@ -113,12 +114,13 @@ const getPotentialCustomer = async (req, res) => {
       attributes: ['id', 'user_id', 'status', 'created_at', 'updated_at', 'shipping_address', 'payment_method', 'total_amount'],
       include: [
         {
-          model: OrderItem,
+          model: OrderItems,
+          as: 'orderItems',
           attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'created_at', 'updated_at'],
           include: [
             {
               model: Product,
-              as: 'Product',
+              as: 'product',
               attributes: ['id', 'name', 'price', 'current_seller', 'thumbnail_url'],
               where: {
                 [Op.and]: [
@@ -135,11 +137,79 @@ const getPotentialCustomer = async (req, res) => {
         },
         {
           model: User,
+          as: 'user',
           attributes: ['id', 'username', 'email'],
         },
       ],
-      where: {
-        status: 'delivered', // Chỉ lấy các order đã giao hàng
+      order: [['created_at', 'DESC']], // Sắp xếp theo created_at giảm dần
+    });
+
+    if (!orders.length) {
+      return res.status(404).json({ message: 'No orders found for this store' });
+    }
+
+    res.status(200).json({
+      message: 'Orders fetched successfully',
+      orders,
+    });
+  } catch (error) {
+    console.error('Error fetching orders:', error.message);
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
+};
+
+
+const getPotentialCustomer = async (req, res) => {
+  try {
+    const sellerId = req.user.id;
+
+    const seller = await Seller.findOne({
+      where: { user_id: sellerId },
+      attributes: ['store_id'],
+    });
+
+    if (!seller) {
+      return res.status(404).json({ message: 'Seller not found' });
+    }
+
+    const storeId = seller.store_id;
+
+    const orders = await Order.findAll({
+      attributes: ['id', 'user_id', 'status', 'created_at', 'updated_at', 'total_amount'],
+      include: [
+        {
+          model: OrderItems,
+          as: 'orderItems',
+          attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'created_at', 'updated_at'],
+          include: [
+            {
+              model: Product,
+              as: 'product',
+              attributes: [],
+              where: {
+                [Op.and]: [
+                  Sequelize.where(
+                    Sequelize.cast(Sequelize.json('current_seller.store_id'), 'INTEGER'),
+                    storeId
+                  )
+                ],
+              },
+              required: true, // Chỉ lấy các OrderItem có Product phù hợp
+            },
+          ],
+          required: true, // Chỉ lấy các Order có OrderItem phù hợp
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'username', 'email'],
+        },
+      ],
+      where : {
+        status: 'shipped',  //shipped
       },
     });
 
@@ -147,11 +217,13 @@ const getPotentialCustomer = async (req, res) => {
       return res.status(404).json({ message: 'No orders found for this store' });
     }
 
+    //console.log(orders);
+
     const groupedUsers = orders.reduce((acc, order) => {
       const userId = order.user_id;
     
       // Tính tổng spending của từng order
-      const orderTotal = order.OrderItems.reduce((total, item) => {
+      const orderTotal = order.orderItems.reduce((total, item) => {
         return total + parseFloat(item.price) * item.quantity;
       }, 0);
     
@@ -159,8 +231,8 @@ const getPotentialCustomer = async (req, res) => {
       if (!acc[userId]) {
         acc[userId] = {
           userId: userId,
-          username: order.User.username,
-          email: order.User.email,
+          username: order.user.username,
+          email: order.user.email,
           totalSpending: 0,
           orders: []
         };
@@ -194,9 +266,11 @@ const getPotentialCustomer = async (req, res) => {
   }
 };
 
-const getRecentOrders = async (req, res) => {
+
+const getMonthlyRevenue = async (req, res) => {
   try {
     const sellerId = req.user.id;
+    const selectedYear = req.query.year ? parseInt(req.query.year, 10) : new Date().getFullYear();
 
     const seller = await Seller.findOne({
       where: { user_id: sellerId },
@@ -210,16 +284,17 @@ const getRecentOrders = async (req, res) => {
     const storeId = seller.store_id;
 
     const orders = await Order.findAll({
-      attributes: ['id', 'user_id', 'status', 'created_at', 'updated_at', 'shipping_address', 'payment_method', 'total_amount'],
+      attributes: ['status', 'created_at', 'updated_at', 'total_amount'],
       include: [
         {
-          model: OrderItem,
-          attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'created_at', 'updated_at'],
+          model: OrderItems,
+          as: 'orderItems',
+          attributes: ['price', 'quantity'],
           include: [
             {
               model: Product,
-              as: 'Product',
-              attributes: ['id', 'name', 'price', 'current_seller', 'thumbnail_url'],
+              as: 'product',
+              attributes: [],
               where: {
                 [Op.and]: [
                   Sequelize.where(
@@ -233,73 +308,9 @@ const getRecentOrders = async (req, res) => {
           ],
           required: true, // Chỉ lấy các Order có OrderItem phù hợp
         },
-        {
-          model: User,
-          attributes: ['id', 'username', 'email'],
-        },
       ],
-      order: [['created_at', 'DESC']], // Sắp xếp theo thời gian tạo giảm dần
-    });
-
-    if (!orders.length) {
-      return res.status(404).json({ message: 'No orders found for this store' });
-    }
-
-    res.status(200).json({
-      message: 'Orders fetched successfully',
-      orders,
-    });
-  } catch (error) {
-    console.error('Error fetching orders:', error.message);
-    res.status(500).json({
-      message: 'Internal server error',
-      error: error.message,
-    });
-  }
-};
-
-
-const getMonthlyRevenue = async (req, res) => {
-  try {
-    const sellerId = req.user.id;
-
-    const seller = await Seller.findOne({
-      where: { user_id: sellerId },
-      attributes: ['store_id'],
-    });
-
-    if (!seller) {
-      return res.status(404).json({ message: 'Seller not found' });
-    }
-
-    const storeId = seller.store_id;
-
-    const orders = await Order.findAll({
-      attributes: ['id', 'created_at', 'updated_at'],
-      include: [
-        {
-          model: OrderItem,
-          attributes: ['quantity', 'price', 'created_at'],
-          include: [
-            {
-              model: Product,
-              as: 'Product',
-              attributes: [],
-              where: {
-                [Op.and]: [
-                  Sequelize.where(
-                    Sequelize.cast(Sequelize.json('current_seller.store_id'), 'INTEGER'), storeId
-                  )
-                ],
-              },
-              required: true, 
-            },
-          ],
-          required: true, 
-        },
-      ],
-      where: {
-        status: 'delivered', // Chỉ lấy các order đã giao hàng
+      where : {
+        status: 'shipped',  //
       },
     });
 
@@ -308,21 +319,20 @@ const getMonthlyRevenue = async (req, res) => {
     }
 
     const result = orders.map((order) => {
-      const spending = order.OrderItems.reduce((total, item) => {
-        const currentYear = new Date().getFullYear();
-        const createdAt = new Date(item.dataValues.created_at);
-
-        if (!isNaN(createdAt) && createdAt.getFullYear() === currentYear) {  // Check if the order is from this year
-          return total + item.price * item.quantity;
-        }
-        return total;
-      }, 0);
+      const createdAt = new Date(order.created_at); // Lấy ngày từ order
+      // Kiểm tra năm
+      const spending =
+        !isNaN(createdAt) && createdAt.getFullYear() === selectedYear
+          ? order.orderItems.reduce((total, item) => total + item.price * item.quantity, 0)
+          : 0;
+    
       return {
         spending,
         createdAt: order.created_at,
         updatedAt: order.updated_at,
       };
     });
+    
 
     const getMonthName = (date) => {
       const monthNames = [
@@ -362,6 +372,7 @@ const getMonthlyRevenue = async (req, res) => {
 
     res.status(200).json({
       message: 'Monthly revenue fetched successfully',
+      year: selectedYear,
       data: formattedData,
     });
 

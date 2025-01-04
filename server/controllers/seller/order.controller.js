@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const Order = require('../../models/Order');
-const OrderItem = require('../../models/OrderItem');
+const OrderItems = require('../../models/OrderItems');
 const Product = require('../../models/Product');
 const Seller = require('../../models/Seller');
 const User = require('../../models/User');
@@ -25,12 +25,13 @@ const getOrders = async (req, res) => {
       attributes: ['id', 'user_id', 'status', 'created_at', 'updated_at', 'shipping_address', 'payment_method', 'total_amount'],
       include: [
         {
-          model: OrderItem,
+          model: OrderItems,
+          as: 'orderItems',
           attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'created_at', 'updated_at'],
           include: [
             {
               model: Product,
-              as: 'Product',
+              as: 'product',
               attributes: ['id', 'name', 'price', 'current_seller', 'thumbnail_url'],
               where: {
                 [Op.and]: [
@@ -47,6 +48,7 @@ const getOrders = async (req, res) => {
         },
         {
           model: User,
+          as: 'user',
           attributes: ['id', 'username', 'email'],
         },
       ],

@@ -76,7 +76,7 @@ const Category = ({ id }) => {
                     <CategoryItem
                       thumbnail={category.thumbnail_url}
                       name={category.name}
-                      navigateTo={() => navigate(`/${category.url_path.split('/')[0]}/c${category.id}`)}
+                      navigateTo={() => navigate(`/category/${category.url_path.split('/')[0]}/c${category.id}`)}
                     />
                   </div>
                 ))}

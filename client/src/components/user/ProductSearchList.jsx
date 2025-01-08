@@ -76,7 +76,7 @@ function ProductSearchList() {
   };
 
   const handleProductClick = (product) => {
-        navigate(`/${product.url_key}`, { state: { product }  });
+        navigate(`/product/${product.url_key}`, { state: { product }  });
 
     };
 

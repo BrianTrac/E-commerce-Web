@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SearchOutlined, UserOutlined, ShoppingCartOutlined, BellOutlined, LogoutOutlined, DownOutlined } from '@ant-design/icons';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAuth } from '../../redux/reducers/user/authReducer';
 import logo from "../../assets/logo.png";
@@ -10,6 +10,7 @@ import { getCartItems } from '../../redux/services/user/cartService';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { selectCartQuantity } from '../../redux/reducers/user/cartReducer';
 import { setCartQuantity } from '../../redux/reducers/user/cartReducer';
+import { logout } from '../../redux/actions/user/authAction';
 
 function Header() {
 
@@ -34,8 +35,10 @@ function Header() {
 
             dispatch(setCartQuantity(quantity));
         };
-
-        fetchCartItems();
+        // check if user is authenticated before fetching cart items
+        if (isAuthenticated) {
+            fetchCartItems();
+        }
     }, []);
 
     const handleClickLogo = () => {
@@ -44,8 +47,8 @@ function Header() {
     }
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
+    const openMenu = () => {
+        setIsMenuOpen(true);
     };
 
     const closeMenu = () => {
@@ -60,10 +63,23 @@ function Header() {
         navigate('/checkout/cart');
     }
 
+    const handleLogout = async() => {
+        await dispatch(logout({ axiosPrivate }));
+        debugger;
+        // Redirect to login after logout
+        navigate('/auth/login');
+    }
+
     return (
         <>
             <header className="w-full bg-sky-100 px-4 py-3 shadow-sm">
                 <div className="max-w-7xl mx-auto flex items-center justify-between flex-wrap">
+                    {/* Link click to seller login */}
+                    <p className="text-gray-600 hover:text-gray-800 mr-10">
+                        <Link to="/auth/login?type=seller">Kênh bán hàng</Link>
+                    </p>
+                           
+
                     {/* Wrapper for logo and text */}
                     <div className="flex flex-col items-center sm:items-start">
                         {/* Logo */}
@@ -101,9 +117,12 @@ function Header() {
                                     4
                                 </span>
                             </div>
-                            <div className="relative">
+                            <div
+                                className="relative"
+                                onMouseLeave={closeMenu} // Close menu when mouse leaves the entire block
+                            >
                                 <button
-                                    onClick={toggleMenu}
+                                    onMouseEnter={openMenu}
                                     className="flex items-center text-gray-600 hover:text-gray-800 font-semibold"
                                 >
                                     <UserOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
@@ -112,12 +131,24 @@ function Header() {
                                 </button>
                                 {isMenuOpen && (
                                     <div
-                                        className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg border border-gray-200 z-10"
+                                        className="absolute left-0 mt-2 w-52 bg-white rounded-md shadow-lg border border-gray-200 z-10"
+                                        onMouseEnter={openMenu}
                                         onMouseLeave={closeMenu}
+                                        style={{ marginTop: '0', paddingTop: '8px' }} // Replace margin with padding
                                     >
                                         <button
                                             className="block w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
-                                            // onClick={handleLogout}
+                                        >
+                                            Thông tin tài khoản
+                                        </button>
+                                        <button
+                                            className="block w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
+                                        >
+                                            Đơn hàng của tôi
+                                        </button>
+                                        <button
+                                            className="block w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
+                                            onClick={handleLogout}
                                         >
                                             Logout
                                         </button>

@@ -60,13 +60,14 @@ const App = () => {
                 <Route path="/" element={<UserLayout />}>
                     <Route index element={<Home />} />
                     <Route path="/search/:keyword" element={<Search />} />
-                    <Route path="/:url_key/:id" element={<CategoryWithProducts />} />
-                    <Route path="/:url_key" element={<ProductDetails />} />
+                    <Route path="category/:url_key/:id" element={<CategoryWithProducts />} />
+                    <Route path="product/:url_key" element={<ProductDetails />} />
                 </Route>
 
                 {/* USER ROUTE RequireAuth */}
-                <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+                <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Admin]} />}>
                     <Route path="/" element={<UserLayout />}>
+                        <Route path="/checkout" element={<Navigate to="/checkout/cart" />} />
                         <Route path="/checkout/cart" element={<Cart />} />
                         <Route path="/checkout/payment" element={<PaymentPage />} />
                     </Route>

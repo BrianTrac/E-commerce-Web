@@ -7,12 +7,14 @@ import { logout } from "../../redux/actions/user/authAction";
 import {
     User,
 } from 'lucide-react';
+import useAxiosPrivate  from '../../hooks/useAxiosPrivate';
 
 const Header = () => {
     const navigate = useNavigate();
     const { user, isAuthenticated } = useSelector(selectAuth); // Getting user and authentication status from Redux
     const dispatch = useDispatch();
-    
+    const axiosPrivate = useAxiosPrivate(); // Axios instance for private routes
+
     // State to handle dropdown visibility
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null); // Create a reference for dropdown
@@ -20,8 +22,8 @@ const Header = () => {
 
     // Handler for logout
     const handleLogout = () => {
-        dispatch(logout()); // Assuming you have a logout action
-        navigate("/auth/login"); // Navigate to login page after logout
+        dispatch(logout({axiosPrivate})); // Assuming you have a logout action
+        navigate("/auth/login?type=seller"); // Navigate to login page after logout
     };
 
     // Close the dropdown after clicking an option

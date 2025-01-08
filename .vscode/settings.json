@@ -2,5 +2,19 @@
     "cSpell.words": [
         "lucide"
     ],
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "e_commerce",
+            "database": "e_commerce_wad_ga03",
+            "password": "22120151",
+            "username": "postgres",
+            "connectionTimeout": 30
+        }
+    ]
+
 }

@@ -17,3 +17,128 @@
 2024-10-19 00:23:01 	 76f827c5-8175-437d-9589-d62e6067851b 	  Error: Login sessions require session support. Did you forget to use `express-session` middleware?
 2024-10-19 01:13:35 	 80deacdb-a8d4-448c-be26-bfc517efaf32 	  SequelizeDatabaseError: column "googleId" does not exist
 2024-10-19 01:15:41 	 3f4c1bb7-6d24-465d-836a-94b020156622 	  SequelizeDatabaseError: relation "Users" does not exist
+2024-10-22 13:46:35 	 7ae209db-e654-4853-90cf-8b5bb6bbb040 	  Error: Not allowed by CORS
+2024-10-22 16:35:46 	 11db5e45-951d-4230-a39b-58c7e6e31af2 	  Error: Not allowed by CORS
+2024-10-22 17:12:41 	 0b727e45-6068-4e36-884d-34df53e50c46 	  Error: Not allowed by CORS
+2024-10-22 17:19:38 	 efc5e3eb-38cd-47a6-a08b-53ef84fce5d2 	  SequelizeValidationError: notNull Violation: User.username cannot be null
+2024-10-22 17:20:11 	 b753f24b-d4a1-49fe-8ea0-83496a08d384 	  SequelizeValidationError: notNull Violation: User.username cannot be null
+2024-10-22 17:44:31 	 35f8d4e0-28d8-49da-bd78-f1ce6f9fec21 	  SequelizeValidationError: notNull Violation: User.username cannot be null
+2024-10-22 17:45:51 	 5ce96d1d-9637-4dee-9e0f-376f8df86ad7 	  SequelizeValidationError: notNull Violation: User.username cannot be null
+2024-10-22 17:54:30 	 b8c451f1-0709-4264-8de1-cef19fda8d6e 	  SequelizeValidationError: notNull Violation: User.username cannot be null
+2024-10-22 17:55:05 	 830e13e4-291b-4b55-b357-f194b5c393db 	  SequelizeValidationError: notNull Violation: User.username cannot be null
+2024-11-01 06:46:21 	 13596a54-0797-415b-9ca8-933f035c2025 	  Error: Not allowed by CORS
+2025-01-03 19:30:04 	 41c120d6-a88f-46b8-b3de-6106dd143e49 	  TypeError: req.user.role.map is not a function
+2024-12-29 10:58:06 	 cfb2b033-3433-41bf-b385-d64fe496271a 	  Error: secret option required for sessions
+2024-12-29 10:58:06 	 7460c6f8-618d-4bcc-b749-f7b6578dacd7 	  Error: secret option required for sessions
+2024-12-29 10:58:07 	 221fd9d7-e70b-4040-b34b-3581ffc8254b 	  Error: secret option required for sessions
+2024-12-29 10:58:07 	 f7ab7daf-c791-4bec-ac82-34754550e12f 	  Error: secret option required for sessions
+2024-12-29 10:58:07 	 0ea1b4d4-0d88-4411-a948-6344ec8cbfac 	  Error: secret option required for sessions
+2024-12-29 10:58:07 	 ec9ab495-419f-444b-a10d-ef19d49d37ee 	  Error: secret option required for sessions
+2024-12-29 10:58:07 	 4a87e745-7b4c-42e7-bff5-f37180f5c392 	  Error: secret option required for sessions
+2024-12-29 10:58:07 	 1db5d2a1-ff03-43fe-b30a-49d50e2412ba 	  Error: secret option required for sessions
+2024-12-29 10:58:28 	 10a8ed7b-66d2-46e3-a566-ea9197d30430 	  Error: secret option required for sessions
+2024-12-29 10:58:28 	 a7288fc9-8070-4471-84e5-7c1bb9397184 	  Error: secret option required for sessions
+2024-12-29 10:58:28 	 3c645114-143f-4bde-99ce-038bcb7af2e1 	  Error: secret option required for sessions
+2024-12-29 10:58:28 	 c89273d0-4198-4dbb-9619-a44c0abb8cfd 	  Error: secret option required for sessions
+2024-12-29 10:58:28 	 6a09af86-b195-4f89-b716-8c122080ca32 	  Error: secret option required for sessions
+2024-12-29 10:59:47 	 7835de15-9965-44a8-8cf2-3720d03d83c1 	  Error: secret option required for sessions
+2024-12-29 10:59:47 	 49f0d2e2-afed-4c2e-b0dc-6b2bc2726785 	  Error: secret option required for sessions
+2024-12-29 10:59:47 	 48cf9639-4191-42cd-a8dd-f39139f4eaf5 	  Error: secret option required for sessions
+2024-12-29 10:59:47 	 85a8b5ba-5939-4dd6-b613-0d7dc0c2b921 	  Error: secret option required for sessions
+2024-12-29 10:59:47 	 7c1c2035-16c3-4c32-aefc-21fe6e42f3e2 	  Error: secret option required for sessions
+2024-12-29 10:59:55 	 2f3817d0-bd84-49ae-807c-77f81dd691b3 	  Error: secret option required for sessions
+2024-12-29 10:59:55 	 4585fe4e-0afd-4e11-bc20-5ab973fce01d 	  Error: secret option required for sessions
+2024-12-29 10:59:55 	 e8fde254-c4ec-46bc-a5ca-e74d3d609be2 	  Error: secret option required for sessions
+2024-12-29 10:59:55 	 2e5e23fd-8fc9-4048-aeb4-a9834a67a0d1 	  Error: secret option required for sessions
+2024-12-29 10:59:55 	 3cf90d98-ad0d-4279-be82-c80d0974c8ec 	  Error: secret option required for sessions
+2024-12-29 10:59:55 	 8414eeec-26e3-41ba-9a47-692672492602 	  Error: secret option required for sessions
+2024-12-29 10:59:55 	 af368dbd-5f7b-4331-aca0-b51bd17cf6ba 	  Error: secret option required for sessions
+2024-12-29 10:59:55 	 c386a9b8-0e69-4c1e-8565-64b7e7e88f29 	  Error: secret option required for sessions
+2024-12-29 10:59:58 	 13ab3699-bf0e-49a8-ac82-247680165ae0 	  Error: secret option required for sessions
+2024-12-29 10:59:58 	 97c3a23b-4e0e-403f-a1ab-03dcf3e75603 	  Error: secret option required for sessions
+2024-12-29 10:59:58 	 dda3e94e-73c3-43c0-8c92-228c678cecc4 	  Error: secret option required for sessions
+2024-12-29 10:59:58 	 d8b9a1fb-0b9d-4096-ae87-1e0fe4ef3cc6 	  Error: secret option required for sessions
+2024-12-29 10:59:58 	 a8f738f2-6d3d-4c41-9550-a6a193d87733 	  Error: secret option required for sessions
+2024-12-29 10:59:58 	 8dec0299-0879-4345-89e8-6ed15f5e692d 	  Error: secret option required for sessions
+2024-12-29 10:59:58 	 060777fb-c8f3-4351-a2dc-82421098a43e 	  Error: secret option required for sessions
+2024-12-29 10:59:58 	 f665be2b-9027-460a-9ce8-bc51c75ee86a 	  Error: secret option required for sessions
+2024-12-29 11:00:22 	 c47afb9c-6954-4ee2-9f0d-d25c76b9ddb5 	  Error: secret option required for sessions
+2024-12-29 11:00:22 	 efa2d0c0-acdd-462c-bc5a-35a6d4287394 	  Error: secret option required for sessions
+2024-12-29 11:07:58 	 38581624-4425-4147-9b2f-60073ee6edab 	  Error: secret option required for sessions
+2024-12-29 11:07:58 	 6db3110b-ec8b-4142-bb50-6b5d98eca75b 	  Error: secret option required for sessions
+2024-12-29 11:07:58 	 c612bd7b-bc63-40fe-9be0-a4dd2d6d3e32 	  Error: secret option required for sessions
+2024-12-29 11:07:58 	 c815dbb0-d853-48aa-952a-3bb417fde540 	  Error: secret option required for sessions
+2024-12-29 11:07:58 	 ae0e0ac9-16c4-477d-802d-fc13428514e0 	  Error: secret option required for sessions
+2024-12-29 11:08:33 	 98514615-3e14-407f-bb11-3a1fc89a4e8f 	  Error: secret option required for sessions
+2024-12-29 11:08:33 	 369e9184-3961-47cc-9f60-7489929fbc5f 	  Error: secret option required for sessions
+2024-12-29 11:08:33 	 14be7192-eebe-4ea8-89eb-e860d2de2c9b 	  Error: secret option required for sessions
+2024-12-29 11:08:33 	 ed03a719-659e-4cd8-ae0f-a20d01ce2d85 	  Error: secret option required for sessions
+2024-12-29 11:08:33 	 f60d386c-7b65-4628-a914-76384ccb045e 	  Error: secret option required for sessions
+2024-12-29 11:08:33 	 4187a19f-93c7-4b7d-b1d5-10593399db39 	  Error: secret option required for sessions
+2024-12-29 11:08:33 	 a506cbd7-d49d-4e1a-a6cf-22d064b77857 	  Error: secret option required for sessions
+2024-12-29 11:08:33 	 2c30c89e-ba91-43cc-8e36-7d78578a2cdd 	  Error: secret option required for sessions
+2024-12-29 11:16:19 	 a6ad7ad5-e43e-4751-a13c-deddaf0e79c7 	  Error: secret option required for sessions
+2024-12-29 11:16:19 	 1b93c2ad-f5e6-4f5f-bb36-258f6c9850f5 	  Error: secret option required for sessions
+2024-12-29 11:16:19 	 7001a0ee-bea0-4684-84af-7fabf55862ff 	  Error: secret option required for sessions
+2024-12-29 11:16:19 	 086fa1c2-b79c-4df6-849f-0df2a0765da4 	  Error: secret option required for sessions
+2024-12-29 11:16:19 	 4803a624-497d-4ff8-ba8b-9b95db137827 	  Error: secret option required for sessions
+2024-12-29 11:16:32 	 e5f36798-7f3d-47ac-8421-02cf2a0367da 	  Error: secret option required for sessions
+2024-12-29 11:16:32 	 490db24f-e7a4-4710-a7b9-f98c5b1e751b 	  Error: secret option required for sessions
+2024-12-29 11:16:32 	 0a60e3db-8d30-41da-bab5-fe7c612c6781 	  Error: secret option required for sessions
+2024-12-29 11:16:32 	 f997c8e8-b249-4df4-b4b9-85aec60bec3a 	  Error: secret option required for sessions
+2024-12-29 11:16:32 	 d81773bd-9478-4986-ae79-c5b44a2f2684 	  Error: secret option required for sessions
+2024-12-29 11:16:32 	 8149cff0-af41-4d02-884d-a9a8e6676728 	  Error: secret option required for sessions
+2024-12-29 11:16:32 	 dfa922dc-dc74-4e42-9b83-2a588b1c4559 	  Error: secret option required for sessions
+2024-12-29 11:16:32 	 b02edb8b-8cda-40f4-8706-5d085ba79614 	  Error: secret option required for sessions
+2024-12-29 11:17:05 	 c05a292f-a2a2-4bf4-adca-43d179391a7a 	  Error: secret option required for sessions
+2024-12-29 11:17:05 	 3055e276-9bdf-4b3c-b644-2ae9aca766dd 	  Error: secret option required for sessions
+2024-12-29 11:17:15 	 f934a988-ddf8-4125-a8ae-75be43bb543d 	  Error: secret option required for sessions
+2024-12-29 11:17:15 	 b8dee930-6ce4-4847-8d0d-611e86433497 	  Error: secret option required for sessions
+2024-12-29 11:17:19 	 c457b30a-031f-46ca-8cf1-41d4817adee0 	  Error: secret option required for sessions
+2024-12-29 11:17:19 	 041ab4d5-30ba-4eea-a7cc-adb29a59d2aa 	  Error: secret option required for sessions
+2024-12-21 21:46:36 	 8a71dd20-6df5-4297-abed-94ed1e5802c9 	  TypeError: Cannot read properties of undefined (reading 'map')
+2024-12-21 21:46:49 	 b5fca18e-f406-4578-a961-28e30f5b5284 	  TypeError: Cannot read properties of undefined (reading 'map')
+2024-12-21 21:47:02 	 c0d47867-6b41-434d-92a6-c9e9197f65e1 	  TypeError: req.user.role.map is not a function
+2024-12-21 21:50:17 	 14050b40-ecb3-4b7a-82c8-865b785d46f3 	  TypeError: req.user.role.map is not a function
+2024-12-22 15:16:30 	 b247778c-914c-4b8e-9144-0bdeaa5ea6c3 	  TypeError: Cannot read properties of undefined (reading 'role')
+2024-12-22 15:28:25 	 ead57a1a-868f-4099-99c7-a8a51ff61e68 	  TypeError: Cannot read properties of undefined (reading 'role')
+2024-12-26 16:00:53 	 5e9aff24-e49e-43ae-a7a8-6a276520e77b 	  TypeError: Cannot read properties of undefined (reading 'role')
+2024-12-26 16:00:53 	 f90ceeeb-a31e-497e-b9c2-789bd6ffff70 	  TypeError: Cannot read properties of undefined (reading 'role')
+2024-12-30 16:37:15 	 09d39196-9c07-4d6e-95b5-96470804137b 	  TypeError: Cannot read properties of undefined (reading 'role')
+2024-12-30 16:37:59 	 c421687d-10b9-4d65-85e2-b55794a6ffc4 	  TypeError: Cannot read properties of undefined (reading 'role')
+2024-12-31 16:28:56 	 bd6e2056-07cd-421d-bc0f-e75369f4a0f5 	  ReferenceError: authHeader is not defined
+2024-12-31 16:28:56 	 9e07d544-8684-427d-b198-7beefbae887d 	  ReferenceError: authHeader is not defined
+2024-12-31 16:28:56 	 8cb6807a-e812-4189-8449-5d18c4b1aa31 	  ReferenceError: authHeader is not defined
+2024-12-31 16:28:56 	 c3742b3e-a2b0-4081-a227-db83e0f3288d 	  ReferenceError: authHeader is not defined
+2024-12-31 16:29:12 	 8b3f7add-4a46-4b42-ba0a-005de85e3d90 	  ReferenceError: authHeader is not defined
+2024-12-31 16:29:12 	 bb2992ec-86f9-4d85-8444-b33b0cf312c1 	  ReferenceError: authHeader is not defined
+2024-12-31 16:29:12 	 a3ec9941-9fd3-4071-b7a3-a48e1ce8e964 	  ReferenceError: authHeader is not defined
+2024-12-31 16:29:12 	 94e34cfb-e158-4d1c-94b9-a5eb2accbda0 	  ReferenceError: authHeader is not defined
+2024-12-31 16:30:43 	 38d0d978-c8bc-4624-8122-f507525470cf 	  ReferenceError: authHeader is not defined
+2024-12-31 16:30:43 	 ee418bd3-dec8-4da6-a7bc-5d40eed90c62 	  ReferenceError: authHeader is not defined
+2024-12-31 16:30:43 	 902e3983-b546-4e36-8641-50487b178e69 	  ReferenceError: authHeader is not defined
+2024-12-31 16:30:43 	 c1ff4136-c917-405b-b14b-b55e53547552 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 8e31e08e-7f77-4e06-b748-ea3266d4989c 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 539faedd-8cde-4451-8e34-b2848bc28f12 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 e3bea9d7-b66f-4aff-bb04-674034bae611 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 1d3fe1f3-d864-49e4-b16f-3230070f2dac 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 ecea4710-efbc-4761-9b36-4a4a9374a3d8 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 6ad60bd7-27fa-459a-9bfa-87b1bfd95fae 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 61491586-3fd3-4d1b-af15-0bad028c731c 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 2a265f9e-b22b-4fa2-b6fb-121f7766581f 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 325952e1-8c8a-49bc-8cd0-24112a0f4454 	  ReferenceError: authHeader is not defined
+2024-12-31 16:38:27 	 e04222e5-eda0-46b2-9855-a32211293229 	  ReferenceError: authHeader is not defined
+2024-12-31 16:40:18 	 6cb5488f-8f0d-4b7c-8ca2-58095108cbb0 	  ReferenceError: authHeader is not defined
+2024-12-31 16:40:18 	 a5b07c2f-2e5e-4747-9c93-1e7829cdaefe 	  ReferenceError: authHeader is not defined
+2024-12-31 16:41:42 	 a33f734f-0fb6-4266-8c68-ff68dcad387c 	  ReferenceError: authHeader is not defined
+2024-12-31 16:41:42 	 37582c5a-ffa9-4d37-905f-9e426177a164 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 f1b637f9-01cb-48de-a63b-d2048f425125 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 6d0b5a25-58e2-46d1-bde1-e167a5cb55de 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 8e4f3eb5-50a2-4319-853b-e3c0b6cbbb2f 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 0bd40e56-4c26-45bc-ac4a-7657e22cb3e7 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 2abaa997-0694-4a8c-b810-101d7cf9167f 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 ea70b88c-0a15-4132-90fc-11a94b9d7529 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 a442da08-5636-4897-bbe4-3cab0dba867b 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 30dbe087-2ed0-43a7-985a-ca7bdd53df10 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 4d07ab66-d32b-4987-b569-499803ff80f4 	  ReferenceError: authHeader is not defined
+2024-12-31 16:43:25 	 e39edd1f-3ce1-4f61-aebd-b69e1f73ddb9 	  ReferenceError: authHeader is not defined

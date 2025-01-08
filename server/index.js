@@ -4,21 +4,16 @@ const app = express();
 const sequelize = require('./config/db');
 const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
-const { logger } = require('./middleware/logEvents');
-const errorHandler = require('./middleware/errorHandler');
+const { logger } = require('./middlewares/logEvents.middleware');
+const errorHandler = require('./middlewares/errorHandler.middleware');
 const cookieParser = require('cookie-parser');
-const credentials = require('./middleware/credentials');
-const verifyJWT = require('./middleware/verifyJWT');
+const credentials = require('./middlewares/credentials.middleware');
 const passport = require('passport');
-require('./config/passport-setup');
+require('./services/passport-setup.service');
 const session = require('express-session'); // Middleware for session handling
 const PORT = process.env.PORT || 5000;
+require('./models/associations'); // Import associations
 
-
-// Sync all models with the database
-sequelize.sync()
-    .then(() => console.log('All models were synchronized successfully.'))
-    .catch(err => console.log('Failed to sync models:', err));
 
 // custom middleware logger
 app.use(logger);
@@ -47,33 +42,38 @@ app.use(session({
 }));
 
 
-// Routes
-app.use('/api/auth/register', require('./routes/register'));
-app.use('/api/auth/send-otp', require('./routes/verifyEmail'));
-app.use('/api/auth/verify-otp', require('./routes/verifyOTP'));
-app.use('/api/auth/login', require('./routes/login'));
-app.use('/api/auth/token/refresh', require('./routes/refreshToken'));
-app.use('/api/auth/logout', require('./routes/logout'));
-app.use('/api/auth/forget-password', require('./routes/forgetPassword'));
-app.use('/api/auth/reset-password', require('./routes/resetPassword'));
+// Sync all models with the database before starting the server and initializing Passport
+sequelize.sync({ force: false })
+    .then(() => {
+        console.log('All models were synchronized successfully.');
 
-// Google and Facebook OAuth routes
-app.use(passport.initialize());
-app.use(passport.session());
-app.use('/api/auth/google', require('./routes/google-auth'));
-//app.use('/api/auth/facebook', require('./routes/facebook-auth'));
+        // Initialize Passport after DB sync to ensure tables exist
+        app.use(passport.initialize());
+        app.use(passport.session());
 
-app.use(verifyJWT);
-app.use('/api/users', require('./routes/users'));
+        // User routes
+        require('./routes/user/index.route')(app);
 
+        // Admin routes
+        require('./routes/admin/index.route')(app);
+        // // Shop routes
+        // require('./routes/shop/index.route')(app);
 
-app.all('*', (req, res) => {
-    res.status(404).json({ message: 'Resource not found' });
-});
+        // Seller routes
+        require('./routes/seller/index.route')(app);
+        
+        app.all('*', (req, res) => {
+            res.status(404).json({ message: 'Resource not found' });
+        });
 
-// Error handler middleware
-app.use(errorHandler);
+        // Error handler middleware
+        app.use(errorHandler);
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    })
+    .catch(err => {
+        console.log('Failed to sync models:', err);
+    }
+);

@@ -45,8 +45,8 @@ const resendOTP = async ({ email }) => {
 };
 
 // Logout function
-const logout = async () => {
-    const response = await axios.post('api/auth/logout', {}, {
+const logout = async ({ axiosPrivate }) => {
+    const response = await axiosPrivate.post('api/auth/logout', {}, {
         withCredentials: true
     });
     return response.data;

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {login, register, verifyOTP, resendOTP, forgotPassword, resetPassword, refreshToken} from "../../actions/user/authAction";
+import { login, register, verifyOTP, resendOTP, forgotPassword, resetPassword, refreshToken, logout} from "../../actions/user/authAction";
 
 const initialState = {
     user: {},
@@ -132,7 +132,14 @@ const authSlice = createSlice({
             state.loading = false;
             state.isAuthenticated = false;
         });
-        
+
+        // Logout set auth state to initial state
+        builder.addCase(logout.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+            state.user = {};
+            state.isAuthenticated = false;
+        });
     }
 });
 

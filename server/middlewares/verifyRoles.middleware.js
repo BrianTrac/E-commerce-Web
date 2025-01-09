@@ -1,7 +1,5 @@
 const verifyRoles = (...allowedRoles) => {
     return (req, res, next) => {
-        console.log('req.user:', req.user);
-
         // Check if req.user exists and has a role property
         if (!req.user || !req.user.role) {
             return res.status(403).json({ message: 'Forbidden!' });

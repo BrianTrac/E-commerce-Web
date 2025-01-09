@@ -142,3 +142,4 @@
 2024-12-31 16:43:25 	 30dbe087-2ed0-43a7-985a-ca7bdd53df10 	  ReferenceError: authHeader is not defined
 2024-12-31 16:43:25 	 4d07ab66-d32b-4987-b569-499803ff80f4 	  ReferenceError: authHeader is not defined
 2024-12-31 16:43:25 	 e39edd1f-3ce1-4f61-aebd-b69e1f73ddb9 	  ReferenceError: authHeader is not defined
+2025-01-08 20:34:34 	 1fca939c-822b-4c1e-87d9-5121cb8025a3 	  SequelizeValidationError: notNull Violation: User.is_active cannot be null

@@ -101,7 +101,7 @@ const NavigationBar = () => {
                 <span key={category.id} className="flex items-center">
                     <span className="mx-2">/</span>
                     <Link
-                        to={`/${category.url_path.split('/')[0]}/c${category.id}`}
+                        to={`/category/${category.url_path.split('/')[0]}/c${category.id}`}
                         className="text-blue-500 hover:underline"
                     >
                         {category.name}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CreditCard, Package, Truck } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import generateDeliveryDateTime from '../../utils/generateDeliveryDateTime';
@@ -21,59 +21,73 @@ const PaymentPage = () => {
   const user = useSelector(selectUser);
   const [orderIdGlobal, setOrderIdGlobal] = useState(null);
   const navigate = useNavigate();
-  
+  const [deliveries, setDeliveries] = useState(null);
+  const [orderDetails, setOrderDetails] = useState(null);
 
-    const orderDetails = cartItems.reduce(
-        (acc, item) => {
-            const price = item.product.price * item.quantity; // Discounted price of the item
-            const originalPrice = item.product.original_price * item.quantity; // Original price of the item
-            const discount = originalPrice - price; // Discount applied to the item
+  // useEffect
+  useEffect(() => {
+    debugger;
+    if (!cartItems || cartItems.length === 0) {
+      navigate('/checkout/cart');
+      return;
+    }
+
+    const calculatedOrderDetails = cartItems.reduce(
+      (acc, item) => {
+        const price = item.product.price * item.quantity; // Discounted price of the item
+        const originalPrice = item.product.original_price * item.quantity; // Original price of the item
+        const discount = originalPrice - price; // Discount applied to the item
     
-            // Update accumulators
-            acc.total += price; // Total (after discounts)
-            acc.subtotal += originalPrice; // Subtotal (before discounts)
-            acc.totalSavings += discount; // Total savings from discounts
-            acc.shipping += 10000; // Fixed shipping cost per item (can adjust logic if needed)
-            acc.sellerDiscount += 0; // Add seller-specific discounts here if applicable
-            acc.shippingDiscount += 5000; // Fixed shipping discount per item
+        // Update accumulators
+        acc.total += price; // Total (after discounts)
+        acc.subtotal += originalPrice; // Subtotal (before discounts)
+        acc.totalSavings += discount; // Total savings from discounts
+        acc.shipping += 10000; // Fixed shipping cost per item (can adjust logic if needed)
+        acc.sellerDiscount += 0; // Add seller-specific discounts here if applicable
+        acc.shippingDiscount += 5000; // Fixed shipping discount per item
     
-            return acc;
-        },
-        {
-            total: 0, subtotal: 0, totalSavings: 0, discount: 0, shipping: 0, sellerDiscount: 0, shippingDiscount: 0, 
-        }
+        return acc;
+      },
+      {
+        total: 0, subtotal: 0, totalSavings: 0, discount: 0, shipping: 0, sellerDiscount: 0, shippingDiscount: 0,
+      }
     );
-    
+
     // Final adjustment to calculate combined discount
-    orderDetails.discount = orderDetails.subtotal - orderDetails.total;
-    
-    
+    calculatedOrderDetails.discount = calculatedOrderDetails.subtotal - calculatedOrderDetails.total;  
+
+    setOrderDetails(calculatedOrderDetails);
+
     // Group cart items by seller_id
     const groupedItems = cartItems.reduce((acc, item) => {
-        const sellerId = item.product.current_seller.id;
-        if (!acc[sellerId]) {
-        acc[sellerId] = {
-            seller_name: item.product.current_seller.name,
-            items: [],
-        };
-        }
-        acc[sellerId].items.push(item);
-        return acc;
+      const sellerId = item.product.current_seller.id;
+      if (!acc[sellerId]) {
+      acc[sellerId] = {
+          seller_name: item.product.current_seller.name,
+          items: [],
+      };
+      }
+      acc[sellerId].items.push(item);
+      return acc;
     }, {});
-
+  
     // Convert grouped items to deliveries
-    const deliveries = Object.values(groupedItems).map((group, index) => ({
-        id: index + 1,
-        date: "Giao vào: " + generateDeliveryDateTime(3), // Replace with actual delivery date
-        items: group.items.map((item) => ({
-        name: item.product.name,
-        image: item.product.thumbnail_url,
-        quantity: `x${item.quantity}`,
-        price: item.product.price * item.quantity,
-        originalPrice: item.product.original_price * item.quantity,
-        shipper: group.seller_name,
-        })),
+    const calculatedDeliveries = Object.values(groupedItems).map((group, index) => ({
+      id: index + 1,
+      date: "Giao vào: " + generateDeliveryDateTime(3), // Replace with actual delivery date
+      items: group.items.map((item) => ({
+      name: item.product.name,
+      image: item.product.thumbnail_url,
+      quantity: `x${item.quantity}`,
+      price: item.product.price * item.quantity,
+      originalPrice: item.product.original_price * item.quantity,
+      shipper: group.seller_name,
+      })),
     }));
+
+    setDeliveries(calculatedDeliveries);
+
+  }, []);
 
   // Function to convert cart items to order items
   const convertCartItemsToOrderItems = (cartItems) => {
@@ -138,6 +152,7 @@ const PaymentPage = () => {
 
 
   return (
+    deliveries &&
     <div className="max-w-6xl mx-auto p-4 flex gap-6">
       {/* Left Column - Delivery and Payment */}
       <div className="flex-grow space-y-6">
@@ -317,7 +332,8 @@ const PaymentPage = () => {
       </div>
       
     </div>
-  );
+
+    )
 };
 
 export default PaymentPage;

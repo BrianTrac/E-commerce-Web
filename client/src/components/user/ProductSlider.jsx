@@ -14,7 +14,7 @@ const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale }) => {
     }
 
     const handleProductClick = (product) => {
-        navigate(`/${product.url_key}`, { state: { product }  });
+        navigate(`/product/${product.url_key}`, { state: { product }  });
     };
 
     // Chunk the products into groups of 6

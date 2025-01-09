@@ -67,27 +67,28 @@ const fetchProductReviews = async (id) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json(); 
-    return data; 
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error('Failed to fetch product reviews', error);
-    throw error; 
+    throw error;
   }
 };
 
 const fetchRelatedProducts = async (id) => {
   try {
-    const response = await fetch(`http://localhost:4000/products/${id}/related`);
+    const response = await axios.get(`api/products/${id}/related`);
+    console.log(response);
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    // Axios response doesn't have "ok" property; instead, check the status directly
+    if (response.status !== 200) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data = await response.json(); 
-    return data; 
+    return response.data; // Axios stores data in response.data
   } catch (error) {
     console.error('Failed to fetch related products', error);
-    throw error; 
+    throw error;
   }
 };
 
@@ -97,4 +98,5 @@ export {
   fetchProductByCategory,
   fetchProductById,
   fetchProductReviews,
+  fetchRelatedProducts,
 };

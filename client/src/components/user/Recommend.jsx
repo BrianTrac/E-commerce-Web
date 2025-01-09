@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import RecommendItem from "./RecommendItem";
 import { useEffect, useState } from "react";
-
+import { fetchRelatedProducts } from "../../service/productApi";
 const Recommend = () => {
     const recommendations = [
         {
@@ -18,15 +18,21 @@ const Recommend = () => {
     const { product } = state || {};
 
     const [relatedProducts, setRelatedProducts] = useState([]);
-    // useEffect(async () => {
-    //     if (product && product.id) {
-    //         // Call API to get related products
-    //         // const response = await fetch(`http://localhost:4000/products/${product.id}/related`);
-    //         // const data = await response.json();
-    //         // setRelatedProducts(data);
-    //         console.log("Related products");
-    //     }
-    // }, [product]);
+    useEffect(() => {
+        const fetchData = async () => {
+            if (product && product.id) {
+                try {
+                    const res = await fetchRelatedProducts(product.id);
+                    console.log(res);
+                    // setRelatedProducts(res); // Assuming `res` contains the related products.
+                } catch (error) {
+                    console.error("Failed to fetch related products:", error);
+                }
+            }
+        };
+
+        fetchData();
+    }, [product]);
 
 
     return (

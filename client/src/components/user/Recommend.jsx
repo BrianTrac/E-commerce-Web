@@ -40,25 +40,26 @@ const Recommend = () => {
                 <h2 className="text-red-500 font-medium text-xl p-3">GỢI Ý HÔM NAY</h2>
             </div>
 
-            <div className="px-3">
+            <div className="px-3 pb-12"> {/* Added pb-12 for pagination spacing */}
                 <Swiper
                     modules={[Navigation, Pagination]}
                     spaceBetween={12}
                     navigation
-                    pagination={{ clickable: true }}
-                    className="mySwiper"
+                    pagination={{
+                        clickable: true,
+                        el: '.swiper-pagination',
+                        type: 'bullets',
+                    }}
+                    className="relative" // Added relative positioning
                     breakpoints={{
-                        // sm
                         640: {
                             slidesPerView: 2,
                             spaceBetween: 12
                         },
-                        // md
                         768: {
                             slidesPerView: 3,
                             spaceBetween: 12
                         },
-                        // lg
                         1024: {
                             slidesPerView: 4,
                             spaceBetween: 12
@@ -66,7 +67,7 @@ const Recommend = () => {
                     }}
                 >
                     {recommendations.map(item => (
-                        <SwiperSlide key={item.id}>
+                        <SwiperSlide key={item.id} className="pb-8"> {/* Added padding-bottom to slides */}
                             <RecommendItem
                                 image={item.thumbnail_url}
                                 title={item.name}
@@ -76,6 +77,7 @@ const Recommend = () => {
                             />
                         </SwiperSlide>
                     ))}
+                    <div className="swiper-pagination !bottom-0" /> {/* Positioned pagination at bottom */}
                 </Swiper>
             </div>
         </div>

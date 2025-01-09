@@ -35,9 +35,9 @@ ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName;
 
 const ExpandableDescription = ({
     product,
-    maxHeight = 400,
+    maxHeight = 1000,
     className = '',
-    scrollViewHeight = 600
+    scrollViewHeight = 1000
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [shouldShowButton, setShouldShowButton] = useState(true);
@@ -60,10 +60,6 @@ const ExpandableDescription = ({
             clearTimeout(timer);
         };
     }, [maxHeight, product?.description]);
-
-    const toggleExpand = () => {
-        setIsExpanded(prev => !prev);
-    };
 
     if (!product?.description) {
         return null;
@@ -91,25 +87,6 @@ const ExpandableDescription = ({
                     className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent"
                     aria-hidden="true"
                 />
-            )}
-
-            {shouldShowButton && (
-                <div className="flex justify-center mt-4">
-                    <button
-                        onClick={toggleExpand}
-                        type="button"
-                        className="inline-flex items-center gap-2 px-4 py-2 text-blue-600 hover:text-blue-700 bg-white hover:bg-gray-50 border border-gray-200 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 z-10"
-                    >
-                        <span className="font-medium">
-                            {isExpanded ? 'Thu gọn' : 'Xem thêm'}
-                        </span>
-                        {isExpanded ? (
-                            <ChevronUp className="w-4 h-4" />
-                        ) : (
-                            <ChevronDown className="w-4 h-4" />
-                        )}
-                    </button>
-                </div>
             )}
         </div>
     );

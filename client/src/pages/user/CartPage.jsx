@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { Row, Col, Card, Button, InputNumber, Typography, Divider, Space, Checkbox } from 'antd';
 import { DeleteOutlined, ShopOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
 import { getCartItems, updateCartItem, deleteCartItem, getCartSummary } from '../../redux/services/user/cartService';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCartQuantity } from "../../redux/reducers/user/cartReducer";
+import { selectAuth } from '../../redux/reducers/user/authReducer';
+
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -15,12 +17,13 @@ const Cart = () => {
   const [cartUpdated, setCartUpdated] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user, isAuthenticated } = useSelector(selectAuth);
 
   useEffect(() => {
     if (!cartUpdated) return;
-
+    
     const fetchCartItems = async () => {
-      const response = await getCartItems(axiosPrivate);
+    const response = await getCartItems(axiosPrivate);
 
       if (!response.success) {
         return;
@@ -30,8 +33,12 @@ const Cart = () => {
       setCartUpdated(false);
     };
 
-    fetchCartItems();
-    getCartSummaryInfo();
+    // check if user is authenticated before fetching cart items
+    if (isAuthenticated) {
+      fetchCartItems();
+      getCartSummaryInfo();
+    }
+    
   }, [cartUpdated]);
 
   // Group cart items by seller
@@ -77,7 +84,7 @@ const Cart = () => {
   };
 
   const handleProductClick = (product) => {
-    navigate(`/${product.url_key}`, { state: { product }  });
+    navigate(`/product/${product.url_key}`, { state: { product }  });
   };
 
   const handleCheckout = () => {

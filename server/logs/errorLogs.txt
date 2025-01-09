@@ -142,3 +142,17 @@
 2024-12-31 16:43:25 	 30dbe087-2ed0-43a7-985a-ca7bdd53df10 	  ReferenceError: authHeader is not defined
 2024-12-31 16:43:25 	 4d07ab66-d32b-4987-b569-499803ff80f4 	  ReferenceError: authHeader is not defined
 2024-12-31 16:43:25 	 e39edd1f-3ce1-4f61-aebd-b69e1f73ddb9 	  ReferenceError: authHeader is not defined
+2025-01-09 04:01:04 	 a612ab0a-171b-4904-82fa-2c2496fa5912 	  SequelizeConnectionError: getaddrinfo EAI_AGAIN aws-0-ap-southeast-1.pooler.supabase.com
+2025-01-09 04:01:04 	 070b8db2-0257-4792-8823-7a8805fc2cf2 	  SequelizeConnectionError: getaddrinfo EAI_AGAIN aws-0-ap-southeast-1.pooler.supabase.com
+2025-01-09 04:01:07 	 fad0e894-7c10-4ffc-9ded-4dae67297ffd 	  SequelizeConnectionError: getaddrinfo EAI_AGAIN aws-0-ap-southeast-1.pooler.supabase.com
+2025-01-09 04:01:07 	 72412e85-4806-4fd1-8087-ef08aa99c19f 	  SequelizeConnectionError: getaddrinfo EAI_AGAIN aws-0-ap-southeast-1.pooler.supabase.com
+2025-01-09 04:01:17 	 40d6d478-2521-478a-98b3-6dc8b8bd6f81 	  SequelizeConnectionError: getaddrinfo EAI_AGAIN aws-0-ap-southeast-1.pooler.supabase.com
+2025-01-09 04:01:17 	 ba0f2d3b-90a6-404f-9c87-dfb8bca203f8 	  SequelizeConnectionError: getaddrinfo EAI_AGAIN aws-0-ap-southeast-1.pooler.supabase.com
+2025-01-09 04:01:17 	 951af9ce-8e07-4f4c-a074-9da8946c1f54 	  SequelizeConnectionError: getaddrinfo EAI_AGAIN aws-0-ap-southeast-1.pooler.supabase.com
+2025-01-09 04:01:17 	 35ae1ce8-2590-4bf2-97b9-212536bae88d 	  SequelizeConnectionError: getaddrinfo EAI_AGAIN aws-0-ap-southeast-1.pooler.supabase.com
+2025-01-09 04:01:17 	 0e9b5afd-df85-4ebd-9881-a44bb0cf3a65 	  SequelizeConnectionError: getaddrinfo EAI_AGAIN aws-0-ap-southeast-1.pooler.supabase.com
+2025-01-09 04:01:17 	 114508c1-db28-425f-bf68-f03ceeedf77f 	  SequelizeConnectionError: getaddrinfo EAI_AGAIN aws-0-ap-southeast-1.pooler.supabase.com
+2025-01-09 04:01:17 	 e9db033f-cb9d-4c3f-82c7-86f810e4066d 	  SequelizeConnectionError: getaddrinfo EAI_AGAIN aws-0-ap-southeast-1.pooler.supabase.com
+2025-01-09 04:01:17 	 4295e7b7-1de7-4ff0-8a86-03190295347d 	  SequelizeConnectionError: getaddrinfo EAI_AGAIN aws-0-ap-southeast-1.pooler.supabase.com
+2025-01-09 04:02:35 	 b8b42c99-9742-4879-a4db-05c2fd017f0d 	  SequelizeConnectionError: 
+2025-01-09 04:02:35 	 c366a610-e5e2-464d-9cfd-774927f510b7 	  SequelizeConnectionError: 

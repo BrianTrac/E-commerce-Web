@@ -118,9 +118,9 @@ export const refreshToken = createAsyncThunk(
 
 export const logout = createAsyncThunk(
     'auth/logout',
-    async (_, { rejectWithValue }) => {
+    async ( {axiosPrivate}, { rejectWithValue }) => {
         try {
-            const response = await authServices.logout();
+            const response = await authServices.logout({ axiosPrivate });
             return response.message;
         } catch (err) {
             return rejectWithValue(err?.response?.data?.message);

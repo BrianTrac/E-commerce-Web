@@ -15,9 +15,18 @@ const Login = () => {
     const location = useLocation();
     const from = location.state?.from?.pathname || '/';
     const dispatch = useDispatch();
+    // get type of login from query params
+    const type = new URLSearchParams(location.search).get('type') || 'user';
+
     // Access Redux state 
-    const {user, error, loading, isAuthenticated} = useSelector(selectAuth);
+    const  {user, error, loading, isAuthenticated} = useSelector(selectAuth);
+    const [errorChanged, setErrorChanged] = useState('');
     
+    useEffect(() => {
+        setErrorChanged(error);
+    }, [error]); // This ensures the state is updated only when `error` changes
+
+
     // Clear any error or success on component load
     useEffect(() => {
         dispatch(clearError());
@@ -37,14 +46,15 @@ const Login = () => {
                 if (user.role && user.role.includes('Admin')) {
                     navigate('/Admin', { replace: true });
                 }
-                else if (user.role && user.role.includes('User')) {
+                else if (type === 'user' && user.role && user.role.includes('User')) {
                     navigate('/', { replace: true });
                 }
-                else if (user.role && user.role.includes('Seller')) {
+                else if (type === 'seller' && user.role && user.role.includes('Seller')) {
                     navigate('/Seller', { replace: true });
                 }
                 else {
-                    // navigate('/unauthorized', { replace: true });                    
+                    setErrorChanged('invalid credentials');       
+                    // clear user in redux
                 }
             }
         }
@@ -67,8 +77,12 @@ const Login = () => {
 
     return (
         <div className="bg-white p-8 relative w-96">
-            <h2 className="font-semibold text-xl text-center mb-8">Login</h2>
-            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+            <h2 className="font-semibold text-xl text-center mb-8">
+                Login
+                {type && <span className="font-semibold text-xl text-center mb-8"> as {type}</span>
+                }
+            </h2>
+            {errorChanged && <p className="text-red-500 text-sm text-center">{errorChanged}</p>}
             <form onSubmit={handleSubmit} className="flex flex-col space-y-6 max-w-sm mx-auto">
                 <input
                     type="text"
@@ -77,7 +91,7 @@ const Login = () => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     className="p-2 border border-gray-300 rounded w-full"
-                    disabled={loading}
+                    
                 />
                 <div className="relative">
                     <input
@@ -87,7 +101,7 @@ const Login = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="p-2 border border-gray-300 rounded w-full pr-10"
-                        disabled={loading}
+                        
                     />
                     <button
                         type='button'
@@ -99,7 +113,7 @@ const Login = () => {
                 <button
                     type='submit'
                     className="bg-cyan-500 text-white p-2 rounded focus:outline-none focus:ring-2 focus:ring-slate-700 focus:ring-opacity-50 hover:bg-cyan-700 transition-colors duration-300"
-                    disabled={loading || !username || !password}
+                    disabled={!username || !password}
                 >
                     Login
                 </button>
@@ -109,13 +123,17 @@ const Login = () => {
                 <div className="w-full border-t border-gray-800"></div>
             
                 <div className="flex">
-                    <button className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 mr-4 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button
+                        className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 mr-4 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        type="button"
+                    >
                         <Facebook className="h-5 w-5 mr-2 text-blue-800" />
                         Facebook
                     </button>
                     <button
                         onClick={handleGoogleLogin}
                         className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        type="button"
                     >
                         <FcGoogle className="h-5 w-5 mr-2" />
                         Google

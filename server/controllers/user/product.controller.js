@@ -574,7 +574,8 @@ let getRelatedProducts = async (req, res) => {
                 FROM category c
                 INNER JOIN CategoryHierarchy ch ON c.id = ch.parent_id
             )
-            SELECT p.*
+            SELECT 
+                p.*
             FROM product p
             JOIN CategoryHierarchy ch ON p.category_id = ch.id
             WHERE p.id != :id

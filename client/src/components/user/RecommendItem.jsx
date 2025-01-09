@@ -1,10 +1,13 @@
 import { StarFilled } from '@ant-design/icons';
 
-function RecommendItem (props) {
-  const { image, title, rating, sold } = props;
+function RecommendItem(props) {
+  const { image, title, rating, sold, onClick } = props;
 
   return (
-    <div className="bg-white p-3 hover:shadow-lg transition-shadow cursor-pointer rounded-md">
+    <div
+      className="bg-white p-3 hover:shadow-lg transition-shadow cursor-pointer rounded-md"
+      onClick={onClick}
+    >
       <div className="relative aspect-square mb-3 overflow-hidden">
         <img
           src={image}

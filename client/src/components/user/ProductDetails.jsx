@@ -29,6 +29,14 @@ const ProductDetails = () => {
     const axiosPrivate = useAxiosPrivate();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    
+    // Add useEffect for scroll to top
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }, [product]); // Dependency on product ensures scroll happens when product changes
 
     if (!product) {
         return <div>No product details available. Please navigate through the product list.</div>;
@@ -51,13 +59,13 @@ const ProductDetails = () => {
 
     const addToCart = async (id, quantity) => {
         const response = await addToCardItem(axiosPrivate, { itemId: id, quantity, selected: true });
-        
+
         if (response.success) {
             dispatch(setCartQuantity(response.length));
             alert('Added to cart successfully');
         }
     }
- 
+
     const handleQuantityChange = (value) => {
         setQuantity(value);
     };
@@ -68,6 +76,7 @@ const ProductDetails = () => {
             state: { cartItems }
         });
     };
+    // Scroll to top when navigating
 
     return (
         product && (
@@ -131,11 +140,11 @@ const ProductDetails = () => {
 
                             <div className="my-6 border-t border-gray-100 pt-4">
                                 <p className="text-gray-700">{product.short_description}</p>
-                        <div className="flex items-center gap-2">
-                            <p>Số Lượng</p>
-                            <QuantityControl maxNumber={product.qty} onChange={handleQuantityChange} />
-                            <p>Còn {product.qty} sản phẩm</p>
-                        </div>
+                                <div className="flex items-center gap-2">
+                                    <p>Số Lượng</p>
+                                    <QuantityControl maxNumber={product.qty} onChange={handleQuantityChange} />
+                                    <p>Còn {product.qty} sản phẩm</p>
+                                </div>
                             </div>
                         </div>
 

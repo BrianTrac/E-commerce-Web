@@ -78,14 +78,11 @@ const fetchProductReviews = async (id) => {
 const fetchRelatedProducts = async (id) => {
   try {
     const response = await axios.get(`api/products/${id}/related`);
-    console.log(response);
-
-    // Axios response doesn't have "ok" property; instead, check the status directly
     if (response.status !== 200) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    return response.data; // Axios stores data in response.data
+    return response.data; 
   } catch (error) {
     console.error('Failed to fetch related products', error);
     throw error;

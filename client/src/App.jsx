@@ -19,7 +19,6 @@ import ProductDetails from "./components/user/ProductDetails.jsx";
 
 // Admin page components
 import AdminDashboard from "./pages/admin/DashboardPage.jsx";
-import RoleManagement from "./pages/admin/RoleManagementPage.jsx";
 import UserManagement from "./pages/admin/UserManagementPage.jsx";
 import UserDetailPage from "./pages/admin/UserDetailPage.jsx";
 import UserWithOrderPage from "./pages/admin/UserWithOrderPage.jsx";
@@ -82,8 +81,6 @@ const App = () => {
                         <Route index element={<Navigate to="/admin/dashboards" replace />} />
                         {/* Admin Dashboards */}
                         <Route path="dashboards" element={<AdminDashboard  />} />
-                        {/* Role Management */}
-                        <Route path="role-management" element={<RoleManagement />} />
                         {/* User Management */}
                         <Route path="user-management" >
                             <Route index element={<UserManagement />} />

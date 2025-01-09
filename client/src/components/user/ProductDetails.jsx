@@ -11,6 +11,7 @@ import { setCartQuantity } from "../../redux/reducers/user/cartReducer";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ProductCarousel from './ProductCarousel';
+import ExpandableDescription from './ExpandableDescription ';
 
 const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -29,7 +30,7 @@ const ProductDetails = () => {
     const axiosPrivate = useAxiosPrivate();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
+
     // Add useEffect for scroll to top
     useEffect(() => {
         window.scrollTo({
@@ -175,13 +176,7 @@ const ProductDetails = () => {
 
                 <div className="flex gap-8 bg-white bg-opacity-80 max-w-5xl p-5 min-h-[400px] mb-3 mx-auto items-start rounded-md">
                     {/* Description Section */}
-                    <div className="flex-1 basis-2/3 pl-10 gap-3 text-lg">
-                        <p className="text-2xl font-bold mb-4">{product.name}</p>
-                        <div
-                            className="overflow-hidden prose max-w-none"
-                            dangerouslySetInnerHTML={{ __html: product.description }}
-                        />
-                    </div>
+                    <ExpandableDescription product={product} />
 
                     {/* Reviews Section */}
                     <div className="flex-1 basis-1/3 bg-white p-6 rounded-lg shadow-md">

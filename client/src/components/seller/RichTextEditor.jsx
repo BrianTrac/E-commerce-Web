@@ -56,23 +56,6 @@ export const RichTextEditor = ({ value, onChange }) => {
                         }}
                         className="flex flex-col"
                     />
-
-                </div>
-
-                {/* Preview Section */}
-                <div className="mt-8 border-t pt-6">
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-semibold text-gray-800">Xem trước nội dung</h3>
-                        <div className="px-3 py-1 bg-blue-50 text-blue-600 text-xs rounded-full">
-                            Preview Mode
-                        </div>
-                    </div>
-                    <div
-                        className="prose max-w-none bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-inner text-gray-700"
-                        dangerouslySetInnerHTML={{
-                            __html: value || "Chưa có nội dung để hiển thị...",
-                        }}
-                    />
                 </div>
             </div>
         </Card>

@@ -204,7 +204,6 @@ const getAllSellerProducts = async (req, res) => {
 
         // Sort the products by status
         products = sortProductByStatus(products);
-        console.log(products);
         
         return res.status(200).json({
             data: products,

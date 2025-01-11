@@ -217,7 +217,7 @@ const SellerAddProduct = () => {
           label="Miêu tả chi tiết"
           rules={[
             {
-              required: true,
+              required: false,
               message: 'Vui lòng nhập miêu tả chi tiết',
             },
             {

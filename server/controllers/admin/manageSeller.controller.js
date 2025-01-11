@@ -2,6 +2,7 @@ const Seller = require('../../models/Seller');
 const Product = require('../../models/Product');
 const { Op, QueryTypes } = require('sequelize');
 const sequelize = require('../../config/db');
+const { sortProductByStatus } = require('../../utils/sortProductByStatus');
 
 
 // [GET] /api/admin/seller/
@@ -162,7 +163,9 @@ const getAllSellerProducts = async (req, res) => {
         });
 
         // Retrieve products with pagination and filters
-        const products = await Product.findAll({
+        const Sequelize = require('sequelize');
+
+        let products = await Product.findAll({
             where: whereCondition,
             attributes: [
                 'id',
@@ -181,10 +184,28 @@ const getAllSellerProducts = async (req, res) => {
                 'specifications',
                 'current_seller',
             ],
+            order: [
+                [
+                    Sequelize.literal(`
+                CASE 
+                    WHEN inventory_status = 'pending' THEN 1
+                    WHEN inventory_status = 'suspend' THEN 2
+                    WHEN inventory_status = 'available' THEN 3
+                    ELSE 4
+                END
+            `),
+                    'ASC',
+                ],
+                ['created_at', 'DESC'],
+            ],
             offset: offset,
             limit: limit,
         });
 
+        // Sort the products by status
+        products = sortProductByStatus(products);
+        console.log(products);
+        
         return res.status(200).json({
             data: products,
             total: totalCount,

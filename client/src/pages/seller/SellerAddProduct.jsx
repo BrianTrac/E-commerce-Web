@@ -7,14 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import useCategories from '../../hooks/useCategories';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import slugify from 'slugify';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import { RichTextEditor } from '../../components/seller/RichTextEditor';
 
 const { Option } = Select;
 const { TextArea } = Input;
 
 const SellerAddProduct = () => {
   const [form] = Form.useForm();
+  const [editorContent, setEditorContent] = useState('');
   const [previewImages, setPreviewImages] = useState([]);
   const [imageUploads, setImageUploads] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -23,6 +23,9 @@ const SellerAddProduct = () => {
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const { categories } = useCategories(searchTerm, 1, 50);
+
+  const [content, setContent] = useState('');
+
 
   const handleImageChange = ({ fileList }) => {
     if (fileList.length > 8) {
@@ -209,8 +212,31 @@ const SellerAddProduct = () => {
           <TextArea rows={3} placeholder="Nhập miêu tả ngắn" />
         </Form.Item>
 
-        <Form.Item name="description" label="Miêu tả chi tiết">
-          <TextArea rows={5} placeholder="Nhập miêu tả chi tiết" />
+        <Form.Item
+          name="description"
+          label="Miêu tả chi tiết"
+          rules={[
+            {
+              required: true,
+              message: 'Vui lòng nhập miêu tả chi tiết',
+            },
+            {
+              validator: (_, value) => {
+                if (value && value.trim() === '') {
+                  return Promise.reject('Nội dung không được để trống');
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
+        >
+          <RichTextEditor
+            value={editorContent}
+            onChange={(content) => {
+              setEditorContent(content);
+              form.setFieldsValue({ description: content });
+            }}
+          />
         </Form.Item>
 
         <Form.Item

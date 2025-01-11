@@ -7,9 +7,38 @@ import { useNavigate } from 'react-router-dom';
 import useCategories from '../../hooks/useCategories';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import slugify from 'slugify';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const { Option } = Select;
 const { TextArea } = Input;
+
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, 3, false] }],
+    [{ size: ['small', false, 'large', 'huge'] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{ color: [] }, { background: [] }],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+    [{ align: [] }],
+    ['image']
+  ],
+};
+
+const formats = [
+  'header',
+  'size',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'color',
+  'background',
+  'list',
+  'bullet',
+  'align',
+  'image'
+];
 
 const SellerAddProduct = () => {
   const [form] = Form.useForm();
@@ -18,6 +47,7 @@ const SellerAddProduct = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [specifications, setSpecifications] = useState([]);
+  const [detailedDescription, setDetailedDescription] = useState('');
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const { categories } = useCategories(searchTerm, 1, 50);
@@ -32,11 +62,13 @@ const SellerAddProduct = () => {
     }));
     setPreviewImages(updatedPreviews);
     setImageUploads(fileList.filter((file) => file.originFileObj).map((file) => file.originFileObj));
+    form.setFieldsValue({ images: updatedPreviews });
   };
 
   const handleRemoveImage = (file) => {
     setPreviewImages(previewImages.filter((img) => img.uid !== file.uid));
     setImageUploads(imageUploads.filter((upload) => upload.name !== file.name));
+    form.setFieldsValue({ images: updatedPreviews });
   };
 
   const validateFileType = (file) => {
@@ -68,6 +100,7 @@ const SellerAddProduct = () => {
         category_id: selectedCategory?.value,
         category_name: selectedCategory?.label,
         specifications: formattedSpecifications,
+        description: detailedDescription,
         images: formattedImages,
         thumbnail_url: formattedImages[0]?.thumbnail_url || '',
         price: values.original_price * (1 - (values.discount_rate || 0) / 100),
@@ -121,8 +154,22 @@ const SellerAddProduct = () => {
           </Select>
         </Form.Item>
 
-        <Form.Item label="Ảnh sản phẩm" >
+        <Form.Item
+          name="images"
+          label="Ảnh sản phẩm"
+          rules={[
+            {
+              validator: (_, value) => {
+                if (previewImages.length === 0) {
+                  return Promise.reject(new Error('Vui lòng tải lên ít nhất một ảnh!'));
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
+        >
           <Upload
+            accept="image/*"
             listType="picture-card"
             fileList={previewImages}
             onChange={handleImageChange}
@@ -148,12 +195,11 @@ const SellerAddProduct = () => {
             className="w-full"
             placeholder="Nhập tỷ lệ giảm giá"
             onKeyDown={(event) => {
-              // Các phím được cho phép
-              const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', '-'];
+              const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete'];
 
               // Kiểm tra nếu không phải số và không nằm trong danh sách allowedKeys
               if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
-                event.preventDefault(); // Chặn phím không hợp lệ
+                event.preventDefault();
               }
             }}
           />
@@ -162,18 +208,19 @@ const SellerAddProduct = () => {
         <Form.Item
           name="original_price"
           label="Giá gốc"
-          rules={[{ required: true, message: 'Giá gốc là bắt buộc' }]}
+          rules={[{ required: true, message: 'Giá gốc là bắt buộc' },
+          { type: 'number', min: 0, message: 'Giá gốc phải lớn hơn 0' }
+          ]}
         >
           <InputNumber
             className="w-full"
             placeholder="Nhập giá gốc"
             onKeyDown={(event) => {
-              // Các phím được cho phép
-              const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', '-'];
+              const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete'];
 
               // Kiểm tra nếu không phải số và không nằm trong danh sách allowedKeys
               if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
-                event.preventDefault(); // Chặn phím không hợp lệ
+                event.preventDefault();
               }
             }}
           />
@@ -183,8 +230,18 @@ const SellerAddProduct = () => {
           <TextArea rows={3} placeholder="Nhập miêu tả ngắn" />
         </Form.Item>
 
-        <Form.Item name="description" label="Miêu tả chi tiết">
-          <TextArea rows={5} placeholder="Nhập miêu tả chi tiết" />
+        <Form.Item
+          name="description"
+          label="Nhập miêu tả chi tiết"
+        >
+          <ReactQuill
+            value={detailedDescription}
+            onChange={setDetailedDescription}
+            theme="snow"
+            modules={modules}
+            formats={formats}
+            style={{ height: '200px', marginBottom: '20px' }}
+          />
         </Form.Item>
 
         <Form.Item
@@ -197,12 +254,11 @@ const SellerAddProduct = () => {
             className="w-full"
             placeholder="Nhập số lượng"
             onKeyDown={(event) => {
-              // Các phím được cho phép
               const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete'];
 
               // Kiểm tra nếu không phải số và không nằm trong danh sách allowedKeys
               if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
-                event.preventDefault(); // Chặn phím không hợp lệ
+                event.preventDefault();
               }
             }}
           />

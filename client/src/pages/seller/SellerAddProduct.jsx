@@ -13,33 +13,6 @@ import 'react-quill/dist/quill.snow.css';
 const { Option } = Select;
 const { TextArea } = Input;
 
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, 3, false] }],
-    [{ size: ['small', false, 'large', 'huge'] }],
-    ['bold', 'italic', 'underline', 'strike'],
-    [{ color: [] }, { background: [] }],
-    [{ list: 'ordered' }, { list: 'bullet' }],
-    [{ align: [] }],
-    ['image']
-  ],
-};
-
-const formats = [
-  'header',
-  'size',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'color',
-  'background',
-  'list',
-  'bullet',
-  'align',
-  'image'
-];
-
 const SellerAddProduct = () => {
   const [form] = Form.useForm();
   const [previewImages, setPreviewImages] = useState([]);
@@ -47,12 +20,15 @@ const SellerAddProduct = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [specifications, setSpecifications] = useState([]);
-  const [detailedDescription, setDetailedDescription] = useState('');
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const { categories } = useCategories(searchTerm, 1, 50);
 
   const handleImageChange = ({ fileList }) => {
+    if (fileList.length > 8) {
+      fileList = fileList.slice(0, 8);
+    }
+
     const updatedPreviews = fileList.map((file) => ({
       uid: file.uid,
       name: file.name || file.url.split('/').pop(),
@@ -62,13 +38,17 @@ const SellerAddProduct = () => {
     }));
     setPreviewImages(updatedPreviews);
     setImageUploads(fileList.filter((file) => file.originFileObj).map((file) => file.originFileObj));
-    form.setFieldsValue({ images: updatedPreviews });
   };
+
+  let showLimitWarning = false;
 
   const handleRemoveImage = (file) => {
     setPreviewImages(previewImages.filter((img) => img.uid !== file.uid));
     setImageUploads(imageUploads.filter((upload) => upload.name !== file.name));
-    form.setFieldsValue({ images: updatedPreviews });
+
+    if (showLimitWarning) {
+      showLimitWarning = false;
+    }
   };
 
   const validateFileType = (file) => {
@@ -100,7 +80,6 @@ const SellerAddProduct = () => {
         category_id: selectedCategory?.value,
         category_name: selectedCategory?.label,
         specifications: formattedSpecifications,
-        description: detailedDescription,
         images: formattedImages,
         thumbnail_url: formattedImages[0]?.thumbnail_url || '',
         price: values.original_price * (1 - (values.discount_rate || 0) / 100),
@@ -230,18 +209,8 @@ const SellerAddProduct = () => {
           <TextArea rows={3} placeholder="Nhập miêu tả ngắn" />
         </Form.Item>
 
-        <Form.Item
-          name="description"
-          label="Nhập miêu tả chi tiết"
-        >
-          <ReactQuill
-            value={detailedDescription}
-            onChange={setDetailedDescription}
-            theme="snow"
-            modules={modules}
-            formats={formats}
-            style={{ height: '200px', marginBottom: '20px' }}
-          />
+        <Form.Item name="description" label="Miêu tả chi tiết">
+          <TextArea rows={5} placeholder="Nhập miêu tả chi tiết" />
         </Form.Item>
 
         <Form.Item

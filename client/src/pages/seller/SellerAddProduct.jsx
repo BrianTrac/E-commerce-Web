@@ -51,13 +51,20 @@ const SellerAddProduct = () => {
     }
   };
 
-  const validateFileType = (file) => {
+  const validateFileTypeAndLimit = (file, fileList) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
     if (!allowedTypes.includes(file.type)) {
       message.error(`${file.name} không phải là định dạng ảnh hợp lệ!`);
-      return Upload.LIST_IGNORE; // Ngăn file không được upload
+      return Upload.LIST_IGNORE;
     }
-    return false; // Ngăn Ant Design upload tự động, nhưng vẫn thêm vào danh sách
+
+    if (fileList.length >= 8 && !showLimitWarning) {
+      showLimitWarning = true;
+      message.error('Bạn đã đạt giới hạn 8 ảnh. Không thể thêm ảnh mới.');
+      return Upload.LIST_IGNORE;
+    }
+    return false;
   };
 
   const onSubmit = async (values) => {
@@ -153,7 +160,7 @@ const SellerAddProduct = () => {
             fileList={previewImages}
             onChange={handleImageChange}
             onRemove={handleRemoveImage}
-            beforeUpload={validateFileType}
+            beforeUpload={(file, fileList) => validateFileTypeAndLimit(file, fileList)}
             multiple
           >
             {previewImages.length < 8 && (

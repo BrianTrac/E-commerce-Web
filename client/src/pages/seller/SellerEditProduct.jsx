@@ -6,6 +6,7 @@ import { UploadOutlined, MinusCircleOutlined, PlusOutlined, CloseOutlined } from
 import useCategories from '../../hooks/useCategories';
 import { uploadImages } from '../../helpers/upload';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { RichTextEditor } from '../../components/seller/RichTextEditor';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -22,6 +23,7 @@ const SellerEditProduct = () => {
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const { categories } = useCategories(searchTerm, 1, 50);
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,6 +39,7 @@ const SellerEditProduct = () => {
           description: product.description,
           qty: product.qty,
         });
+        setDescription(product.description);
 
         const parsedSpecifications = Array.isArray(product.specifications)
           ? product.specifications
@@ -128,6 +131,7 @@ const SellerEditProduct = () => {
 
       const updatedData = {
         ...values,
+        description: description,
         category_id: selectedCategory?.value,
         category_name: selectedCategory?.label,
         images: formattedImages,
@@ -144,6 +148,7 @@ const SellerEditProduct = () => {
       message.error('Có lỗi xảy ra khi cập nhật sản phẩm!');
     }
   };
+
 
   return (
     <div className="container mx-auto p-4">
@@ -234,8 +239,15 @@ const SellerEditProduct = () => {
           <Input.TextArea rows={3} placeholder="Nhập miêu tả ngắn" />
         </Form.Item>
 
-        <Form.Item name="description" label="Miêu tả chi tiết">
-          <TextArea rows={5} placeholder="Nhập miêu tả chi tiết" />
+        <Form.Item
+          name="description"
+          label="Miêu tả chi tiết"
+          initialValue={description}
+        >
+          <RichTextEditor
+            value={description}
+            onChange={(newValue) => setDescription(newValue)}
+          />
         </Form.Item>
 
         <Form.Item

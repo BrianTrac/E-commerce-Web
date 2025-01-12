@@ -16,10 +16,11 @@ import GoogleAuthHandler from './pages/user/GoogleAuthHandlerPage.jsx';
 import Search from "./pages/user/SearchPage.jsx";
 import CategoryWithProducts from "./components/user/CategoryWithProducts.jsx";
 import ProductDetails from "./components/user/ProductDetails.jsx";
+import TopDealsPage from "./pages/user/TopDealsPage.jsx";
+import FlashSalePage from "./pages/user/FlashSalePage.jsx";
 
 // Admin page components
 import AdminDashboard from "./pages/admin/DashboardPage.jsx";
-import RoleManagement from "./pages/admin/RoleManagementPage.jsx";
 import UserManagement from "./pages/admin/UserManagementPage.jsx";
 import UserDetailPage from "./pages/admin/UserDetailPage.jsx";
 import UserWithOrderPage from "./pages/admin/UserWithOrderPage.jsx";
@@ -60,6 +61,8 @@ const App = () => {
                 {/* USER ROUTE */}
                 <Route path="/" element={<UserLayout />}>
                     <Route index element={<Home />} />
+                    <Route path="/top-deals" element={<TopDealsPage />} />
+                    <Route path="/flash-sale" element={<FlashSalePage />} />
                     <Route path="/search/:keyword" element={<Search />} />
                     <Route path="category/:url_key/:id" element={<CategoryWithProducts />} />
                     <Route path="product/:url_key" element={<ProductDetails />} />
@@ -84,8 +87,6 @@ const App = () => {
                         <Route index element={<Navigate to="/admin/dashboards" replace />} />
                         {/* Admin Dashboards */}
                         <Route path="dashboards" element={<AdminDashboard  />} />
-                        {/* Role Management */}
-                        <Route path="role-management" element={<RoleManagement />} />
                         {/* User Management */}
                         <Route path="user-management" >
                             <Route index element={<UserManagement />} />

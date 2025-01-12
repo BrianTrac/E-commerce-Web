@@ -4,9 +4,9 @@ import authServices from '../../services/user/authService';
 
 export const login = createAsyncThunk(
     'auth/login',
-    async ({ username, password }, { rejectWithValue }) => {
+    async ({ username, password, type }, { rejectWithValue }) => {
         try {
-            const response = await authServices.login({ username, password });
+            const response = await authServices.login({ username, password, type });
             console.log('response: ', response);
 
             const accessToken = response?.accessToken;
@@ -25,10 +25,10 @@ export const login = createAsyncThunk(
 
 export const register = createAsyncThunk(
     'auth/register',
-    async ({ username, email, password }, { rejectWithValue }) => {
+    async ({ username, email, password, type }, { rejectWithValue }) => {
         try {
             
-            const response = await authServices.register({ username, email, password });
+            const response = await authServices.register({ username, email, password, type });
             
             return {email: email, message: response?.message};
         } catch (err) {

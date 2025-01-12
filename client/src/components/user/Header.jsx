@@ -35,9 +35,12 @@ function Header() {
 
             dispatch(setCartQuantity(quantity));
         };
+        debugger;
         // check if user is authenticated before fetching cart items
-        if (isAuthenticated) {
+        if (isAuthenticated && user.role.toLowerCase() === 'user') {
+        
             fetchCartItems();
+            console.log('User: ', user);
         }
     }, []);
 
@@ -97,7 +100,7 @@ function Header() {
                     <Search />
 
                     {/* Conditional Rendering for User Login */}
-                    {isAuthenticated ? (
+                    {(isAuthenticated && user.role.toLowerCase() === 'user')? (
                         <div className="flex items-center space-x-6 mt-4 sm:mt-0">
                             <div className="relative">
                                 <button

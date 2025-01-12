@@ -18,6 +18,7 @@ const OTPVerification = () => {
   const dispatch = useDispatch();
   const [isVerified, setIsVerified] = useState(false);
   const { user, error, loading, success } = useSelector(selectAuth);
+  const type = new URLSearchParams(location.search).get('type') || 'user';
   
   const [email, setEmail] = useState(null);
   // get email from query params if not already set
@@ -65,7 +66,7 @@ const OTPVerification = () => {
     if (success) {
       toast.success(success);
       if (isVerified) {
-        navigate('/auth/login');
+        navigate('/auth/login?type=' + type);
       }
       dispatch(clearSuccess());
     }

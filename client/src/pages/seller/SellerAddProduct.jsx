@@ -7,12 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import useCategories from '../../hooks/useCategories';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import slugify from 'slugify';
+import { RichTextEditor } from '../../components/seller/RichTextEditor';
 
 const { Option } = Select;
 const { TextArea } = Input;
 
 const SellerAddProduct = () => {
   const [form] = Form.useForm();
+  const [editorContent, setEditorContent] = useState('');
   const [previewImages, setPreviewImages] = useState([]);
   const [imageUploads, setImageUploads] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -22,7 +24,14 @@ const SellerAddProduct = () => {
   const axiosPrivate = useAxiosPrivate();
   const { categories } = useCategories(searchTerm, 1, 50);
 
+  const [content, setContent] = useState('');
+
+
   const handleImageChange = ({ fileList }) => {
+    if (fileList.length > 8) {
+      fileList = fileList.slice(0, 8);
+    }
+
     const updatedPreviews = fileList.map((file) => ({
       uid: file.uid,
       name: file.name || file.url.split('/').pop(),
@@ -34,18 +43,31 @@ const SellerAddProduct = () => {
     setImageUploads(fileList.filter((file) => file.originFileObj).map((file) => file.originFileObj));
   };
 
+  let showLimitWarning = false;
+
   const handleRemoveImage = (file) => {
     setPreviewImages(previewImages.filter((img) => img.uid !== file.uid));
     setImageUploads(imageUploads.filter((upload) => upload.name !== file.name));
+
+    if (showLimitWarning) {
+      showLimitWarning = false;
+    }
   };
 
-  const validateFileType = (file) => {
+  const validateFileTypeAndLimit = (file, fileList) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
     if (!allowedTypes.includes(file.type)) {
       message.error(`${file.name} không phải là định dạng ảnh hợp lệ!`);
-      return Upload.LIST_IGNORE; // Ngăn file không được upload
+      return Upload.LIST_IGNORE;
     }
-    return false; // Ngăn Ant Design upload tự động, nhưng vẫn thêm vào danh sách
+
+    if (fileList.length >= 8 && !showLimitWarning) {
+      showLimitWarning = true;
+      message.error('Bạn đã đạt giới hạn 8 ảnh. Không thể thêm ảnh mới.');
+      return Upload.LIST_IGNORE;
+    }
+    return false;
   };
 
   const onSubmit = async (values) => {
@@ -121,13 +143,27 @@ const SellerAddProduct = () => {
           </Select>
         </Form.Item>
 
-        <Form.Item label="Ảnh sản phẩm" >
+        <Form.Item
+          name="images"
+          label="Ảnh sản phẩm"
+          rules={[
+            {
+              validator: (_, value) => {
+                if (previewImages.length === 0) {
+                  return Promise.reject(new Error('Vui lòng tải lên ít nhất một ảnh!'));
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
+        >
           <Upload
+            accept="image/*"
             listType="picture-card"
             fileList={previewImages}
             onChange={handleImageChange}
             onRemove={handleRemoveImage}
-            beforeUpload={validateFileType}
+            beforeUpload={(file, fileList) => validateFileTypeAndLimit(file, fileList)}
             multiple
           >
             {previewImages.length < 8 && (
@@ -148,12 +184,11 @@ const SellerAddProduct = () => {
             className="w-full"
             placeholder="Nhập tỷ lệ giảm giá"
             onKeyDown={(event) => {
-              // Các phím được cho phép
-              const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', '-'];
+              const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete'];
 
               // Kiểm tra nếu không phải số và không nằm trong danh sách allowedKeys
               if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
-                event.preventDefault(); // Chặn phím không hợp lệ
+                event.preventDefault();
               }
             }}
           />
@@ -162,18 +197,19 @@ const SellerAddProduct = () => {
         <Form.Item
           name="original_price"
           label="Giá gốc"
-          rules={[{ required: true, message: 'Giá gốc là bắt buộc' }]}
+          rules={[{ required: true, message: 'Giá gốc là bắt buộc' },
+          { type: 'number', min: 0, message: 'Giá gốc phải lớn hơn 0' }
+          ]}
         >
           <InputNumber
             className="w-full"
             placeholder="Nhập giá gốc"
             onKeyDown={(event) => {
-              // Các phím được cho phép
-              const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', '-'];
+              const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete'];
 
               // Kiểm tra nếu không phải số và không nằm trong danh sách allowedKeys
               if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
-                event.preventDefault(); // Chặn phím không hợp lệ
+                event.preventDefault();
               }
             }}
           />
@@ -183,8 +219,31 @@ const SellerAddProduct = () => {
           <TextArea rows={3} placeholder="Nhập miêu tả ngắn" />
         </Form.Item>
 
-        <Form.Item name="description" label="Miêu tả chi tiết">
-          <TextArea rows={5} placeholder="Nhập miêu tả chi tiết" />
+        <Form.Item
+          name="description"
+          label="Miêu tả chi tiết"
+          rules={[
+            {
+              required: false,
+              message: 'Vui lòng nhập miêu tả chi tiết',
+            },
+            {
+              validator: (_, value) => {
+                if (value && value.trim() === '') {
+                  return Promise.reject('Nội dung không được để trống');
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
+        >
+          <RichTextEditor
+            value={editorContent}
+            onChange={(content) => {
+              setEditorContent(content);
+              form.setFieldsValue({ description: content });
+            }}
+          />
         </Form.Item>
 
         <Form.Item
@@ -197,12 +256,11 @@ const SellerAddProduct = () => {
             className="w-full"
             placeholder="Nhập số lượng"
             onKeyDown={(event) => {
-              // Các phím được cho phép
               const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete'];
 
               // Kiểm tra nếu không phải số và không nằm trong danh sách allowedKeys
               if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
-                event.preventDefault(); // Chặn phím không hợp lệ
+                event.preventDefault();
               }
             }}
           />

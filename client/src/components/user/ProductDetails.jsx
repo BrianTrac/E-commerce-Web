@@ -20,6 +20,7 @@ const formatPrice = (price) => {
 const ProductDetails = () => {
     const { state } = useLocation();
     const { product } = state || {};
+    console.log(product);
     const [reviews, setReviews] = useState({
         rating_average: 0,
         reviews_count: 0,
@@ -91,7 +92,9 @@ const ProductDetails = () => {
                             <p className="text-2xl font-bold">{product.name}</p>
 
                             {/* Shop/Seller Info - Redesigned */}
-                            <div className="flex items-center gap-3 mt-3 mb-4">
+                            <div className="flex items-center gap-3 mt-3 mb-4 cursor-pointer"
+                                onClick={() => navigate(`/store/${product.current_seller.store_id}`)}
+                            >
                                 <img
                                     src={product.current_seller.logo}
                                     alt={product.current_seller.name}

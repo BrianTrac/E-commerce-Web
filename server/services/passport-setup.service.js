@@ -9,10 +9,17 @@ const crypto = require('crypto');
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'api/auth/google/callback'
-}, async (accessToken, refreshToken, profile, done) => {
+    callbackURL: 'api/auth/google/callback',
+    passReqToCallback: true, // allows us to pass the req from our route (check if a user is logged in)
+}, async (req, accessToken, refreshToken, profile, done) => {
     try {
-        let user = await User.findOne({ where: { googleId: profile.id } });
+
+        const {type} = JSON.parse(req.query.state.toLowerCase() || '{}');
+
+        let user = await User.findOne({
+            where: {
+                googleId: profile.id, 
+         } });
 
         if (!user) {
             // check if user already exists by email
@@ -21,14 +28,20 @@ passport.use(new GoogleStrategy({
                 user.googleId = profile.id;
                 await user.save();
             } else {
+                const defaultRole = ((type.toLowerCase() === 'seller') ? 'Seller' : 'User');
                 user = await User.create({
                     googleId: profile.id,
                     email: profile.emails[0].value,
                     username: profile.displayName,
-                    role: 'User',
+                    role: defaultRole,
                     password: await bcrypt.hash(crypto.randomBytes(20).toString('hex'), 10)
                 });
 
+            }
+        } else {
+            // Validate the user type
+            if (type && user.role.toLowerCase() !== type.toLowerCase()) {
+                return done(null, false, { message: 'Role mismatch' });
             }
         }
 

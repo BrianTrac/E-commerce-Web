@@ -21,6 +21,8 @@ const Register = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { user, error, loading, success } = useSelector(selectAuth);
+    const type = new URLSearchParams(location.search).get('type') || 'user';
+
 
     // Enable or disable the Register button
     useEffect(() => {
@@ -57,7 +59,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await dispatch(register({ username, email, password }));
+            await dispatch(register({ username, email, password, type }));
             // Clear form fields
             setUsername('');
             setEmail('');
@@ -81,7 +83,7 @@ const Register = () => {
                     await dispatch(clearSuccess());
                     // Then navigate after a short delay
                     
-                    navigate(`/auth/register/verify-otp?email=${email}`);
+                    navigate(`/auth/register/verify-otp?email=${email}&type=${type.toLowerCase()}`);
                     
                     
                 } catch (err) {
@@ -103,12 +105,17 @@ const Register = () => {
     }, [success, error, dispatch, navigate]);
 
     const handleGoogleLogin = () => {
-        window.location.href = `${SERVER_URL}/api/auth/google`;
-    }
+        const typeParam = encodeURIComponent(type.toLowerCase()); // Ensure the type is URL-safe
+        window.location.href = `${SERVER_URL}/api/auth/google?type=${typeParam}`;
+    };
 
     return (
         <div className="bg-white p-8 relative w-96">
-            <h2 className="font-semibold text-xl text-center mb-8">Register</h2>
+            <h2 className="font-semibold text-xl text-center mb-8">
+                Register
+                {type && <span className="font-semibold text-xl text-center mb-8"> as {type}</span>
+                }
+            </h2>
             {error && <p className="text-red-500 text-sm text-center">{error}</p>}
             <form onSubmit={handleSubmit} className="flex flex-col space-y-6 max-w-sm mx-auto">
                 <input
@@ -184,7 +191,10 @@ const Register = () => {
                 </div>
                 <div className="mt-6 text-center text-sm">
                     <span className="text-gray-600">Already have an account? </span>
-                    <Link to="/auth/login" className="font-medium text-blue-500 hover:text-blue-700 hover:underline">
+                    <Link 
+                            to={`/auth/login?type=${type.toLowerCase()}`} 
+                            className="font-medium text-blue-500 hover:text-blue-700 hover:underline"
+                    >
                         Login
                     </Link>
                 </div>

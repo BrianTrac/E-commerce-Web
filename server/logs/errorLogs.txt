@@ -1,0 +1,1 @@
+2025-01-12 10:23:40 	 84c84650-8b61-49fb-906b-96a1acc3e66c 	  TypeError: req.query.state.toLoweCase is not a function

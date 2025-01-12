@@ -1,9 +1,9 @@
 import axios from '../../../config/axios';
 
 // Login function
-const login = async ({ username, password }) => {
+const login = async ({ username, password, type }) => {
     const response = await axios.post('api/auth/login',
-        JSON.stringify({ username, password }),
+        JSON.stringify({ username, password, type }),
         {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true
@@ -12,9 +12,9 @@ const login = async ({ username, password }) => {
 };
 
 // Register function
-const register = async ({ username, password, email }) => {
+const register = async ({ username, password, email, type }) => {
     const response = await axios.post('api/auth/register',
-        JSON.stringify({ username, password, email }),
+        JSON.stringify({ username, password, email, type }),
         {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true

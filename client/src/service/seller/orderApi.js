@@ -34,9 +34,11 @@ export const getRecentOrders = async (axiosPrivate) => {
   }
 };
 
-export const getMonthlyRevenue = async (axiosPrivate) => {
+export const getMonthlyRevenue = async (axiosPrivate, selectedYear) => {
   try {
-    const response = await axiosPrivate.get('/api/seller/orders/monthly-revenue');
+    const response = await axiosPrivate.get(`/api/seller/orders/monthly-revenue`, {
+      params: { year: selectedYear.value },
+    });
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Failed to fetch monthly revenue');

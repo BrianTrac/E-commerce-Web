@@ -1,4 +1,4 @@
-// services/productApi.js
+// service/storeApi.js
 export const getStore = async (axiosPrivate) => {
   try {
     const response = await axiosPrivate.get(`/api/seller/store`);

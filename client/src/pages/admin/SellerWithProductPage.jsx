@@ -14,7 +14,6 @@ import {
     CheckOutlined,
     UndoOutlined,
 } from '@ant-design/icons';
-import { sortProductByStatus } from '../../helpers/sortProductByStatus';
 
 const { Text } = Typography;
 
@@ -47,7 +46,7 @@ const SellerProductPage = () => {
 
             if (fetchSellerProducts.fulfilled.match(resultAction)) {
                 let { products, totalCount, currentPage, pageSize } = resultAction.payload;
-                products = sortProductByStatus(products);
+                console.log(products);
 
                 setProducts(products);
                 setPagination({
@@ -227,7 +226,6 @@ const SellerProductPage = () => {
             render: (_, record) => (
                 <div className="min-w-[150px]">
                     <Text strong className="block text-sm md:text-base">{record.name}</Text>
-                    <Text type="secondary" className="text-xs md:text-sm">SKU: {record.current_seller?.sku}</Text>
                 </div>
             ),
         },

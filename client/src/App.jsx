@@ -46,6 +46,7 @@ import SellerVoucher from "./pages/seller/SellerVoucher.jsx";
 import SellerEditProduct from "./pages/seller/SellerEditProduct.jsx";
 import SellerInfo from "./pages/seller/SellerInfo.jsx";
 import SellerOrder from "./pages/seller/SellerOrder.jsx";
+import StoreDetail from "./pages/user/StoreDetail.jsx";
 
 const ROLES = {
     User: 'User',
@@ -65,6 +66,7 @@ const App = () => {
                     <Route path="/search/:keyword" element={<Search />} />
                     <Route path="category/:url_key/:id" element={<CategoryWithProducts />} />
                     <Route path="product/:url_key" element={<ProductDetails />} />
+                    <Route path="store/:storeId" element={<StoreDetail />} />
                 </Route>
 
                 {/* USER ROUTE RequireAuth */}

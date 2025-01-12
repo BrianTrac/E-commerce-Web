@@ -73,11 +73,11 @@ const SellerProductManagement = () => {
 
   const handleDeleteMultiple = async (ids) => {
     confirm({
-      title: `Bạn thật sự muốn xóa những ${ids.length} sản phẩm này chứ?`,
+      title: `Bạn có chắc chắn muốn xóa ${ids.length} sản phẩm này không?`,
       icon: <ExclamationCircleOutlined />,
       content: 'Thao tác này không thể hoàn tác.',
       okText: 'Có',
-      okType: 'Cảnh báo',
+      okType: 'danger',
       cancelText: 'Không',
       onOk: async () => {
         try {
@@ -98,7 +98,7 @@ const SellerProductManagement = () => {
       icon: <ExclamationCircleOutlined />,
       content: 'Thao tác này không thể hoàn tác.',
       okText: 'Có',
-      okType: 'Cảnh báo',
+      okType: 'danger',
       cancelText: 'Không',
       onOk: async () => {
         try {

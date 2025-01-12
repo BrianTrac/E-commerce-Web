@@ -5,9 +5,14 @@ const { WEB_URL } = require('../../config/config');
 const { generateAccessToken, generateRefreshToken } = require('../../utils/jwtToken');
 
 // Google OAuth login route
-router.get('/', passport.authenticate('google', {
-    scope: ['profile', 'email']
-}));
+router.get('/', (req, res, next) => {
+    const { type } = req.query;
+    
+    passport.authenticate('google', {
+        scope: ['profile', 'email'],
+        state: JSON.stringify({ type: type || 'user' })
+    })(req, res, next);
+});
 
 // Google OAuth callback route
 router.get('/callback', passport.authenticate('google',{failureRedirect: `${WEB_URL}/auth/login`}),

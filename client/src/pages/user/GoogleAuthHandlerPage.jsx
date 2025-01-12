@@ -22,7 +22,10 @@ const GoogleAuthHandler = () => {
             console.log('decodedToken:', decodedToken);
             if (userRole && userRole.includes('Admin')) {
                 navigate('/Admin', { replace: true });
-            } else {
+            }  else if (userRole && userRole.includes('Seller')) {
+                navigate('/Seller', { replace: true });
+            }
+            else {
                 navigate('/', { replace: true });
             }
         }

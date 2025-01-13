@@ -16,10 +16,12 @@ import GoogleAuthHandler from './pages/user/GoogleAuthHandlerPage.jsx';
 import Search from "./pages/user/SearchPage.jsx";
 import CategoryWithProducts from "./components/user/CategoryWithProducts.jsx";
 import ProductDetails from "./components/user/ProductDetails.jsx";
+import TopDealsPage from "./pages/user/TopDealsPage.jsx";
+import FlashSalePage from "./pages/user/FlashSalePage.jsx";
+import OrderManagement from "./pages/user/OrderManagement.jsx";
 
 // Admin page components
 import AdminDashboard from "./pages/admin/DashboardPage.jsx";
-import RoleManagement from "./pages/admin/RoleManagementPage.jsx";
 import UserManagement from "./pages/admin/UserManagementPage.jsx";
 import UserDetailPage from "./pages/admin/UserDetailPage.jsx";
 import UserWithOrderPage from "./pages/admin/UserWithOrderPage.jsx";
@@ -45,6 +47,7 @@ import SellerVoucher from "./pages/seller/SellerVoucher.jsx";
 import SellerEditProduct from "./pages/seller/SellerEditProduct.jsx";
 import SellerInfo from "./pages/seller/SellerInfo.jsx";
 import SellerOrder from "./pages/seller/SellerOrder.jsx";
+import StoreDetail from "./pages/user/StoreDetail.jsx";
 
 const ROLES = {
     User: 'User',
@@ -59,9 +62,12 @@ const App = () => {
                 {/* USER ROUTE */}
                 <Route path="/" element={<UserLayout />}>
                     <Route index element={<Home />} />
+                    <Route path="/top-deals" element={<TopDealsPage />} />
+                    <Route path="/flash-sale" element={<FlashSalePage />} />
                     <Route path="/search/:keyword" element={<Search />} />
                     <Route path="category/:url_key/:id" element={<CategoryWithProducts />} />
                     <Route path="product/:url_key" element={<ProductDetails />} />
+                    <Route path="store/:storeId" element={<StoreDetail />} />
                 </Route>
 
                 {/* USER ROUTE RequireAuth */}
@@ -70,6 +76,7 @@ const App = () => {
                         <Route path="/checkout" element={<Navigate to="/checkout/cart" />} />
                         <Route path="/checkout/cart" element={<Cart />} />
                         <Route path="/checkout/payment" element={<PaymentPage />} />
+                        <Route path="/order-management" element={<OrderManagement />} />
                     </Route>
                     <Route path="/checkout/success" element={<PaymentSuccess />} />
                     <Route path="/checkout/failure" element={<PaymentFailure />} />
@@ -82,8 +89,6 @@ const App = () => {
                         <Route index element={<Navigate to="/admin/dashboards" replace />} />
                         {/* Admin Dashboards */}
                         <Route path="dashboards" element={<AdminDashboard  />} />
-                        {/* Role Management */}
-                        <Route path="role-management" element={<RoleManagement />} />
                         {/* User Management */}
                         <Route path="user-management" >
                             <Route index element={<UserManagement />} />

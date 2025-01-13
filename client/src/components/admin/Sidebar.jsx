@@ -1,4 +1,4 @@
-import { ChevronDown } from 'lucide-react';
+import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const Sidebar = () => {
@@ -7,22 +7,45 @@ export const Sidebar = () => {
             <div className="mb-8">
                 <h1 className="text-2xl font-bold">Trang Admin</h1>
             </div>
-
             <nav>
-                <div className="space-y-2">
-                    <Link to="/admin/dashboards" className="flex items-center space-x-2 p-2 rounded hover:bg-blue-600">
-                        <span>Trang chủ</span>
-                    </Link>
-                    <Link to="/admin/user-management" className="flex items-center space-x-2 p-2 rounded hover:bg-blue-600">
-                        <span>Quản lý người dùng</span>
-                    </Link>
-                    <Link to="/admin/seller-management" className="flex items-center space-x-2 p-2 rounded hover:bg-blue-600">
-                        <span>Quản lý shop</span>
-                    </Link>
-                    <Link to="/admin/product-management" className="flex items-center space-x-2 p-2 rounded hover:bg-blue-600">
-                        <span>Quản lý sản phẩm</span>
-                    </Link>
-                </div>
+                <ul className="space-y-4">
+                    <li>
+                        <Link
+                            to="/admin/dashboards"
+                            className="flex items-center p-3 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
+                        >
+                            <span className="flex-grow">Tổng quan</span>
+                            <ChevronRight className="w-5 h-5" />
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/admin/user-management"
+                            className="flex items-center p-3 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
+                        >
+                            <span className="flex-grow">Quản trị người dùng</span>
+                            <ChevronRight className="w-5 h-5" />
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/admin/seller-management"
+                            className="flex items-center p-3 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
+                        >
+                            <span className="flex-grow">Quản trị shop</span>
+                            <ChevronRight className="w-5 h-5" />
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/admin/product-management"
+                            className="flex items-center p-3 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
+                        >
+                            <span className="flex-grow">Quản trị sản phẩm</span>
+                            <ChevronRight className="w-5 h-5" />
+                        </Link>
+                    </li>
+                </ul>
             </nav>
         </div>
     )

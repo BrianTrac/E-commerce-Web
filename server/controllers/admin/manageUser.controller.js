@@ -56,7 +56,7 @@ const getAllUser = async (req, res) => {
             };
         });
 
-        res.status(200).json({
+        return res.status(200).json({
             data: formattedUsers,
             total: totalCount,
             page: page,
@@ -65,7 +65,7 @@ const getAllUser = async (req, res) => {
 
     } catch (error) {
         console.error('Error in getAllUser:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -95,13 +95,13 @@ const getOneUser = async (req, res) => {
             });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             data: user
         });
 
     } catch (error) {
         console.error('Error in getOneUser:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -167,7 +167,7 @@ const getAllUserOrderList1 = async (req, res) => {
         });
     } catch (error) {
         console.error('Error in getAllUserOrderList:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error,
         });
@@ -245,7 +245,7 @@ const getAllUserOrderList = async (req, res) => {
         });
     } catch (error) {
         console.error('Error in getAllUserOrderList:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error,
         });
@@ -263,13 +263,13 @@ const activateUser = async (req, res) => {
         }
         user.is_active = true;
         await user.save();
-        res.status(200).json({
+        return res.status(200).json({
             message: 'Activated user successfully',
             data: user
         });
     } catch (error) {
         console.error('Error in activateUser:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -288,13 +288,13 @@ const deactivateUser = async (req, res) => {
         }
         user.is_active = false;
         await user.save();
-        res.status(200).json({
+        return res.status(200).json({
             message: 'Deactivated user successfully',
             data: user
         });
     } catch (error) {
         console.error('Error in deactivateUser:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -343,7 +343,7 @@ const getUserTotalSpent = async (req, res) => {
         });
     } catch (error) {
         console.error('Error in getUserTotalSpent:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error,
         });

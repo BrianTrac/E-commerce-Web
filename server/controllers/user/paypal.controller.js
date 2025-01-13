@@ -60,10 +60,10 @@ const createOrder = async (req, res) => {
         });
 
         const order = await client().execute(request);
-        res.status(200).json({ orderId: order.result.id });
+        return res.status(200).json({ orderId: order.result.id });
     } catch (error) {
         console.error(error);
-        res.status(500).json({
+        return res.status(500).json({
             message: "Error creating Paypal order",
             error: error.message || "Internal Server Error",
         });
@@ -77,10 +77,10 @@ const captureOrder = async (req, res) => {
         request.requestBody({});
 
         const capture = await client().execute(request);
-        res.status(200).json({ status: capture.result.status });
+        return res.status(200).json({ status: capture.result.status });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Error capturing Paypal order" });
+        return res.status(500).json({ message: "Error capturing Paypal order" });
     }
 };
 

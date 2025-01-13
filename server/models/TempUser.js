@@ -25,6 +25,10 @@ const TempUser = sequelize.define('TempUser', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    role: {
+        type: DataTypes.ENUM('User', 'Admin', 'Seller'),
+        defaultValue: 'user',
+    },
 }, {
     tableName: 'TempUsers',
     timestamps: true,

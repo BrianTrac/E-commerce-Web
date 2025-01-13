@@ -6,7 +6,7 @@ const { generateOTP, verifyOTP } = require('../../../utils/otpService');
 const { sendOTPVerificationEmail } = require('../../../services/mailer.service');
 
 const handleRegister = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, type } = req.body;
     
     if (!username || !email || !password) {
         return res.status(400).json({message: 'incorrect form submission'});
@@ -56,6 +56,7 @@ const handleRegister = async (req, res) => {
             email: email,
             password: hashedPassword,
             otp: otp,
+            role: ((type.toLowerCase() === 'seller') ? 'Seller' : 'User') || 'User',
         });
 
         return res.status(200).json({ message: 'OTP sent successfully. Please check your inbox' });
@@ -88,14 +89,14 @@ const verifyRegistrationOTP = async(req, res) => {
             username: tempUser.username,
             email: tempUser.email,
             password: tempUser.password,
-            role: 'User',
+            role: ((tempUser.role.toLowerCase() === 'seller') ? 'Seller' : 'User') || 'User',
             is_active: true,
         });
 
         await newUser.save();
         await TempUser.destroy({ where: { email: email } });
        
-        res.status(200).json({success: true, message: 'User registered successfully'});
+        return res.status(200).json({success: true, message: `${tempUser.role} registered successfully`});
     } catch (err) {
         return res.status(500).json({ message: err.message });
     }
@@ -112,7 +113,7 @@ const resendOTP = async (req, res) => {
         const otp = await generateOTP(null, email, 'registration');
         await sendOTPVerificationEmail(email, otp);
 
-        res.status(200).json({ success: true, message: 'OTP sent successfully' });
+        return res.status(200).json({ success: true, message: 'OTP sent successfully' });
     } catch (err) {
         return res.status(500).json({ message: 'Failed to send OTP. Please try again later' });
     }

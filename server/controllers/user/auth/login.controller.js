@@ -3,9 +3,9 @@ const bcrypt = require('bcrypt');
 const { generateAccessToken, generateRefreshToken } = require('../../../utils/jwtToken');
 
 const handleLogin = async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, type } = req.body;
     //    console.log('req.body: ', req.body);
-    if (!username || !password) {
+    if (!username || !password || !type) {
         return res.status(400).json({ message: 'incorrect form submission' });
     }
 
@@ -27,6 +27,19 @@ const handleLogin = async (req, res) => {
         return res.status(401).json({ message: 'invalid credentials' });
     }
 
+    if (typeof type !== 'string' || typeof user.role !== 'string') {
+        return res.status(400).json({ message: 'invalid credentials' });
+    }
+    
+    if (type.trim().toLowerCase() !== user.role.trim().toLowerCase()) {
+        return res.status(401).json({ message: 'invalid credentials' });
+    }
+        
+    // check the user type
+    if (type.toLowerCase() !== user.role.toLowerCase()) {
+        return res.status(401).json({ message: 'invalid credentials' });
+    }
+
     const accessToken = generateAccessToken(user);
 
     const refreshToken = generateRefreshToken(user);
@@ -41,7 +54,7 @@ const handleLogin = async (req, res) => {
         sameSite: 'None',
     });
 
-    res.json({ accessToken: accessToken });
+    return res.json({ accessToken: accessToken });
 };
 
 module.exports = { handleLogin };

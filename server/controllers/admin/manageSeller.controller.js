@@ -2,6 +2,7 @@ const Seller = require('../../models/Seller');
 const Product = require('../../models/Product');
 const { Op, QueryTypes } = require('sequelize');
 const sequelize = require('../../config/db');
+const { sortProductByStatus } = require('../../utils/sortProductByStatus');
 
 
 // [GET] /api/admin/seller/
@@ -46,7 +47,7 @@ const getAllSeller = async (req, res) => {
             ]
         });
 
-        res.status(200).json({
+        return res.status(200).json({
             data: sellers.map(seller => ({
                 id: seller.id,
                 name: seller.name,
@@ -67,7 +68,7 @@ const getAllSeller = async (req, res) => {
 
     } catch (error) {
         console.error('Error in getAllSeller:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -101,7 +102,7 @@ const getOneSeller = async (req, res) => {
             });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             data: [{
                 id: seller.id,
                 name: seller.name,
@@ -122,7 +123,7 @@ const getOneSeller = async (req, res) => {
 
     } catch (error) {
         console.error('Error in getAllSeller:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -162,7 +163,9 @@ const getAllSellerProducts = async (req, res) => {
         });
 
         // Retrieve products with pagination and filters
-        const products = await Product.findAll({
+        const Sequelize = require('sequelize');
+
+        let products = await Product.findAll({
             where: whereCondition,
             attributes: [
                 'id',
@@ -181,10 +184,27 @@ const getAllSellerProducts = async (req, res) => {
                 'specifications',
                 'current_seller',
             ],
+            order: [
+                [
+                    Sequelize.literal(`
+                CASE 
+                    WHEN inventory_status = 'pending' THEN 1
+                    WHEN inventory_status = 'suspend' THEN 2
+                    WHEN inventory_status = 'available' THEN 3
+                    ELSE 4
+                END
+            `),
+                    'ASC',
+                ],
+                ['created_at', 'DESC'],
+            ],
             offset: offset,
             limit: limit,
         });
 
+        // Sort the products by status
+        products = sortProductByStatus(products);
+        
         return res.status(200).json({
             data: products,
             total: totalCount,
@@ -193,7 +213,7 @@ const getAllSellerProducts = async (req, res) => {
         });
     } catch (error) {
         console.error('Error in getAllSellerProducts:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -213,13 +233,13 @@ const activateSeller = async (req, res) => {
         }
         seller.is_active = true;
         await seller.save();
-        res.status(200).json({
+        return  res.status(200).json({
             message: 'Activated seller successfully',
             data: seller
         });
     } catch (error) {
         console.error('Error in activateSeller:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -238,13 +258,13 @@ const deactivateSeller = async (req, res) => {
         }
         seller.is_active = false;
         await seller.save();
-        res.status(200).json({
+        return res.status(200).json({
             message: 'Deactivated seller successfully',
             data: seller
         });
     } catch (error) {
         console.error('Error in deactivateSeller:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -318,7 +338,7 @@ const getSellerStatistics = async (req, res) => {
         productResult.sort((a, b) => b.total_sales - a.total_sales);
         const topProducts = productResult.slice(0, 10);
 
-        res.status(200).json({
+        return res.status(200).json({
             data: {
                 totalProducts: totalProducts,
                 totalRevenue: totalRevenue,
@@ -328,7 +348,7 @@ const getSellerStatistics = async (req, res) => {
         });
     } catch (error) {
         console.error('Error in getSellerStatistics:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -354,12 +374,12 @@ const suspendSellerProduct = async (req, res) => {
 
         product.inventory_status = 'suspend';
         await product.save();
-        res.status(200).json({
+        return res.status(200).json({
             message: 'Product is temporarily suspended',
         });
     } catch (error) {
         console.log('Error in suspendSellerProduct:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -389,7 +409,7 @@ const unsuspendProduct = async (req, res) => {
         return res.status(200).json({ message: 'Product unsuspended successfully' });
     } catch (error) {
         console.error('Error unsuspending product:', error);
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -417,7 +437,7 @@ const approveProduct = async (req, res) => {
         return res.status(200).json({ message: 'Product unsuspended successfully' });
     } catch (error) {
         console.error('Error unsuspending product:', error);
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -442,9 +462,9 @@ const editSeller = async (req, res) => {
         }
         await seller.save();
 
-        res.status(200).json({ message: 'Edit seller successfully' });
+        return res.status(200).json({ message: 'Edit seller successfully' });
     } catch {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 module.exports = {

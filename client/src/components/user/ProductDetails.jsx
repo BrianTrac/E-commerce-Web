@@ -11,6 +11,7 @@ import { setCartQuantity } from "../../redux/reducers/user/cartReducer";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ProductCarousel from './ProductCarousel';
+import ExpandableDescription from './ExpandableDescription ';
 
 const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -19,6 +20,7 @@ const formatPrice = (price) => {
 const ProductDetails = () => {
     const { state } = useLocation();
     const { product } = state || {};
+    console.log(product);
     const [reviews, setReviews] = useState({
         rating_average: 0,
         reviews_count: 0,
@@ -29,6 +31,14 @@ const ProductDetails = () => {
     const axiosPrivate = useAxiosPrivate();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // Add useEffect for scroll to top
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }, [product]); // Dependency on product ensures scroll happens when product changes
 
     if (!product) {
         return <div>No product details available. Please navigate through the product list.</div>;
@@ -51,13 +61,13 @@ const ProductDetails = () => {
 
     const addToCart = async (id, quantity) => {
         const response = await addToCardItem(axiosPrivate, { itemId: id, quantity, selected: true });
-        
+
         if (response.success) {
             dispatch(setCartQuantity(response.length));
             alert('Added to cart successfully');
         }
     }
- 
+
     const handleQuantityChange = (value) => {
         setQuantity(value);
     };
@@ -68,6 +78,7 @@ const ProductDetails = () => {
             state: { cartItems }
         });
     };
+    // Scroll to top when navigating
 
     return (
         product && (
@@ -81,7 +92,9 @@ const ProductDetails = () => {
                             <p className="text-2xl font-bold">{product.name}</p>
 
                             {/* Shop/Seller Info - Redesigned */}
-                            <div className="flex items-center gap-3 mt-3 mb-4">
+                            <div className="flex items-center gap-3 mt-3 mb-4 cursor-pointer"
+                                onClick={() => navigate(`/store/${product.current_seller.store_id}`)}
+                            >
                                 <img
                                     src={product.current_seller.logo}
                                     alt={product.current_seller.name}
@@ -131,11 +144,11 @@ const ProductDetails = () => {
 
                             <div className="my-6 border-t border-gray-100 pt-4">
                                 <p className="text-gray-700">{product.short_description}</p>
-                        <div className="flex items-center gap-2">
-                            <p>Số Lượng</p>
-                            <QuantityControl maxNumber={product.qty} onChange={handleQuantityChange} />
-                            <p>Còn {product.qty} sản phẩm</p>
-                        </div>
+                                <div className="flex items-center gap-2">
+                                    <p>Số Lượng</p>
+                                    <QuantityControl maxNumber={product.qty} onChange={handleQuantityChange} />
+                                    <p>Còn {product.qty} sản phẩm</p>
+                                </div>
                             </div>
                         </div>
 
@@ -166,13 +179,7 @@ const ProductDetails = () => {
 
                 <div className="flex gap-8 bg-white bg-opacity-80 max-w-5xl p-5 min-h-[400px] mb-3 mx-auto items-start rounded-md">
                     {/* Description Section */}
-                    <div className="flex-1 basis-2/3 pl-10 gap-3 text-lg">
-                        <p className="text-2xl font-bold mb-4">{product.name}</p>
-                        <div
-                            className="overflow-hidden prose max-w-none"
-                            dangerouslySetInnerHTML={{ __html: product.description }}
-                        />
-                    </div>
+                    <ExpandableDescription product={product} />
 
                     {/* Reviews Section */}
                     <div className="flex-1 basis-1/3 bg-white p-6 rounded-lg shadow-md">

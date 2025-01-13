@@ -64,15 +64,17 @@ const Login = () => {
     const handleSubmit = async(e) => {
         e.preventDefault();   
         
-        await dispatch(login({ username, password }));
+        await dispatch(login({ username, password, type }));
+        console.log('login' + username + password + type);
 
         setUsername('');
         setPassword('');    
     }
 
     const handleGoogleLogin = () => {
-        window.location.href = `${SERVER_URL}/api/auth/google`;
-    }
+        const typeParam = encodeURIComponent(type.toLowerCase()); // Ensure the type is URL-safe
+        window.location.href = `${SERVER_URL}/api/auth/google?type=${typeParam}`;
+    };
 
     return (
         <div className="bg-white p-8 relative w-96">
@@ -120,32 +122,37 @@ const Login = () => {
                     <Link to="/auth/forget-password" className="hover:underline">Forget Password</Link>
                 </p> 
                 <div className="w-full border-t border-gray-800"></div>
-            
-                <div className="flex">
-                    <button
-                        className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 mr-4 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        type="button"
-                    >
-                        <Facebook className="h-5 w-5 mr-2 text-blue-800" />
-                        Facebook
-                    </button>
-                    <button
-                        onClick={handleGoogleLogin}
-                        className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        type="button"
-                    >
-                        <FcGoogle className="h-5 w-5 mr-2" />
-                        Google
-                    </button>
-                </div>
-      
-                <div className="mt-6 text-center text-sm">
-                    <span className="text-gray-600">You are new to Shobee? </span>
-                    <Link to="/auth/register" className="font-medium text-blue-500 hover:text-blue-700 hover:underline">
-                     Register
-                    </Link>
-                </div>
-
+                { type.toLowerCase() !== 'admin' &&
+                    <div className="flex">
+                        <button
+                            className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 mr-4 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            type="button"
+                        >
+                            <Facebook className="h-5 w-5 mr-2 text-blue-800" />
+                            Facebook
+                        </button>
+                        <button
+                            onClick={handleGoogleLogin}
+                            className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            type="button"
+                        >
+                            <FcGoogle className="h-5 w-5 mr-2" />
+                            Google
+                        </button>
+                    </div>
+                }
+                {/* Admin can not register */}
+                {type.toLowerCase() !== 'admin' &&
+                    <div className="mt-6 text-center text-sm">
+                        <span className="text-gray-600">You are new to Shobee? </span>
+                        <Link 
+                            to={`/auth/register?type=${type.toLowerCase()}`} 
+                            className="font-medium text-blue-500 hover:text-blue-700 hover:underline"
+                        >
+                            Register
+                        </Link>
+                    </div>
+                }
             </form>   
         </div>
     );

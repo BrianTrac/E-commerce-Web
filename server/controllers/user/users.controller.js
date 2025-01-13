@@ -6,9 +6,9 @@ const getAllUsers = async (req, res) => {
         if (!users.length) {
             return res.status(404).json({ message: 'No users found' });
         }
-        res.json(users);
+        return res.json(users);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -24,9 +24,9 @@ const deleteUser = async (req, res) => {
         }
 
         await user.destroy();
-        res.status(204).json({ message: 'No content' });
+        return res.status(204).json({ message: 'No content' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -41,9 +41,9 @@ const getUserById = async (req, res) => {
             return res.status(404).json({ message: `User ${req.params.id} not found` });
         }
 
-        res.json(user);
+        return res.json(user);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -59,10 +59,10 @@ const getUserByEmail = async (req, res) => {
             return res.status(404).json({ message: `User ${req.params.email} not found` });
         }
 
-        res.json(user);
+        return res.json(user);
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 

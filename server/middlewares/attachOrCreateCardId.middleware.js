@@ -2,11 +2,13 @@ const Cart = require('../models/Cart');
 
 const attachOrCreateCartId = async (req, res, next) => {
     try {
+     //   console.log('req.user in attachOrCreateCartId: ', req.user);
         const cart = await Cart.findOne({
             where: {
                 user_id: req.user.id,
             },
         });
+    //    console.log('cart in attachOrCreateCartId: ', cart.id);
 
         if (!cart) {
             const newCart = await Cart.create({
@@ -18,12 +20,10 @@ const attachOrCreateCartId = async (req, res, next) => {
             req.user.cart_id = cart.id;
         }
 
-        next();
+    //    console.log('req.user after attachOrCreateCartId:', req.user);
+        return next();
     } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        })
+        next(error); 
     }
 };
 

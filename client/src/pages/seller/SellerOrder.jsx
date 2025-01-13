@@ -22,7 +22,7 @@ const SellerOrder = () => {
         setOrders(validOrders);
         setFilteredOrders(validOrders); // Show all orders by default
       } catch (err) {
-        message.error('Lỗi khi lấy danh sách đơn hàng');
+        // Do nothing
       } finally {
         setLoading(false);
       }

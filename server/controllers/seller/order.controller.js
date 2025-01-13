@@ -55,7 +55,7 @@ const getOrders = async (req, res) => {
     });
 
     if (!orders.length) {
-      return res.status(404).json({ message: 'No orders found for this store' });
+      return res.json({ message: 'No orders found for this store' });
     }
 
     return res.status(200).json({
@@ -105,7 +105,7 @@ const getRecentOrders = async (req, res) => {
     });
 
     if (!seller) {
-      return res.status(404).json({ message: 'Seller not found' });
+      return res.json({ message: 'Seller not found' });
     }
 
     const storeId = seller.store_id;
@@ -145,7 +145,7 @@ const getRecentOrders = async (req, res) => {
     });
 
     if (!orders.length) {
-      return res.status(404).json({ message: 'No orders found for this store' });
+      return res.json({ message: 'No orders found for this store' });
     }
 
     return res.status(200).json({
@@ -172,7 +172,7 @@ const getPotentialCustomer = async (req, res) => {
     });
 
     if (!seller) {
-      return res.status(404).json({ message: 'Seller not found' });
+      return res.json({ message: 'Seller not found' });
     }
 
     const storeId = seller.store_id;
@@ -214,7 +214,7 @@ const getPotentialCustomer = async (req, res) => {
     });
 
     if (!orders.length) {
-      return res.status(404).json({ message: 'No orders found for this store' });
+      return res.json({ message: 'No orders found for this store' });
     }
 
     //console.log(orders);
@@ -278,7 +278,7 @@ const getMonthlyRevenue = async (req, res) => {
     });
 
     if (!seller) {
-      return res.status(404).json({ message: 'Seller not found' });
+      return res.json({ message: 'Seller not found' });
     }
 
     const storeId = seller.store_id;
@@ -315,7 +315,7 @@ const getMonthlyRevenue = async (req, res) => {
     });
 
     if (!orders.length) {
-      return res.status(404).json({ message: 'No data found for this store' });
+      return res.json({ message: 'No data found for this store' });
     }
 
     const result = orders.map((order) => {

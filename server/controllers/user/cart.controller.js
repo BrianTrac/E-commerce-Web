@@ -26,7 +26,7 @@ const getCartItems = async (req, res) => {
         //     req.user.cart_id = cart.id;
         // }
 
-        console.log('req.user2 in getCartItems: ', req.user);
+    //    console.log('req.user2 in getCartItems: ', req.user);
         const cartItems = await CartItems.findAll({
             where: {
                 cart_id: req.user.cart_id,

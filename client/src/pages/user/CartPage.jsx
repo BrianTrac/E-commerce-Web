@@ -32,7 +32,7 @@ const Cart = () => {
       setCartItems(response.cartItems);
       setCartUpdated(false);
     };
-    debugger;
+    //debugger;
     // check if user is authenticated before fetching cart items
     if (isAuthenticated && user.role.toLowerCase() === 'user') {  
       fetchCartItems();

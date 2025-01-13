@@ -131,26 +131,7 @@ const SellerProductPage = () => {
     };
 
     const renderActionButtons = (record) => {
-        const buttons = [
-            <Tooltip key="view" title="View Product">
-                <Button
-                    type="link"
-                    icon={<EyeOutlined />}
-                    onClick={() => handleView(record)}
-                    className="text-blue-600 p-0 hover:text-blue-800"
-                    disabled
-                />
-            </Tooltip>,
-            <Tooltip key="edit" title="Edit">
-                <Button
-                    type="link"
-                    icon={<EditOutlined />}
-                    onClick={() => handleEdit(record)}
-                    className="text-green-600 p-0 hover:text-green-800"
-                    disabled
-                />
-            </Tooltip>
-        ];
+        const buttons = [];
 
         switch (record.inventory_status) {
             case 'available':
@@ -207,7 +188,7 @@ const SellerProductPage = () => {
             ),
         },
         {
-            title: 'Image',
+            title: 'Ảnh',
             key: 'thumbnail_url',
             responsive: ['md'],
             width: '80px',
@@ -220,7 +201,7 @@ const SellerProductPage = () => {
             ),
         },
         {
-            title: 'Product Name',
+            title: 'Tên sản phẩm',
             key: 'name',
             width: '200px',
             render: (_, record) => (
@@ -252,13 +233,13 @@ const SellerProductPage = () => {
             ),
         },
         {
-            title: 'Sold',
+            title: 'Đã bán',
             key: 'quantity_sold',
             width: '100px',
             render: (_, record) => <Text>{record.quantity_sold}</Text>,
         },
         {
-            title: 'Actions',
+            title: 'Hành động',
             key: 'actions',
             width: '150px',
             fixed: 'right',

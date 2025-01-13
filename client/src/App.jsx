@@ -19,6 +19,7 @@ import ProductDetails from "./components/user/ProductDetails.jsx";
 import TopDealsPage from "./pages/user/TopDealsPage.jsx";
 import FlashSalePage from "./pages/user/FlashSalePage.jsx";
 import OrderManagement from "./pages/user/OrderManagement.jsx";
+import AccountInfo from "./pages/user/AccountInfo.jsx";
 
 // Admin page components
 import AdminDashboard from "./pages/admin/DashboardPage.jsx";
@@ -68,6 +69,7 @@ const App = () => {
                     <Route path="category/:url_key/:id" element={<CategoryWithProducts />} />
                     <Route path="product/:url_key" element={<ProductDetails />} />
                     <Route path="store/:storeId" element={<StoreDetail />} />
+                    <Route path="account/info" element={<AccountInfo />} />
                 </Route>
 
                 {/* USER ROUTE RequireAuth */}

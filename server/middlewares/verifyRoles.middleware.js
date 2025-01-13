@@ -9,7 +9,7 @@ const verifyRoles = (...allowedRoles) => {
 
         // Check if the user's role matches one of the allowed roles
         const rolesArray = [...allowedRoles];
-    //    console.log('rolesArray:', rolesArray);
+        //    console.log('rolesArray:', rolesArray);
         const hasPermission = rolesArray.includes(req.user.role);
 
         if (!hasPermission) {

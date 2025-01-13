@@ -14,7 +14,8 @@ const getCartItems = async (req, res) => {
                 user_id: req.user.id,
             },
         });
-
+        console.log("CHECK2: ", res.headersSent);
+        
         if (!cart) {
             console.log('Creating cart for user: ', req.user.id);
             _= await Cart.create({
@@ -35,7 +36,6 @@ const getCartItems = async (req, res) => {
             include: {
                 model: Product,
                 as: 'product',
-            //    attributes: ['name', 'price', 'qty', 'thumbnail_url', 'current_seller'],
                 required: true,
             },
             order: [
@@ -50,10 +50,13 @@ const getCartItems = async (req, res) => {
             cartItems,
         });
     } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-        });
+        // Only send error response if no response has been sent yet
+        if (!res.headersSent) {
+            return res.status(501).json({
+                success: false,
+                message: error.message,
+            });
+        }
     }
 };
 
@@ -84,7 +87,7 @@ const addToCartItem = async (req, res) => {
         if (cartItems) {
             length = cartItems.length;
         }
-        
+
         // If item not found in cart, add it
         if (!cartItem) {
             const newCartItem = await CartItems.create({
@@ -99,10 +102,10 @@ const addToCartItem = async (req, res) => {
                 length: length + 1,
             });
         }
-    
+
         cartItem.quantity += quantity;
         await cartItem.save();
-        
+
         return res.status(200).json({
             success: true,
             cartItem,
@@ -162,7 +165,7 @@ const updateCartItem = async (req, res) => {
 
 const deleteCartItem = async (req, res) => {
     const { itemIds } = req.body;
-    
+
     const parsedItemIds = itemIds.map((id) => parseInt(id, 10));
 
     try {

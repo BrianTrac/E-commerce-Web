@@ -7,8 +7,8 @@ const sequelize = require('../../config/db');
 const getCartItems = async (req, res) => {
     try {
         // check if cart does not exist for the user and create one
-        console.log('req.user in getCartItems: ', req.user);
-        console.log("CHECK1: ", res.headersSent);
+        //console.log('req.user in getCartItems: ', req.user);
+        
         const cart = await Cart.findOne({
             where: {
                 user_id: req.user.id,
@@ -18,13 +18,16 @@ const getCartItems = async (req, res) => {
         
         if (!cart) {
             console.log('Creating cart for user: ', req.user.id);
-            const newCart = await Cart.create({
+            _= await Cart.create({
                 user_id: req.user.id,
             });
-            req.user.cart_id = newCart.id; // Set the cart_id after creating new cart
-        } else {
-            req.user.cart_id = cart.id; // Set the cart_id from existing cart
         }
+        //console.log('cart in getCartItems: ', cart.id);
+        // if (!req.user.cart_id) {
+        //     req.user.cart_id = cart.id;
+        // }
+
+        console.log('req.user2 in getCartItems: ', req.user);
         const cartItems = await CartItems.findAll({
             where: {
                 cart_id: req.user.cart_id,
@@ -39,6 +42,9 @@ const getCartItems = async (req, res) => {
                 ['created_at', 'DESC'],
             ],
         });
+
+    //    console.log('cartItems: ', cartItems);
+
         return res.status(200).json({
             success: true,
             cartItems,

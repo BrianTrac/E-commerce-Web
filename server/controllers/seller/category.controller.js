@@ -21,7 +21,7 @@ const getAllCategories = async (req, res) => {
       offset,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       data: rows,
       total: count,
       page,
@@ -29,7 +29,7 @@ const getAllCategories = async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching categories:', error.message);
-    res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
 

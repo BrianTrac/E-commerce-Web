@@ -96,7 +96,7 @@ const verifyRegistrationOTP = async(req, res) => {
         await newUser.save();
         await TempUser.destroy({ where: { email: email } });
        
-        res.status(200).json({success: true, message: `${tempUser.role} registered successfully`});
+        return res.status(200).json({success: true, message: `${tempUser.role} registered successfully`});
     } catch (err) {
         return res.status(500).json({ message: err.message });
     }
@@ -113,7 +113,7 @@ const resendOTP = async (req, res) => {
         const otp = await generateOTP(null, email, 'registration');
         await sendOTPVerificationEmail(email, otp);
 
-        res.status(200).json({ success: true, message: 'OTP sent successfully' });
+        return res.status(200).json({ success: true, message: 'OTP sent successfully' });
     } catch (err) {
         return res.status(500).json({ message: 'Failed to send OTP. Please try again later' });
     }

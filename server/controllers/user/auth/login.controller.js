@@ -54,7 +54,7 @@ const handleLogin = async (req, res) => {
         sameSite: 'None',
     });
 
-    res.json({ accessToken: accessToken });
+    return res.json({ accessToken: accessToken });
 };
 
 module.exports = { handleLogin };

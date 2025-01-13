@@ -15,8 +15,8 @@ const verifyRoles = (...allowedRoles) => {
         if (!hasPermission) {
             return res.status(403).json({ message: 'Forbidden!' });
         }
-        //    console.log('hasPermission:', hasPermission);
-        next();
+    //    console.log('hasPermission:', hasPermission);
+        return next();
     };
 };
 

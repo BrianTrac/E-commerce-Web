@@ -140,10 +140,10 @@ const getTopSellingProducts_v1 = async (req, res) => {
             };
         });
 
-        res.status(200).json({ data: formattedProducts });
+        return res.status(200).json({ data: formattedProducts });
     } catch (error) {
         console.error('Error fetching top 10 best-selling products:', error);
-        res.status(500).json({ message: 'Server error', error: error.message });
+        return res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
 
@@ -204,10 +204,10 @@ const getProductById = async (req, res) => {
             qty: product.qty,
         };
 
-        res.status(200).json({ data: productDetail });
+        return res.status(200).json({ data: productDetail });
     } catch (error) {
         console.error('Error fetching product by ID:', error);
-        res.status(500).json({ message: 'Lỗi server', error: error.message });
+        return res.status(500).json({ message: 'Lỗi server', error: error.message });
     }
 };
 
@@ -240,13 +240,13 @@ const addProductToStore = async (req, res) => {
 
         await addNotification(productData.current_seller.id, productData.name);
 
-        res.status(201).json({
+        return res.status(201).json({
             message: 'Thêm sản phẩm thành công, chờ admin duyệt',
             product: newProduct
         });
     } catch (error) {
         console.error('Error adding product to store:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Lỗi server khi thêm sản phẩm',
             error: error.message
         });
@@ -272,10 +272,10 @@ const deleteProduct = async (req, res) => {
         }
 
         console.log(`Product with ID: ${productId} deleted successfully`);
-        res.status(200).json({ message: "Sản phẩm đã xóa thành công" });
+        return res.status(200).json({ message: "Sản phẩm đã xóa thành công" });
     } catch (error) {
         console.error('Error deleting product:', error);
-        res.status(500).json({ message: "Error deleting product" });
+        return res.status(500).json({ message: "Error deleting product" });
     }
 };
 
@@ -307,10 +307,10 @@ const deleteMultipleProducts = async (req, res) => {
         }
 
         console.log(`Products with IDs ${ids} deleted successfully`);
-        res.status(200).json({ message: `${result} sản phẩm đã được xóa thành công` });
+        return res.status(200).json({ message: `${result} sản phẩm đã được xóa thành công` });
     } catch (error) {
         console.error('Error deleting multiple products:', error);
-        res.status(500).json({ message: "Lỗi khi xóa nhiều sản phẩm" });
+        return res.status(500).json({ message: "Lỗi khi xóa nhiều sản phẩm" });
     }
 };
 
@@ -328,13 +328,13 @@ const updateProduct = async (req, res) => {
         // Cập nhật dữ liệu sản phẩm
         const updatedProduct = await product.update(updateData);
 
-        res.status(200).json({
+        return res.status(200).json({
             message: 'Cập nhật sản phẩm thành công',
             product: updatedProduct,
         });
     } catch (error) {
         console.error('Error updating product:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Lỗi khi cập nhật sản phẩm',
             error: error.message,
         });
@@ -406,7 +406,7 @@ let getTopSellingProducts_v2 = async (req, res) => {
             };
         });
 
-        res.status(200).json({
+        return res.status(200).json({
             message: "Top selling products fetched successfully",
             currentPage: page,
             pageSize: limit,
@@ -415,7 +415,7 @@ let getTopSellingProducts_v2 = async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching top selling products:', error);
-        res.status(500).json({ message: "Error fetching top selling products" });
+        return res.status(500).json({ message: "Error fetching top selling products" });
     }
 };
 
@@ -468,7 +468,7 @@ const getFlashSaleProducts = async (req, res) => {
             offset: (current_page - 1) * limit, // Adjust offset based on capped page
         });
 
-        res.status(200).json({
+        return res.status(200).json({
             data: flashSale,
             paging: {
                 current_page: current_page,
@@ -482,7 +482,7 @@ const getFlashSaleProducts = async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching flash sale:', error);
-        res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({ message: 'Server error' });
     }
 };
 

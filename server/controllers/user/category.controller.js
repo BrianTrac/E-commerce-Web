@@ -159,17 +159,17 @@ const getCategoryTree = async (req, res) => {
 
             const data = await getCategoryTreeOptimizedWithMap(parent_id, level);
             //    const data = await getCategoryTreeWithCTE(parent_id);
-            res.status(200).json({ "data": data });
+            return res.status(200).json({ "data": data });
         }
         else if (include === 'ancestor') {
             // Get all ancestors of the specified category
             const ancestors = await fetchAncestorInfo(parent_id);
-            res.status(200).json({ "data": ancestors });
+            return res.status(200).json({ "data": ancestors });
         }
     }
     catch (error) {
         console.log('Error fetching category tree:', error);
-        res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({ message: 'Server error' });
     }
 };
 
@@ -326,7 +326,7 @@ const getProductsByCategory = async (req, res) => {
         );
         
         // Respond with pagination metadata and product data
-        res.json({
+        return res.json({
             data,
             paging: {
                 current_page: parsedPage,
@@ -340,7 +340,7 @@ const getProductsByCategory = async (req, res) => {
         });
     } catch (error) {
         console.log('Error fetching products by category:', error);
-        res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({ message: 'Server error' });
     }
 };
 

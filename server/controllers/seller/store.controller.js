@@ -60,11 +60,11 @@ const getStore = async (req, res) => {
             }
         }
 
-        res.status(200).json(store);  // Return the store information
+        return res.status(200).json(store);  // Return the store information
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -84,10 +84,10 @@ const updateStore = async (req, res) => {
 
         await store.update(req.body);
 
-        res.status(200).json({ message: 'Store updated' });
+        return res.status(200).json({ message: 'Store updated' });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 }
 

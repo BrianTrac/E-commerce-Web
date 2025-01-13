@@ -9,10 +9,10 @@ let createNewProduct = async (req, res) => {
     try {
         const productData = req.body;
         const newProduct = await Product.create(productData);
-        res.status(201).json({ message: "Product created", product: newProduct });
+        return res.status(201).json({ message: "Product created", product: newProduct });
     } catch (error) {
         console.error('Error creating product:', error);
-        res.status(500).json({ message: "Error creating product" });
+        return res.status(500).json({ message: "Error creating product" });
     }
 };
 
@@ -89,10 +89,10 @@ let updateProduct = async (req, res) => {
             where: { id: productId }
         });
 
-        res.status(200).json({ message: "Product updated successfully" });
+        return res.status(200).json({ message: "Product updated successfully" });
     } catch (error) {
         console.error('Error updating product:', error);
-        res.status(500).json({ message: "Error updating product" });
+        return res.status(500).json({ message: "Error updating product" });
     }
 };
 
@@ -108,10 +108,10 @@ let deleteProduct = async (req, res) => {
         if (result === 0) {
             return res.status(404).json({ message: "Product not found" });
         }
-        res.status(200).json({ message: "Product deleted" });
+        return res.status(200).json({ message: "Product deleted" });
     } catch (error) {
         console.error('Error deleting product:', error);
-        res.status(500).json({ message: "Error deleting product" });
+        return res.status(500).json({ message: "Error deleting product" });
     }
 };
 
@@ -284,7 +284,7 @@ const searchProducts = async (req, res) => {
         );
 
         // Respond with pagination metadata and product data
-        res.json({
+        return res.json({
             data,
             paging: {
                 current_page: parsedPage,
@@ -298,7 +298,7 @@ const searchProducts = async (req, res) => {
         });
     } catch (error) {
         console.log('Error fetching products by query:', error);
-        res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({ message: 'Server error' });
     }
 };
 
@@ -341,11 +341,11 @@ const detail = async (req, res) => {
         const productData = product[0].toJSON();
         productData.breadcrumbs = await fetchParentCategories(product[0].category_id);
 
-        res.status(200).json(productData);
+        return res.status(200).json(productData);
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Server Error' });
+        return res.status(500).json({ error: 'Server Error' });
     }
 };
 
@@ -423,11 +423,11 @@ const getSuggestions = async (req, res) => {
 
         const data = suggestions.map(suggestion => suggestion.toJSON());
 
-        res.status(200).json({ data: data });
+        return res.status(200).json({ data: data });
 
     } catch (error) {
         console.error('Error fetching suggestions:', error);
-        res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({ message: 'Server error' });
     }
 }
 
@@ -465,7 +465,7 @@ const getTopDeals = async (req, res) => {
             offset: (current_page - 1) * limit, // Adjust offset based on capped page
         });
 
-        res.status(200).json({
+        return res.status(200).json({
             data: topDeals,
             paging: {
                 current_page: current_page,
@@ -479,7 +479,7 @@ const getTopDeals = async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching top deals:', error);
-        res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({ message: 'Server error' });
     }
 };
 
@@ -524,7 +524,7 @@ const getFlashSale = async (req, res) => {
             offset: (current_page - 1) * limit, // Adjust offset based on capped page
         });
 
-        res.status(200).json({
+        return res.status(200).json({
             data: flashSale,
             paging: {
                 current_page: current_page,
@@ -538,7 +538,7 @@ const getFlashSale = async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching flash sale:', error);
-        res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({ message: 'Server error' });
     }
 };
 
@@ -589,13 +589,13 @@ let getRelatedProducts = async (req, res) => {
                 },
             }
         );
-        res.status(200).json({
+        return res.status(200).json({
             data: relatedProducts,
             total: relatedProducts.length,
             title: 'Related Products',
         });
     } catch (error) {
-        res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 

@@ -47,7 +47,7 @@ const getAllProducts = async (req, res) => {
             ]
         });
 
-        res.status(200).json({
+        return res.status(200).json({
             data: products,
             total: totalCount,
             page: page,
@@ -56,7 +56,7 @@ const getAllProducts = async (req, res) => {
 
     } catch (error) {
         console.error('Error in getAllProducts:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -93,7 +93,7 @@ const getOneProduct = async (req, res) => {
             });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             data: [{
                 id: product.id,
                 name: product.name,
@@ -118,7 +118,7 @@ const getOneProduct = async (req, res) => {
 
     } catch (error) {
         console.error('Error in getOneProduct:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -145,7 +145,7 @@ const suspendProduct = async (req, res) => {
         });
     } catch (error) {
         console.error('Error in suspendProduct:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error,
         });
@@ -172,7 +172,7 @@ const restoreProduct = async (req, res) => {
         });
     } catch (error) {
         console.error('Error in suspendProduct:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error,
         });

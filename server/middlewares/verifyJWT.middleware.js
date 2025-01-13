@@ -23,10 +23,7 @@ const verifyJWT = (req, res, next) => {
             }
             console.log('req.user:', req.user);  // In ra thông tin user
             next();
-            return;
         });
-    next();
-    return;
 };
 
 module.exports = verifyJWT;

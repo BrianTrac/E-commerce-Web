@@ -7,6 +7,7 @@ const credentials = (req, res, next) => {
     }
     
     next();
+    return;
 };
 
 module.exports = credentials;

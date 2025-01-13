@@ -33,10 +33,10 @@ const getSellerInfo = async (req, res) => {
             email: sellerAuth?.email,
         };
 
-        res.status(200).json(fullSellerInfo);
+        return res.status(200).json(fullSellerInfo);
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 }
 
@@ -61,10 +61,10 @@ const createSellerInfo = async (req, res) => {
             user_id: id,
         });
 
-        res.status(201).json(sellerInfo);
+        return res.status(201).json(sellerInfo);
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 }
 
@@ -84,10 +84,10 @@ const updateSellerInfo = async (req, res) => {
 
         await sellerInfo.update(req.body);
 
-        res.status(200).json({ message: 'Seller info updated' });
+        return res.status(200).json({ message: 'Seller info updated' });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 }
 

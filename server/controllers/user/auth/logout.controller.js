@@ -31,7 +31,7 @@ const handleLogout = async (req, res) => {
         }
     );
 
-    res.status(204).json({ message: 'No content' });
+    return res.status(204).json({ message: 'No content' });
 };
 
 module.exports = { handleLogout };

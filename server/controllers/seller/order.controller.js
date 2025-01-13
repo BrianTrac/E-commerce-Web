@@ -58,13 +58,13 @@ const getOrders = async (req, res) => {
       return res.status(404).json({ message: 'No orders found for this store' });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       message: 'Orders fetched successfully',
       orders,
     });
   } catch (error) {
     console.error('Error fetching orders:', error.message);
-    res.status(500).json({
+    return res.status(500).json({
       message: 'Internal server error',
       error: error.message,
     });
@@ -87,10 +87,10 @@ const updateOrderStatus = async (req, res) => {
     order.status = status;
     await order.save();
 
-    res.status(200).json({ message: 'Order status updated successfully', order });
+    return res.status(200).json({ message: 'Order status updated successfully', order });
   } catch (error) {
     console.error('Error updating order status:', error.message);
-    res.status(500).json({ message: 'Internal server error', error: error.message });
+    return res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
 
@@ -148,13 +148,13 @@ const getRecentOrders = async (req, res) => {
       return res.status(404).json({ message: 'No orders found for this store' });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       message: 'Orders fetched successfully',
       orders,
     });
   } catch (error) {
     console.error('Error fetching orders:', error.message);
-    res.status(500).json({
+    return res.status(500).json({
       message: 'Internal server error',
       error: error.message,
     });
@@ -253,13 +253,13 @@ const getPotentialCustomer = async (req, res) => {
     const result = Object.values(groupedUsers);
     
     // Trả về kết quả
-    res.status(200).json({
+    return res.status(200).json({
       message: 'Orders with spending fetched successfully',
       data: result,
     });
   } catch (error) {
     console.error('Error fetching potential customers:', error.message);
-    res.status(500).json({
+    return res.status(500).json({
       message: 'Internal server error',
       error: error.message,
     });
@@ -370,7 +370,7 @@ const getMonthlyRevenue = async (req, res) => {
     const formattedData = transformData(result);
 
 
-    res.status(200).json({
+    return res.status(200).json({
       message: 'Monthly revenue fetched successfully',
       year: selectedYear,
       data: formattedData,
@@ -378,7 +378,7 @@ const getMonthlyRevenue = async (req, res) => {
 
   } catch (error) {
     console.error('Error fetching monthly revenue:', error.message);
-    res.status(500).json({
+    return res.status(500).json({
       message: 'Internal server error',
       error: error.message,
     });

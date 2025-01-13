@@ -7,8 +7,8 @@ const sequelize = require('../../config/db');
 const getCartItems = async (req, res) => {
     try {
         // check if cart does not exist for the user and create one
-        console.log('req.user in getCartItems: ', req.user);
-    //    req.user.cart_id = 1;
+        //console.log('req.user in getCartItems: ', req.user);
+        
         const cart = await Cart.findOne({
             where: {
                 user_id: req.user.id,
@@ -17,11 +17,11 @@ const getCartItems = async (req, res) => {
 
         if (!cart) {
             console.log('Creating cart for user: ', req.user.id);
-            await Cart.create({
+            _= await Cart.create({
                 user_id: req.user.id,
             });
         }
-        console.log('cart in getCartItems: ', cart.id);
+        //console.log('cart in getCartItems: ', cart.id);
         // if (!req.user.cart_id) {
         //     req.user.cart_id = cart.id;
         // }
@@ -42,6 +42,8 @@ const getCartItems = async (req, res) => {
                 ['created_at', 'DESC'],
             ],
         });
+
+    //    console.log('cartItems: ', cartItems);
 
         return res.status(200).json({
             success: true,

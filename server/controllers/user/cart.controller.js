@@ -7,19 +7,24 @@ const sequelize = require('../../config/db');
 const getCartItems = async (req, res) => {
     try {
         // check if cart does not exist for the user and create one
-        
+        console.log('req.user in getCartItems: ', req.user);
+        console.log("CHECK1: ", res.headersSent);
         const cart = await Cart.findOne({
             where: {
                 user_id: req.user.id,
             },
         });
-
+        console.log("CHECK2: ", res.headersSent);
+        
         if (!cart) {
-            await Cart.create({
+            console.log('Creating cart for user: ', req.user.id);
+            const newCart = await Cart.create({
                 user_id: req.user.id,
             });
+            req.user.cart_id = newCart.id; // Set the cart_id after creating new cart
+        } else {
+            req.user.cart_id = cart.id; // Set the cart_id from existing cart
         }
-
         const cartItems = await CartItems.findAll({
             where: {
                 cart_id: req.user.cart_id,
@@ -28,23 +33,24 @@ const getCartItems = async (req, res) => {
             include: {
                 model: Product,
                 as: 'product',
-            //    attributes: ['name', 'price', 'qty', 'thumbnail_url', 'current_seller'],
                 required: true,
             },
             order: [
                 ['created_at', 'DESC'],
             ],
         });
-
         return res.status(200).json({
             success: true,
             cartItems,
         });
     } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-        });
+        // Only send error response if no response has been sent yet
+        if (!res.headersSent) {
+            return res.status(501).json({
+                success: false,
+                message: error.message,
+            });
+        }
     }
 };
 
@@ -53,7 +59,7 @@ const addToCartItem = async (req, res) => {
 
     console.log('itemId: ', itemId);
     console.log('quantity: ', quantity);
-
+    console.log('user: ', req.user);
     try {
         const cartItem = await CartItems.findOne({
             where: {
@@ -75,7 +81,7 @@ const addToCartItem = async (req, res) => {
         if (cartItems) {
             length = cartItems.length;
         }
-        
+
         // If item not found in cart, add it
         if (!cartItem) {
             const newCartItem = await CartItems.create({
@@ -90,10 +96,10 @@ const addToCartItem = async (req, res) => {
                 length: length + 1,
             });
         }
-    
+
         cartItem.quantity += quantity;
         await cartItem.save();
-        
+
         return res.status(200).json({
             success: true,
             cartItem,
@@ -153,7 +159,7 @@ const updateCartItem = async (req, res) => {
 
 const deleteCartItem = async (req, res) => {
     const { itemIds } = req.body;
-    
+
     const parsedItemIds = itemIds.map((id) => parseInt(id, 10));
 
     try {

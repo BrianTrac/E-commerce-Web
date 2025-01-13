@@ -18,6 +18,7 @@ import CategoryWithProducts from "./components/user/CategoryWithProducts.jsx";
 import ProductDetails from "./components/user/ProductDetails.jsx";
 import TopDealsPage from "./pages/user/TopDealsPage.jsx";
 import FlashSalePage from "./pages/user/FlashSalePage.jsx";
+import OrderManagement from "./pages/user/OrderManagement.jsx";
 
 // Admin page components
 import AdminDashboard from "./pages/admin/DashboardPage.jsx";
@@ -75,6 +76,7 @@ const App = () => {
                         <Route path="/checkout" element={<Navigate to="/checkout/cart" />} />
                         <Route path="/checkout/cart" element={<Cart />} />
                         <Route path="/checkout/payment" element={<PaymentPage />} />
+                        <Route path="/order-management" element={<OrderManagement />} />
                     </Route>
                     <Route path="/checkout/success" element={<PaymentSuccess />} />
                     <Route path="/checkout/failure" element={<PaymentFailure />} />

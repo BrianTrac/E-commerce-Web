@@ -28,7 +28,7 @@ const getRecentOrders = async (req, res) => {
             ]
         });
 
-        res.status(200).json({
+        return res.status(200).json({
             data: orderItems,
             total: orderItems.length,
             limit: limit
@@ -36,7 +36,7 @@ const getRecentOrders = async (req, res) => {
 
     } catch (error) {
         console.error('Error in getRecentOrders:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -74,7 +74,7 @@ const getRecentCustomer = async (req, res) => {
             });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             data: recentCustomers,
             total: recentCustomers.length,
             limit: limit
@@ -82,7 +82,7 @@ const getRecentCustomer = async (req, res) => {
 
     } catch (error) {
         console.error('Error in getRecentOrders:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error
         });
@@ -133,14 +133,14 @@ const getTopSeller = async (req, res) => {
             }
         );
         
-        res.status(200).json({
+        return res.status(200).json({
             data: topSellers,
             total: topSellers.length,
             limit: limit,
         });
     } catch (error) {
         console.error('Error in getTopSeller:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
             error: error,
         });
@@ -191,13 +191,13 @@ const getUserGrowth = async (req, res) => {
             totalUsers += parseInt(formattedData[i].newUsers);
         }
         
-        res.status(200).json({
+        return res.status(200).json({
             data: formattedData,
             total_users: totalUsers,
         });
     } catch (error) {
         console.error('Error in getUserGrowth:', error);
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
         });
     }

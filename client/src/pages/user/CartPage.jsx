@@ -21,9 +21,9 @@ const Cart = () => {
 
   useEffect(() => {
     if (!cartUpdated) return;
-    
+
     const fetchCartItems = async () => {
-    const response = await getCartItems(axiosPrivate);
+      const response = await getCartItems(axiosPrivate);
 
       if (!response.success) {
         return;
@@ -32,13 +32,13 @@ const Cart = () => {
       setCartItems(response.cartItems);
       setCartUpdated(false);
     };
-
+    debugger;
     // check if user is authenticated before fetching cart items
-    if (isAuthenticated) {
+    if (isAuthenticated && user.role.toLowerCase() === 'user') {
       fetchCartItems();
       getCartSummaryInfo();
     }
-    
+
   }, [cartUpdated]);
 
   // Group cart items by seller
@@ -61,7 +61,7 @@ const Cart = () => {
     );
 
     // Update backend
-    await  updateCartItem(axiosPrivate, { itemId: id, quantity, selected: checked });
+    await updateCartItem(axiosPrivate, { itemId: id, quantity, selected: checked });
     getCartSummaryInfo();
     //  setCartUpdated(true);
   };
@@ -84,7 +84,7 @@ const Cart = () => {
   };
 
   const handleProductClick = (product) => {
-    navigate(`/product/${product.url_key}`, { state: { product }  });
+    navigate(`/product/${product.url_key}`, { state: { product } });
   };
 
   const handleCheckout = () => {
@@ -99,18 +99,18 @@ const Cart = () => {
       <Divider />
 
       {/* Header */}
-      
+
       <Card className="w-full my-4">
-          <Row align="middle" className="text-left font-bold">
-            <Col span={2}></Col>
-            <Col span={6}>Product</Col>
-            <Col span={3}>Price</Col>
-            <Col span={5}>Quantity</Col>
-            <Col span={3}>Total</Col>
-            <Col span={3}></Col>
+        <Row align="middle" className="text-left font-bold">
+          <Col span={2}></Col>
+          <Col span={6}>Product</Col>
+          <Col span={3}>Price</Col>
+          <Col span={5}>Quantity</Col>
+          <Col span={3}>Total</Col>
+          <Col span={3}></Col>
         </Row>
       </Card>
-     
+
       {/* Seller Groups */}
       <div className="space-y-4">
         {Object.entries(groupedItems).map(([sellerId, { seller_name, items }]) => (
@@ -124,7 +124,7 @@ const Cart = () => {
               <ShopOutlined className="w-5 h-5 mr-2" />
               <span className="font-semibold">{seller_name}</span>
             </div>
-          
+
             {/* Seller's Items */}
             <div className="divide-y">
               {items.map((item) => (
@@ -138,9 +138,9 @@ const Cart = () => {
                     </Col>
                     <Col span={6} >
                       <div className="flex items-center justify-start text-left space-x-10 mr-20">
-                        <img 
-                          src={item.product.thumbnail_url} 
-                          alt={item.product.name} 
+                        <img
+                          src={item.product.thumbnail_url}
+                          alt={item.product.name}
                           className="w-20 h-20 object-cover"
                           onClick={() => handleProductClick(item.product)}
                         />

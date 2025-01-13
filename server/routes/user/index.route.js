@@ -29,13 +29,11 @@ const userRoutes = (app) => {
     app.use(verifyJWT);
 
     // Middleware to attach or create cart_id
-    app.use(attachOrCreateCartId);
+    //    app.use(attachOrCreateCartId);
 
-    app.use('/api/users', require('./users.route'));
+    app.use('/api/orders', attachOrCreateCartId, require('./order.route'));
 
-    app.use('/api/orders', require('./order.route'));
-
-    app.use('/api/cart', require('./cart.route'));
+    app.use('/api/cart', attachOrCreateCartId, require('./cart.route'));
 
     // User routes
     app.use('/api/users', require('./users.route'));

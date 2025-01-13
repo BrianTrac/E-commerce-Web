@@ -35,12 +35,11 @@ function Header() {
 
             dispatch(setCartQuantity(quantity));
         };
-        debugger;
         // check if user is authenticated before fetching cart items
         if (isAuthenticated && user.role.toLowerCase() === 'user') {
-        
+            debugger;
             fetchCartItems();
-            console.log('User: ', user);
+        //    console.log('User: ', user);
         }
     }, []);
 
@@ -68,9 +67,16 @@ function Header() {
 
     const handleLogout = async() => {
         await dispatch(logout({ axiosPrivate }));
-        debugger;
         // Redirect to login after logout
         navigate('/auth/login');
+    }
+
+    const handleAccountInfoClick = () => {
+        navigate('/account/info');
+    }
+
+    const handleOrderManagementClick = () => {
+        navigate('/order-management');
     }
 
     return (
@@ -141,11 +147,13 @@ function Header() {
                                     >
                                         <button
                                             className="block w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
+                                            onClick={handleAccountInfoClick}
                                         >
                                             Thông tin tài khoản
                                         </button>
                                         <button
                                             className="block w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
+                                            onClick={handleOrderManagementClick}
                                         >
                                             Đơn hàng của tôi
                                         </button>

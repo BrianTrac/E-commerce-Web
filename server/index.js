@@ -63,7 +63,7 @@ sequelize.sync({ force: false })
         require('./routes/seller/index.route')(app);
         
         app.all('*', (req, res) => {
-            res.status(404).json({ message: 'Resource not found' });
+            return res.status(404).json({ message: 'Resource not found' });
         });
 
         // Error handler middleware

@@ -6,7 +6,7 @@ const CategoryWithProducts = () => {
     const { url_key, id } = useParams();
     
     return (
-        <div className="flex flex-col items-center space-y-16 bg-green-600 max-w-6xl mx-auto">
+        <div className="flex flex-col items-center space-y-16 bg-red-700 rounded-md max-w-6xl mx-auto">
             <Category id={id} />
             <ProductList categoryId={id} />
         </div>

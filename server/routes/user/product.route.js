@@ -13,6 +13,7 @@ router.get('/', (req, res, next) => {
     }
 });
 
+router.get('/featured', productController.getSomeProducts); // method GET - Read
 // [GET] /products/:id/related
 router.get('/:id/related', productController.getRelatedProducts);
 
@@ -29,5 +30,6 @@ router.get('/:id', productController.detail); // method GET - Read
 router.put('/:id', productController.updateProduct); // method PUT - Update
 
 router.delete('/:id', productController.deleteProduct); // method DELETE - Delete
+
 
 module.exports = router;

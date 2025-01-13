@@ -174,7 +174,7 @@ const getUserOrders = async (req, res) => {
     const { status } = req.query; // Optional filter by status
 
     // if status === 'all' then return all orders
-    console.log('status', status);
+ //   console.log('status', status);
     try {
         // Build query filters
         const filters = { user_id: userId };
@@ -182,7 +182,7 @@ const getUserOrders = async (req, res) => {
             filters.status = status;
         }
 
-        console.log('filters', filters);
+    //    console.log('filters', filters);
 
         // Fetch orders with associated items and products
         const orders = await Order.findAndCountAll({
@@ -205,7 +205,7 @@ const getUserOrders = async (req, res) => {
             ],
         });
         
-        console.log('orders', orders);
+    //    console.log('orders', orders);
 
         // Calculate total pages for pagination
         const totalPages = Math.ceil(orders.count / limit);

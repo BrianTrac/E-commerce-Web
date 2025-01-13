@@ -60,12 +60,13 @@ const Home = () => {
 
             {/* OTHERS */}
             {<ProductSlider
-                title="Featured products"
+                title="Sản phẩm nổi bật"
                 products={featuredProducts}
                 url="/featured-products"
                 isTopDeal={false}
                 isFlashSale={true}
                 clickable={false}
+                chunkedSize={10}
             />}
 
 

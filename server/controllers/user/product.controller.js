@@ -610,7 +610,7 @@ const getSomeProducts = async (req, res) => {
             order: [
                 Sequelize.literal('RANDOM()')
             ],
-            limit: 30,
+            limit: 80,
         });
 
         return res.status(200).json({

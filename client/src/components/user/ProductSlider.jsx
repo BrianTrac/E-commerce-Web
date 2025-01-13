@@ -5,7 +5,7 @@ import 'swiper/css/navigation';
 import { Link, useNavigate } from 'react-router-dom';
 import ProductCard from './ProductCard'; // Assuming this component exists
 
-const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale, clickable = true }) => {
+const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale, clickable = true, chunkedSize=5}) => {
     const navigate = useNavigate();
 
     if (!products || products.length === 0) {
@@ -18,8 +18,8 @@ const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale, clickable
 
     // Chunk the products into groups of 6
     const chunkedProducts = [];
-    for (let i = 0; i < products.length; i += 5) {
-        chunkedProducts.push(products.slice(i, i + 5));
+    for (let i = 0; i < products.length; i += chunkedSize) {
+        chunkedProducts.push(products.slice(i, i + chunkedSize));
     }
 
     // If no products exist after chunking, don't render the slider
@@ -28,7 +28,7 @@ const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale, clickable
     }
 
     return (
-        <div className="mt-10 max-w-4xl mx-auto p-4 bg-blue-500 rounded-md overflow-hidden">
+        <div className="mt-10 max-w-4xl mx-auto p-4 bg-red-700 rounded-md overflow-hidden">
             <div className="flex justify-between mb-2">
                 <h2 className="text-2xl font-semibold text-white">{title}</h2>
                 {clickable ? (

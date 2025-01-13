@@ -13,6 +13,9 @@ router.get('/', (req, res, next) => {
     }
 });
 
+// [GET] /products/:id/related
+router.get('/:id/related', productController.getRelatedProducts);
+
 router.get('/', productController.getProductById); // method GET - Read
 
 router.get('/search/suggestion', productController.getSuggestions); // method GET Suggestions

@@ -65,6 +65,7 @@ const Login = () => {
         e.preventDefault();   
         
         await dispatch(login({ username, password }));
+        console.log('login' + username + password);
 
         setUsername('');
         setPassword('');    

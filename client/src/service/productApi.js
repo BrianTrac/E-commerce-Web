@@ -67,11 +67,25 @@ const fetchProductReviews = async (id) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json(); 
-    return data; 
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error('Failed to fetch product reviews', error);
-    throw error; 
+    throw error;
+  }
+};
+
+const fetchRelatedProducts = async (id) => {
+  try {
+    const response = await axios.get(`api/products/${id}/related`);
+    if (response.status !== 200) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return response.data; 
+  } catch (error) {
+    console.error('Failed to fetch related products', error);
+    throw error;
   }
 };
 
@@ -81,4 +95,5 @@ export {
   fetchProductByCategory,
   fetchProductById,
   fetchProductReviews,
+  fetchRelatedProducts,
 };

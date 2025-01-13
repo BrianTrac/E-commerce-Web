@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Tag, Avatar, Typography, List, Divider, Button, message, Space } from 'antd';
 import { getOrders, updateOrderStatus } from '../../service/seller/orderApi';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 
@@ -11,13 +12,15 @@ const SellerOrder = () => {
   const [statusFilter, setStatusFilter] = useState(''); // Default to show all
   const [loading, setLoading] = useState(true);
   const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const response = await getOrders(axiosPrivate);
-        setOrders(response.orders);
-        setFilteredOrders(response.orders); // Show all orders by default
+        const validOrders = response.orders.filter((order) => order.status !== 'pending');
+        setOrders(validOrders);
+        setFilteredOrders(validOrders); // Show all orders by default
       } catch (err) {
         message.error('Lỗi khi lấy danh sách đơn hàng');
       } finally {
@@ -63,8 +66,8 @@ const SellerOrder = () => {
     },
     {
       title: 'Khách hàng',
-      dataIndex: 'User',
-      key: 'User',
+      dataIndex: 'user',
+      key: 'user',
       render: (user) => (
         <>
           <Text strong>{user.username}</Text>
@@ -85,21 +88,24 @@ const SellerOrder = () => {
         let color = '';
         let text = '';
         switch (status) {
-          case 'pending':
+          case 'processing':
             color = 'orange';
             text = 'Chờ duyệt';
             break;
-          case 'processing':
+          case 'delivered':
             color = 'green';
             text = 'Đang vận chuyển';
+            break;
+          case 'shipped':
+            color = 'blue';
+            text = 'Đơn hàng thành công';
             break;
           case 'cancelled':
             color = 'red';
             text = 'Đã hủy';
             break;
           default:
-            color = 'blue';
-            text = 'Không xác định';
+            return null;
         }
         return <Tag color={color}>{text}</Tag>;
       },
@@ -126,11 +132,11 @@ const SellerOrder = () => {
       title: 'Hành động',
       key: 'actions',
       render: (_, record) =>
-        record.status === 'pending' ? (
+        record.status === 'processing' ? (
           <div style={{ display: 'flex', gap: '10px' }}>
             <Button
               type="primary"
-              onClick={() => handleStatusUpdate(record.id, 'processing')} // Map Accept to processing
+              onClick={() => handleStatusUpdate(record.id, 'delivered')} // Map Accept to processing
               style={{ backgroundColor: 'green', borderColor: 'green' }}
             >
               Chấp nhận
@@ -144,7 +150,7 @@ const SellerOrder = () => {
             </Button>
           </div>
         ) : (
-          <Text type="secondary">Không thể thực hiện hành động</Text>
+          <Text type="secondary">Không còn hành động có thể thực hiện</Text>
         ),
     },
   ];
@@ -162,14 +168,20 @@ const SellerOrder = () => {
           Tất cả
         </Button>
         <Button
-          type={statusFilter === 'processing' ? 'primary' : 'default'}
-          onClick={() => handleStatusFilter('processing')}
+          type={statusFilter === 'shipped' ? 'primary' : 'default'}
+          onClick={() => handleStatusFilter('shipped')}
+        >
+          Đơn hàng thành công
+        </Button>
+        <Button
+          type={statusFilter === 'delivered' ? 'primary' : 'default'}
+          onClick={() => handleStatusFilter('delivered')}
         >
           Đang vận chuyển
         </Button>
         <Button
-          type={statusFilter === 'pending' ? 'primary' : 'default'}
-          onClick={() => handleStatusFilter('pending')}
+          type={statusFilter === 'processing' ? 'primary' : 'default'}
+          onClick={() => handleStatusFilter('processing')}
         >
           Chờ duyệt
         </Button>
@@ -192,17 +204,20 @@ const SellerOrder = () => {
             <>
               <Divider orientation="left">Quản lý đơn hàng</Divider>
               <List
-                dataSource={record.OrderItems}
+                dataSource={record.orderItems}
                 bordered
                 renderItem={(item) => (
-                  <List.Item>
+                  <List.Item
+                    onClick={() => navigate(`/seller/product-management/detail/${item.product.id}`)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     <List.Item.Meta
-                      avatar={<Avatar src={item.Product.thumbnail_url} />}
+                      avatar={<Avatar src={item.product.thumbnail_url} />}
                       title={
                         <div>
-                          <Text strong>{item.Product.name}</Text>
+                          <Text strong>{item.product.name}</Text>
                           <br />
-                          <Text type="secondary">Giá: {Number(item.Product.price).toLocaleString()} VND</Text>
+                          <Text type="secondary">Giá: {Number(item.product.price).toLocaleString()} VND</Text>
                         </div>
                       }
                       description={

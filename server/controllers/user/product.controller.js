@@ -1,6 +1,6 @@
 // Desc: Product controller
 const Product = require('../../models/Product');
-const { Op } = require('sequelize');
+const { Op, ValidationErrorItemOrigin } = require('sequelize');
 const sequelize = require('../../config/db');
 const { WEB_URL } = require('../../config/config');
 //const { get } = require('../../routes/user/product.route');
@@ -155,7 +155,7 @@ const fetchProductsByQuery = async (query, limit, offset, filters, sortOption) =
                 unaccentQuery
             ),
             {
-                [Op.gte]: 0.2, 
+                [Op.gte]: 0.2,
             }
         );
 
@@ -180,8 +180,8 @@ const fetchProductsByQuery = async (query, limit, offset, filters, sortOption) =
     if (filters.rating) {
         if (filters.rating.length === 1) {
             where.rating_average = {
-            [Op.gte]: filters.rating[0],
-        //    [Op.lte]: filters.rating[0] + 1
+                [Op.gte]: filters.rating[0],
+                //    [Op.lte]: filters.rating[0] + 1
             };
         } else {
             const minRating = Math.min(...filters.rating);
@@ -189,7 +189,7 @@ const fetchProductsByQuery = async (query, limit, offset, filters, sortOption) =
             where.rating_average = {
                 [Op.between]: [minRating, maxRating],
             };
-        }   
+        }
     }
 
     if (filters.price) {
@@ -223,7 +223,7 @@ const fetchProductsByQuery = async (query, limit, offset, filters, sortOption) =
             order = [['rating_average', 'DESC'], ['quantity_sold', 'DESC']];
             break;
     }
-//    order.unshift([relevanceScore, 'DESC']);
+    //    order.unshift([relevanceScore, 'DESC']);
 
     const products = await Product.findAll({
         where,
@@ -234,7 +234,7 @@ const fetchProductsByQuery = async (query, limit, offset, filters, sortOption) =
 
     const count = await Product.count({ where });
 
-    return {count, rows: products};
+    return { count, rows: products };
 }
 
 
@@ -248,14 +248,14 @@ const searchProducts = async (req, res) => {
         price,
         sort = 'default',
     } = req.query;
-    
+
     const params = { limit, page, q, rating, price, sort };
 
-     // Parse limit and page as integers, fallback to default values if not invalid
+    // Parse limit and page as integers, fallback to default values if not invalid
     const parsedLimit = parseInt(limit, 10) || 24;
     const parsedPage = parseInt(page, 10) || 1;
     const offset = (parsedPage - 1) * parsedLimit;
-    
+
     if (!q) {
         return res.status(400).json({ error: 'Query parameter "q" is required' });
     }
@@ -270,7 +270,7 @@ const searchProducts = async (req, res) => {
     // Parse price filter
     const parsedPrice = price ? price.split(',').map(p => parseInt(p, 10)).filter(p => !isNaN(p)) : null;
 
-    if (parsedPrice  && parsedPrice.length !== 2) {
+    if (parsedPrice && parsedPrice.length !== 2) {
         return res.status(400).json({ message: 'Price filter must have 2 values' });
     }
 
@@ -282,7 +282,7 @@ const searchProducts = async (req, res) => {
             { rating: parsedRating, price: parsedPrice },
             sort,
         );
-        
+
         // Respond with pagination metadata and product data
         res.json({
             data,
@@ -293,7 +293,7 @@ const searchProducts = async (req, res) => {
                 total_pages: Math.ceil(total / parsedLimit),
                 per_page: parsedLimit,
                 total,
-            }, 
+            },
             params,
         });
     } catch (error) {
@@ -340,9 +340,9 @@ const detail = async (req, res) => {
         }
         const productData = product[0].toJSON();
         productData.breadcrumbs = await fetchParentCategories(product[0].category_id);
-      
+
         res.status(200).json(productData);
-        
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Server Error' });
@@ -542,8 +542,62 @@ const getFlashSale = async (req, res) => {
     }
 };
 
+// [GET] /api/products/:id/related
+let getRelatedProducts = async (req, res) => {
+    try {
+        const { id } = req.params;
 
-// GET /api/products/past_interests
+        const product = await sequelize.query(
+            `SELECT * FROM product WHERE id = :id`,
+            {
+                type: sequelize.QueryTypes.SELECT,
+                replacements: { id },
+            }
+        );
+
+        if (product.length === 0) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        const categoryId = product[0].category_id;
+
+        const relatedProducts = await sequelize.query(
+            `
+            WITH RECURSIVE CategoryHierarchy AS (
+                SELECT id, parent_id, name
+                FROM category
+                WHERE id = :categoryId
+
+                UNION ALL
+
+                SELECT c.id, c.parent_id, c.name
+                FROM category c
+                INNER JOIN CategoryHierarchy ch ON c.id = ch.parent_id
+            )
+            SELECT 
+                p.*
+            FROM product p
+            JOIN CategoryHierarchy ch ON p.category_id = ch.id
+            WHERE p.id != :id
+            LIMIT 10
+            `,
+            {
+                type: sequelize.QueryTypes.SELECT,
+                replacements: {
+                    categoryId,
+                    id,
+                },
+            }
+        );
+        res.status(200).json({
+            data: relatedProducts,
+            total: relatedProducts.length,
+            title: 'Related Products',
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
 
 
 module.exports = {
@@ -557,4 +611,5 @@ module.exports = {
     getSuggestions,
     getTopDeals,
     getFlashSale,
+    getRelatedProducts,
 };

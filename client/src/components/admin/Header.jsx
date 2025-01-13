@@ -9,7 +9,6 @@ import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 
-
 export const Header = () => {
     const { user, isAuthenticated } = useSelector(selectAuth);
     const axiosPrivate = useAxiosPrivate();

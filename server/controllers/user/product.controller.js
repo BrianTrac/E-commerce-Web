@@ -599,6 +599,29 @@ let getRelatedProducts = async (req, res) => {
     }
 };
 
+const Sequelize = require('../../config/db');
+
+const getSomeProducts = async (req, res) => {
+    try {
+        const products = await Product.findAll({
+            where: {
+                inventory_status: 'available',
+            },
+            order: [
+                Sequelize.literal('RANDOM()')
+            ],
+            limit: 30,
+        });
+
+        return res.status(200).json({
+            data: products,
+            title: 'Magic',
+        });
+    } catch (error) {
+        console.error('Error fetching magic:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+};
 
 module.exports = {
     createNewProduct,
@@ -612,4 +635,5 @@ module.exports = {
     getTopDeals,
     getFlashSale,
     getRelatedProducts,
+    getSomeProducts,
 };

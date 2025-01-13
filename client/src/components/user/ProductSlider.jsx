@@ -3,10 +3,9 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Link, useNavigate } from 'react-router-dom';
-import ProductCard from './ProductCard';  // Assuming this component exists
+import ProductCard from './ProductCard'; // Assuming this component exists
 
-
-const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale }) => {
+const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale, clickable = true }) => {
     const navigate = useNavigate();
 
     if (!products || products.length === 0) {
@@ -14,7 +13,7 @@ const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale }) => {
     }
 
     const handleProductClick = (product) => {
-        navigate(`/product/${product.url_key}`, { state: { product }  });
+        navigate(`/product/${product.url_key}`, { state: { product } });
     };
 
     // Chunk the products into groups of 6
@@ -29,17 +28,23 @@ const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale }) => {
     }
 
     return (
-        <div className="mt-10 max-w-4xl mx-auto p-4 bg-red-700 rounded-md overflow-hidden">
+        <div className="mt-10 max-w-4xl mx-auto p-4 bg-blue-500 rounded-md overflow-hidden">
             <div className="flex justify-between mb-2">
                 <h2 className="text-2xl font-semibold text-white">{title}</h2>
-                <Link
-                    to={url}
-                    className="text-sm text-gray-200 hover:text-white hover:underline transition-colors duration-200"
-                >
-                    Xem tất cả
-                </Link>
+                {clickable ? (
+                    <Link
+                        to={url}
+                        className="text-sm text-gray-200 hover:text-white hover:underline transition-colors duration-200"
+                    >
+                        Xem tất cả
+                    </Link>
+                ) : (
+                    <span className="text-sm text-gray-400 cursor-not-allowed">
+
+                    </span>
+                )}
             </div>
-            
+
             <Swiper
                 modules={[Navigation]}
                 navigation
@@ -53,7 +58,7 @@ const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale }) => {
                                 <div
                                     key={product.id}
                                     onClick={() => handleProductClick(product)}
-                                    className="flex justify-center flex-shrink-0 w-36 h-80 mr-2 bg-slate-700 cursor-pointer"
+                                    className="flex justify-center flex-shrink-0 w-36 h-80 mr-2 bg-white cursor-pointer rounded-lg shadow-md"
                                 >
                                     <ProductCard
                                         image={product.thumbnail_url || product.name}

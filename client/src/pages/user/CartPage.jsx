@@ -21,7 +21,6 @@ const Cart = () => {
   useEffect(() => {
     if (!cartUpdated) return;
 
-
     const fetchCartItems = async () => {
       const response = await getCartItems(axiosPrivate);
 
@@ -32,8 +31,7 @@ const Cart = () => {
       setCartItems(response.cartItems);
       setCartUpdated(false);
     };
-    debugger;
-    // check if user is authenticated before fetching cart items
+
     if (isAuthenticated && user.role.toLowerCase() === 'user') {
       fetchCartItems();
       getCartSummaryInfo();

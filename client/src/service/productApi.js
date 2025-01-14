@@ -20,6 +20,11 @@ const getFlashSalev2 = async ({ limit = 12, page = 1 } = {}) => {
   return response.data;
 };
 
+const getFeaturedProducts = async ({ limit = 36, page = 1 } = {}) => {
+  const response = await axios.get(`api/products/featured?limit=${limit}&page=${page}`);
+  return response.data.data;
+};
+
 const fetchProductByCategory = async (
   {
     category,
@@ -92,7 +97,7 @@ const fetchRelatedProducts = async (id) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error('Failed to fetch related products', error);
     throw error;
@@ -108,4 +113,5 @@ export {
   fetchProductById,
   fetchProductReviews,
   fetchRelatedProducts,
+  getFeaturedProducts
 };

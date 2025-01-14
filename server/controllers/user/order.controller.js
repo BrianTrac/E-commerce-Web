@@ -165,11 +165,73 @@ const updateOrder = async (req, res) => {
     }
 };
 
+// get user orders
+const getUserOrders = async (req, res) => {
+    const { userId } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+    const { status } = req.query; // Optional filter by status
+
+    // if status === 'all' then return all orders
+ //   console.log('status', status);
+    try {
+        // Build query filters
+        const filters = { user_id: userId };
+        if (status && status !== 'all') {
+            filters.status = status;
+        }
+
+    //    console.log('filters', filters);
+
+        // Fetch orders with associated items and products
+        const orders = await Order.findAndCountAll({
+            where: filters,
+            order: [['created_at', 'DESC']],
+            offset,
+            limit,
+            include: [
+                {
+                    model: OrderItems,
+                    as: 'orderItems',
+                    include: [
+                        {
+                            model: Product,
+                            as: 'product',
+                        //    attributes: ['id', 'name', 'thumbnail_url'], // Adjust fields as needed
+                        },
+                    ],
+                },
+            ],
+        });
+        
+    //    console.log('orders', orders);
+
+        // Calculate total pages for pagination
+        const totalPages = Math.ceil(orders.count / limit);
+
+        return res.json({
+            success: true,
+            message: 'Successfully fetched orders',
+            data: {
+                rows: orders.rows,
+                count: orders.count,
+                totalPages,
+            },
+        });
+    } catch (error) {
+        console.error('Error fetching user orders:', error);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
+
 module.exports = {
     getOrders,
     getOrder,
     createOrder,
     updateOrder,
+    getUserOrders,
 };
 
 

@@ -128,7 +128,7 @@ const SellerDetailPage = () => {
                         <Title level={4}>Quản lý</Title>
                         <Row gutter={[16, 16]}>
                             {[
-                                { label: 'Xem sản phảm của shop', action: () => navigate(`/admin/seller-management/${id}/products`) },
+                                { label: 'Xem sản phẩm của shop', action: () => navigate(`/admin/seller-management/${id}/products`) },
                                 { label: 'Thống kê', action: () => navigate(`/admin/seller-management/${id}/analytics`) },
                             ].map((item) => (
                                 <Col span={12} key={item.label}>

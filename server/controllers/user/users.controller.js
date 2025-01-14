@@ -66,11 +66,24 @@ const getUserByEmail = async (req, res) => {
     }
 };
 
+const getUserInfo = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: `User ${req.user.id} not found` });
+        }
+
+        return res.json(user);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
 
 module.exports = {
     getAllUsers,
     deleteUser,
     getUserById,
     getUserByEmail,
+    getUserInfo,
 };
 

@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ProductCarousel from './ProductCarousel';
 import ExpandableDescription from './ExpandableDescription ';
+import { ShoppingCartOutlined } from '@ant-design/icons';
 
 const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -153,26 +154,29 @@ const ProductDetails = () => {
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="flex flex-col gap-4 mt-auto">
+                        <div className="flex flex-col gap-3 mt-auto">
                             <div className="flex gap-3">
                                 <button
-                                    className="bg-transparent border-2 border-blue-500 text-blue-500 w-1/2 px-4 py-2 rounded-md hover:bg-blue-600 hover:text-white"
+                                    className="bg-transparent border-2 border-blue-500 text-blue-500 w-96 px-4 py-4 rounded-md flex items-center justify-center gap-2 hover:bg-blue-600 hover:text-white"
                                     onClick={() => addToCart(product.id, quantity)}
                                 >
-                                    Thêm vào giỏ hàng
+                                    <ShoppingCartOutlined /> Thêm vào giỏ hàng
                                 </button>
-                                <button className="bg-transparent border-2 border-blue-500 text-blue-500 w-1/2 px-4 py-2 rounded-md hover:bg-blue-600 hover:text-white transition-colors">
-                                    Chat ngay
+                                <button
+                                    className="bg-orange-400 text-white w-full px-4 py-4 rounded-md hover:bg-orange-600"
+                                    onClick={handleCheckout}
+                                >
+                                    Mua ngay
                                 </button>
                             </div>
-                            <div>
+                            {/* <div>
                                 <button
                                     className="bg-orange-400 text-white w-full px-4 py-2 rounded-md hover:bg-orange-600"
                                     onClick={handleCheckout}
                                 >
                                     Mua ngay
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

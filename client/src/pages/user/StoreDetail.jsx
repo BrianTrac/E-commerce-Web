@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { fetchStoreDetails } from '../../service/storeApi';
 import { Input, Spin, Pagination } from 'antd';
 import ProductCard from '../../components/user/ProductCard';
+import { useNavigate } from 'react-router-dom';
 
 const { Search } = Input;
 
@@ -18,6 +19,7 @@ const StoreDetail = () => {
   const [sort, setSort] = useState('popular'); // Default sorting
   const [activeTab, setActiveTab] = useState('products'); // Default tab
   const itemsPerPage = 24; // Number of products per page
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -53,6 +55,10 @@ const StoreDetail = () => {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+  };
+
+  const handleProductClick = (product) => {
+    navigate(`/product/${product.url_key}`, { state: { product }  });
   };
 
   if (loading) return <Spin />;
@@ -147,17 +153,23 @@ const StoreDetail = () => {
             {/* Product List */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  image={product.thumbnail_url}
-                  name={product.name}
-                  price={product.price}
-                  originalPrice={product.original_price}
-                  discountRate={product.discount_rate}
-                  quantitySold={product.quantity_sold}
-                  ratingAverage={product.rating_average}
-                />
-              ))}
+                      <div 
+                          key={product.id}
+                          onClick={() => handleProductClick(product)}
+                          className="cursor-pointer"
+                      >
+                          <ProductCard
+                              key={product.id}
+                              image={product.thumbnail_url || product.name}
+                              name={product.name}
+                              price={product.price}
+                              originalPrice={product.original_price}
+                              discountRate={product.discount_rate}
+                              quantitySold={product.quantity_sold}
+                              ratingAverage={product.rating_average}
+                          />
+                      </div>
+                  ))}
             </div>
 
             {/* Pagination */}

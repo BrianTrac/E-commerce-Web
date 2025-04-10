@@ -19,6 +19,8 @@ bower_components/
 # Environment variables
 .env
 
+.gitignore
+
 # Build directories
 dist/
 build/

@@ -1,7 +1,7 @@
 // services/productApi.js
 import axios from '../../config/axios';
 
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = process.env.REACT_APP_SERVER_URL + '/api';
 
 export const getProductById = async (axiosPrivate, id) => {
     try {

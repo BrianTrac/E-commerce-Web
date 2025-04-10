@@ -63,7 +63,7 @@ const Login = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();   
-        
+        debugger;
         await dispatch(login({ username, password, type }));
         console.log('login' + username + password + type);
 
@@ -73,6 +73,9 @@ const Login = () => {
 
     const handleGoogleLogin = () => {
         const typeParam = encodeURIComponent(type.toLowerCase()); // Ensure the type is URL-safe
+        console.log('Google login type: ', typeParam);
+        debugger;
+        // Redirect to the Google login URL with the type parameter
         window.location.href = `${SERVER_URL}/api/auth/google?type=${typeParam}`;
     };
 
@@ -124,13 +127,13 @@ const Login = () => {
                 <div className="w-full border-t border-gray-800"></div>
                 { type.toLowerCase() !== 'admin' &&
                     <div className="flex">
-                        <button
+                        {/* <button
                             className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 mr-4 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             type="button"
                         >
                             <Facebook className="h-5 w-5 mr-2 text-blue-800" />
                             Facebook
-                        </button>
+                        </button> */}
                         <button
                             onClick={handleGoogleLogin}
                             className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

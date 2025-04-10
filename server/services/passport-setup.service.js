@@ -15,12 +15,13 @@ passport.use(new GoogleStrategy({
     try {
 
         const {type} = JSON.parse(req.query.state.toLowerCase() || '{}');
-
+        console.log('Type:', type); // Log the type to see if it's being passed correctly;
         let user = await User.findOne({
             where: {
                 googleId: profile.id, 
          } });
 
+        console.log('User:', user); // Log the user to see if it's being found correctly
         if (!user) {
             // check if user already exists by email
             user = await User.findOne({where : { email: profile.emails[0].value }});

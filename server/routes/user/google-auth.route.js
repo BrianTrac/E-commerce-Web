@@ -32,7 +32,7 @@ router.get('/callback', passport.authenticate('google',{failureRedirect: `${WEB_
                     secure: true
                 }
             );
-
+            console.log('Redirect URL:', redirectURL);
             res.redirect(redirectURL);
         } catch (error) {
             console.error('Error saving user:', error);

@@ -55,7 +55,7 @@ const Category = ({ id }) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-4 bg-red-700 rounded-md overflow-hidden">
+    <div className="max-w-4xl mx-auto p-4 bg-blue-400 rounded-md overflow-hidden">
       <h2 className="font-medium mb-4 text-xl text-white">Danh mục</h2>
 
       <Swiper

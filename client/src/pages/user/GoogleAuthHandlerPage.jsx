@@ -16,7 +16,8 @@ const GoogleAuthHandler = () => {
         if (accessToken) {
             const decodedToken = jwtDecode(accessToken);
             const userRole = decodedToken?.role;
-
+            debugger;
+            console.log('userRole:', userRole);
             // Store token and user data in auth state
         //    setAuth({ accessToken });
             console.log('decodedToken:', decodedToken);

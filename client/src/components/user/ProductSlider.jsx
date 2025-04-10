@@ -28,7 +28,7 @@ const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale, clickable
     }
 
     return (
-        <div className="mt-10 max-w-4xl mx-auto p-4 bg-red-700 rounded-md overflow-hidden">
+        <div className="mt-10 max-w-4xl mx-auto p-4 bg-blue-400 rounded-md overflow-hidden">
             <div className="flex justify-between mb-2">
                 <h2 className="text-2xl font-semibold text-white">{title}</h2>
                 {clickable ? (

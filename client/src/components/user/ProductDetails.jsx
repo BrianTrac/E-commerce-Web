@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import ProductCarousel from './ProductCarousel';
 import ExpandableDescription from './ExpandableDescription ';
 import { ShoppingCartOutlined } from '@ant-design/icons';
+import { useSelector } from "react-redux";
+import { selectAuth } from "../../redux/reducers/user/authReducer";
 
 const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -32,6 +34,7 @@ const ProductDetails = () => {
     const axiosPrivate = useAxiosPrivate();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const {user, isAuthenticated } = useSelector(selectAuth);
 
     // Add useEffect for scroll to top
     useEffect(() => {
@@ -61,6 +64,11 @@ const ProductDetails = () => {
     }, [product]);
 
     const addToCart = async (id, quantity) => {
+        // check if user is authenticated before fetching cart items
+        if (!isAuthenticated || !(user.role.toLowerCase() === 'user')) {
+            return navigate('/auth/login');
+        }
+
         const response = await addToCardItem(axiosPrivate, { itemId: id, quantity, selected: true });
 
         if (response.success) {

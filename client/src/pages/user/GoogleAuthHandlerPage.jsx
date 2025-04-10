@@ -14,22 +14,19 @@ const GoogleAuthHandler = () => {
         console.log('accessToken:', accessToken);
         console.log('urlParams:', urlParams);
         if (accessToken) {
+            localStorage.setItem('accessToken', accessToken);
             const decodedToken = jwtDecode(accessToken);
             const userRole = decodedToken?.role;
-            debugger;
-            console.log('userRole:', userRole);
-            // Store token and user data in auth state
-        //    setAuth({ accessToken });
             console.log('decodedToken:', decodedToken);
+          
             if (userRole && userRole.includes('Admin')) {
-                navigate('/Admin', { replace: true });
-            }  else if (userRole && userRole.includes('Seller')) {
-                navigate('/Seller', { replace: true });
+              navigate('/Admin', { replace: true });
+            } else if (userRole && userRole.includes('Seller')) {
+              navigate('/Seller', { replace: true });
+            } else {
+              navigate('/', { replace: true });
             }
-            else {
-                navigate('/', { replace: true });
-            }
-        }
+        }          
     }, [navigate]);
 
     // Display a loading message while the user is being redirected

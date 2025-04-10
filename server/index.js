@@ -32,13 +32,18 @@ app.use(express.urlencoded({ extended: false }));
 
 // Parse Cookie header and populate req.cookies
 app.use(cookieParser());
-
+app.set('trust proxy', 1);
 // Express session middleware
 app.use(session({
     secret: process.env.SESSION_SECRET,  // Change 'your-secret-key' to a secure, unique string
     resave: false,              // Prevent session from being saved back to the store if it wasn't modified
     saveUninitialized: false,   // Only save session data when something is stored in the session
-    cookie: { secure: false }   // Use secure: true if you're using HTTPS
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',       // Use HTTPS only in production
+        httpOnly: true,
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+        maxAge: 1000 * 60 * 60 * 24 * 7  // 7 days
+    }   // Use secure: true if you're using HTTPS
 }));
 
 

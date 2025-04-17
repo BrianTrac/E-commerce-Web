@@ -13,6 +13,8 @@ const userRoutes = (app) => {
 
     app.use('/api/categories', require('./category.route'));
 
+    app.use('/api/tiki/reviews', require('./tiki-reviews.route'));
+
     // Google and Facebook OAuth routes
     app.use('/api/auth/google', require('./google-auth.route'));
     // app.use('/api/auth/facebook', require('./facebook-auth.route'));

@@ -51,7 +51,9 @@ const ProductDetails = () => {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
+                console.log('Fetching reviews for product ID:', product.id);
                 const data = await fetchProductReviews(product.id);
+                console.log('Fetched reviews:', data);
                 setReviews(data);
             } catch (error) {
                 console.error("Failed to fetch product reviews", error);

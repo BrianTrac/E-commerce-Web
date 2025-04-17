@@ -76,14 +76,15 @@ const fetchProductById = async (id) => {
 
 const fetchProductReviews = async (id) => {
   try {
-    const response = await fetch(`https://tiki.vn/api/v2/reviews?product_id=${id}`);
+    const response = await axios.get(`api/tiki/reviews?product_id=${id}`);
 
-    if (!response.ok) {
+    console.log('Response data:', response.data);
+
+    if (!response.status) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json();
-    return data;
+    return response.data;
   } catch (error) {
     console.error('Failed to fetch product reviews', error);
     throw error;

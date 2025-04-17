@@ -128,7 +128,7 @@ const Cart = () => {
                         src={item.product.thumbnail_url}
                         alt={item.product.name}
                         className="w-20 h-20 object-cover cursor-pointer"
-                        onClick={() => navigate(`/product/${item.product.url_key}`)}
+                        onClick={() => navigate(`/product/${item.product.url_key}`, { state: { product: item.product } })}
                       />
                       <Text className="ml-4 font-medium">{item.product.name}</Text>
                     </Col>

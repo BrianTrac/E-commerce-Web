@@ -23,7 +23,7 @@ const formatPrice = (price) => {
 const ProductDetails = () => {
     const { state } = useLocation();
     const { product } = state || {};
-    console.log(product);
+    console.log("Product :", product);
     const [reviews, setReviews] = useState({
         rating_average: 0,
         reviews_count: 0,

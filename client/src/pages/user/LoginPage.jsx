@@ -18,13 +18,22 @@ const Login = () => {
     // get type of login from query params
     const type = new URLSearchParams(location.search).get('type') || 'user';
 
+     // Check for error parameter in URL (for Google auth failures)
+     const urlParams = new URLSearchParams(location.search);
+     const googleAuthError = urlParams.get('error');
+
     // Access Redux state 
     const  {user, error, loading, isAuthenticated} = useSelector(selectAuth);
     const [errorChanged, setErrorChanged] = useState('');
     
     useEffect(() => {
-        setErrorChanged(error);
-    }, [error]); // This ensures the state is updated only when `error` changes
+        // Handle both Redux errors and Google auth errors
+        if (error) {
+            setErrorChanged(error);
+        } else if (googleAuthError === 'google_auth_failed') {
+            setErrorChanged('Google authentication failed. Please try again or use another login method.');
+        }
+    }, [error, googleAuthError]);
 
 
     // Clear any error or success on component load

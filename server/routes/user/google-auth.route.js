@@ -22,6 +22,8 @@ router.get('/callback', passport.authenticate('google',{failureRedirect: `${WEB_
         const redirectURL = `${WEB_URL}/auth/google/callback?accessToken=${accessToken}`;
 
         req.user.refreshToken = refreshToken;
+        console.log('User_2:', req.user); // Log the user to see if it's being found correctly
+        console.log('Refresh Token:', refreshToken); // Log the refresh token to see if it's being generated correctly
 
         try {
             await req.user.save();

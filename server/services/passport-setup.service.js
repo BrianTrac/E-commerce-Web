@@ -23,7 +23,7 @@ passport.use(new GoogleStrategy({
                 googleId: profile.id, 
          } });
 
-        console.log('User:', user); // Log the user to see if it's being found correctly
+        console.log('User_1:', user); // Log the user to see if it's being found correctly
         if (!user) {
             // check if user already exists by email
             user = await User.findOne({where : { email: profile.emails[0].value }});

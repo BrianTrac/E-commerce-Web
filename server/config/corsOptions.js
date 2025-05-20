@@ -7,10 +7,11 @@ const corsOptions = {
         } else {
             callback(new Error('Not allowed by CORS'));
         }
-        optionsSuccessStatus: 200
+       
     },
 
     credentials: true,
+    optionsSuccessStatus: 200, // For legacy browser support
 };
 
 module.exports = corsOptions;
